@@ -1,0 +1,98 @@
+<?php //App_Entity_Promo
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Promo',
+                'id',
+                'langue',
+                'titre',
+                'description',
+                'lieu',
+                'dateDebut',
+                'dateFinProvisoire',
+                'fabrique',
+                'dateFinReel',
+                'groupe',
+                'referentiel',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'langue' => $o[2],
+                    'titre' => $o[3],
+                    'description' => $o[4],
+                    'lieu' => $o[5],
+                    'dateDebut' => $o[6],
+                    'dateFinProvisoire' => $o[7],
+                    'fabrique' => $o[8],
+                    'dateFinReel' => $o[9],
+                    'groupe' => $o[10],
+                    'referentiel' => $o[11],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'readGroupe',
+                    'writeGroupe',
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+                [
+                    'readPromo',
+                    'writePromo',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

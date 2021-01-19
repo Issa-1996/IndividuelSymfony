@@ -1,0 +1,3 @@
+<?php //route_name_971b8aa97566123ba9c0379e7cb2b819
+
+return [PHP_INT_MAX, 'api_apprenants_get_item'];

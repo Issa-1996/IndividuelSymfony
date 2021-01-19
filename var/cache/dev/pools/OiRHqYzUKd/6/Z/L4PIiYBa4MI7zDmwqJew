@@ -1,0 +1,61 @@
+<?php //subresource_operations_6577c1fe79a408b6fcc1914e8efd6da0
+
+return [PHP_INT_MAX, [
+    'api_groupe_de_competences_competences_get_subresource' => [
+        'property' => 'competences',
+        'collection' => true,
+        'resource_class' => 'App\\Entity\\Competences',
+        'shortNames' => [
+            'Competences',
+            'GroupeDeCompetences',
+        ],
+        'identifiers' => [
+            [
+                'id',
+                'App\\Entity\\GroupeDeCompetences',
+                true,
+            ],
+        ],
+        'operation_name' => 'competences_get_subresource',
+        'route_name' => 'api_groupe_de_competences_competences_get_subresource',
+        'path' => '/admin/groupe_de_competences/{id}/competences.{_format}',
+        'defaults' => [],
+        'requirements' => [],
+        'options' => [],
+        'host' => '',
+        'schemes' => [],
+        'condition' => '',
+        'controller' => null,
+    ],
+    'api_groupe_de_competences_competences_niveaux_get_subresource' => [
+        'property' => 'niveau',
+        'collection' => true,
+        'resource_class' => 'App\\Entity\\Niveau',
+        'shortNames' => [
+            'Niveau',
+            'Competences',
+        ],
+        'identifiers' => [
+            [
+                'id',
+                'App\\Entity\\GroupeDeCompetences',
+                true,
+            ],
+            [
+                'competences',
+                'App\\Entity\\Competences',
+                true,
+            ],
+        ],
+        'operation_name' => 'competences_niveaux_get_subresource',
+        'route_name' => 'api_groupe_de_competences_competences_niveaux_get_subresource',
+        'path' => '/admin/groupe_de_competences/{id}/competences/{competences}/niveaux.{_format}',
+        'defaults' => [],
+        'requirements' => [],
+        'options' => [],
+        'host' => '',
+        'schemes' => [],
+        'condition' => '',
+        'controller' => null,
+    ],
+]];

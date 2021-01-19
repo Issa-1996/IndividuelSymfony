@@ -1,0 +1,50 @@
+<?php //%255BApp%255CEntity%255CPromo%255D%255B1%255D
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['ApiPlatform\\Core\\Annotation\\ApiResource'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('ApiPlatform\\Core\\Annotation\\ApiResource')),
+        clone ($p['Doctrine\\ORM\\Mapping\\Entity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Entity')),
+    ],
+    null,
+    [
+        'stdClass' => [
+            'collectionOperations' => [
+                [
+                    'GET',
+                    'POST',
+                ],
+            ],
+            'itemOperations' => [
+                [
+                    'GET',
+                    'PUT',
+                ],
+            ],
+            'attributes' => [
+                [
+                    'security' => 'is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_FORMATEUR\')',
+                    'security_message' => 'vous avez pas acces a ce resource',
+                    'route_prefix' => '/admin',
+                    'denormalization_context' => [
+                        'groups' => [
+                            'writePromo',
+                        ],
+                    ],
+                    'normalization_context' => [
+                        'groups' => [
+                            'readPromo',
+                        ],
+                    ],
+                ],
+            ],
+            'repositoryClass' => [
+                1 => 'App\\Repository\\PromoRepository',
+            ],
+        ],
+    ],
+    [
+        $o[0],
+        $o[1],
+    ],
+    []
+); }];

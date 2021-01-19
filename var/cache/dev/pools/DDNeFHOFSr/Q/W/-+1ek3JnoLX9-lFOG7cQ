@@ -1,0 +1,113 @@
+<?php //App_Entity_CM
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\CM',
+                'id',
+                'email',
+                'roles',
+                'password',
+                'prenom',
+                'nom',
+                'adresse',
+                'telephone',
+                'genre',
+                'status',
+                'profil',
+                'avatar',
+                'archivage',
+                'username',
+                'salt',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'email' => $o[2],
+                    'roles' => $o[3],
+                    'password' => $o[4],
+                    'prenom' => $o[5],
+                    'nom' => $o[6],
+                    'adresse' => $o[7],
+                    'telephone' => $o[8],
+                    'genre' => $o[9],
+                    'status' => $o[10],
+                    'profil' => $o[11],
+                    'avatar' => $o[12],
+                    'archivage' => $o[13],
+                    'username' => $o[14],
+                    'salt' => $o[15],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'User:read',
+                    'User:write',
+                    'readGroupe',
+                    'writeGroupe',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                5 => [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'User:read',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

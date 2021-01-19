@@ -1,0 +1,55 @@
+<?php //App_Entity_Competences
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Competences',
+                'id',
+                'libelle',
+                'archivage',
+                'groupeDeCompetences',
+                'niveau',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'libelle' => $o[2],
+                    'archivage' => $o[3],
+                    'groupeDeCompetences' => $o[4],
+                    'niveau' => $o[5],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'GroupeCompetences:read',
+                    'readCompetences',
+                    'writeCompetences',
+                ],
+                [
+                    'readCompetences',
+                    'writeCompetences',
+                ],
+                [
+                    'readCompetences',
+                    'writeCompetences',
+                ],
+                [
+                    'readCompetences',
+                    'writeCompetences',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

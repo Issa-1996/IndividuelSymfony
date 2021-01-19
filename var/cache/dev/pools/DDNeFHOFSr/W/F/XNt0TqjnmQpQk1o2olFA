@@ -1,0 +1,60 @@
+<?php //App_Entity_Niveau
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Niveau',
+                'id',
+                'libelle',
+                'critereEvaluation',
+                'groupeAction',
+                'competences',
+                'archivage',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'libelle' => $o[2],
+                    'critereEvaluation' => $o[3],
+                    'groupeAction' => $o[4],
+                    'competences' => $o[5],
+                    'archivage' => $o[6],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'grp:read',
+                    'grp:write',
+                ],
+                [
+                    'grp:read',
+                    'grp:write',
+                ],
+                [
+                    'grp:read',
+                    'grp:write',
+                ],
+                [
+                    'grp:read',
+                    'grp:write',
+                ],
+                [
+                    'grp:read',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

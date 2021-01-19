@@ -1,0 +1,30 @@
+<?php //subresource_operations_c522cb8e18ea5c7af58c04e52f6fbdd8
+
+return [PHP_INT_MAX, [
+    'api_competences_niveaux_get_subresource' => [
+        'property' => 'niveau',
+        'collection' => true,
+        'resource_class' => 'App\\Entity\\Niveau',
+        'shortNames' => [
+            'Niveau',
+            'Competences',
+        ],
+        'identifiers' => [
+            [
+                'id',
+                'App\\Entity\\Competences',
+                true,
+            ],
+        ],
+        'operation_name' => 'niveaux_get_subresource',
+        'route_name' => 'api_competences_niveaux_get_subresource',
+        'path' => '/admin/competences/{id}/niveaux.{_format}',
+        'defaults' => [],
+        'requirements' => [],
+        'options' => [],
+        'host' => '',
+        'schemes' => [],
+        'condition' => '',
+        'controller' => null,
+    ],
+]];

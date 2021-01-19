@@ -1,0 +1,52 @@
+<?php //%255BApp%255CEntity%255CGroupe%255D%255B1%255D
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['ApiPlatform\\Core\\Annotation\\ApiResource'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('ApiPlatform\\Core\\Annotation\\ApiResource')),
+        clone ($p['Doctrine\\ORM\\Mapping\\Entity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Entity')),
+    ],
+    null,
+    [
+        'stdClass' => [
+            'collectionOperations' => [
+                [
+                    'POST',
+                    'GET',
+                ],
+            ],
+            'itemOperations' => [
+                [
+                    'GET',
+                    'PUT',
+                    'DELETE' => [
+                        'method' => 'DELETE',
+                        'path' => '/groupes/{id}/apprenants',
+                    ],
+                ],
+            ],
+            'attributes' => [
+                [
+                    'security' => 'is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_FORMATEUR\')',
+                    'security_message' => 'Vous n\'avez pas acces a ce resource',
+                    'route_prefix' => '/admin',
+                    'denormalization_context' => [
+                        'groups' => [
+                            'writeGroupe',
+                        ],
+                    ],
+                    'normalization_context' => [
+                        'groups' => 'readGroupe',
+                    ],
+                ],
+            ],
+            'repositoryClass' => [
+                1 => 'App\\Repository\\GroupeRepository',
+            ],
+        ],
+    ],
+    [
+        $o[0],
+        $o[1],
+    ],
+    []
+); }];
