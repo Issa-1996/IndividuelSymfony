@@ -73,7 +73,10 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'User:read',
                     'User:write',
                 ],
-                6 => [
+                5 => [
+                    'User:write',
+                ],
+                [
                     'User:read',
                     'User:write',
                 ],

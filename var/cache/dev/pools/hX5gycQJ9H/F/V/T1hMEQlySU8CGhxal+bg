@@ -20,10 +20,10 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 true,
             ],
             'readableLink' => [
-                false,
+                true,
             ],
             'writableLink' => [
-                false,
+                true,
             ],
             'required' => [
                 false,

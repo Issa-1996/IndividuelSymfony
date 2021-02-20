@@ -10,6 +10,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
     ],
     null,
     [
@@ -23,6 +24,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 'critereAdmission',
                 'critereEvaluation',
                 'promo',
+                'groupeDeCompetences',
             ],
             'attributesMetadata' => [
                 [
@@ -33,6 +35,47 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'critereAdmission' => $o[5],
                     'critereEvaluation' => $o[6],
                     'promo' => $o[7],
+                    'groupeDeCompetences' => $o[8],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                    'Promo:read',
+                    'Promo:write',
+                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'Referentiel:read',
+                    'Referentiel:write',
                 ],
             ],
         ],

@@ -15,6 +15,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'archivage',
                     'user',
                     'competences',
+                    'referentiels',
                 ],
             ],
         ],

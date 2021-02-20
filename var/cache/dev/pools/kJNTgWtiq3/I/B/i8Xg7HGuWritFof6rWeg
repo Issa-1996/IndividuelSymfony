@@ -135,14 +135,14 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'security' => 'is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_FORMATEUR\')',
                     'security_message' => 'vous avez pas acces a ce resource',
                     'route_prefix' => '/admin',
-                    'denormalization_context' => [
-                        'groups' => [
-                            'writePromo',
-                        ],
-                    ],
                     'normalization_context' => [
                         'groups' => [
-                            'readPromo',
+                            'Promo:read',
+                        ],
+                    ],
+                    'denormalization_context' => [
+                        'groups' => [
+                            'Promo:write',
                         ],
                     ],
                     'input' => null,

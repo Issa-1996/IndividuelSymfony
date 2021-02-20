@@ -15,10 +15,16 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 $o[1],
             ],
             'readable' => [
-                false,
+                true,
             ],
             'writable' => [
-                false,
+                true,
+            ],
+            'readableLink' => [
+                true,
+            ],
+            'writableLink' => [
+                true,
             ],
             'required' => [
                 false,

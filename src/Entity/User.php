@@ -31,7 +31,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *              "path"="/users"
  *           }
  *     },
- *     itemOperations={"PUT", "GET"},
+ *     itemOperations={"POST"={
+ *          "deserialize"=false,
+ *             "validation_groups"={"Default", "media_object_create"},
+ *             "swagger_context"={
+ *                 "consumes"={
+ *                     "multipart/form-data",
+ *                 },
+ *                 "parameters"={
+ *                     {
+ *                         "in"="formData",
+ *                         "name"="file",
+ *                         "type"="file",
+ *                         "description"="The file to upload",
+ *                     },
+ *                 },
+ *             },
+ * }, "GET"},
  *     normalizationContext={"groups"={"User:read"}},
  *     denormalizationContext={"groups"={"User:write"}}
  * )
@@ -64,6 +80,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Le password est obligatoire")
+     * @Groups({"User:write"})
      */
     private $password;
 
@@ -107,7 +124,7 @@ class User implements UserInterface
      * @Groups({"User:read"})
      * @Groups({"User:write"})
      */
-    private $status;
+    private $status="actif";
 
     /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")

@@ -1,0 +1,3 @@
+<?php //route_name_b8a1796ef3b7f86431bd6a3db07c7de9
+
+return [PHP_INT_MAX, 'api_promos_GET_item'];

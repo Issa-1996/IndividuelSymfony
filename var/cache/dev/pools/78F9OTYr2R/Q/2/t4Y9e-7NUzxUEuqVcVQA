@@ -1,0 +1,3 @@
+<?php //route_name_f69fe971c2be594ec9997ce82467d2ea
+
+return [PHP_INT_MAX, 'api_referentiels_GET_collection'];

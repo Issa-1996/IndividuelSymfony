@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Constraints as assert;
  *      routePrefix="/admin",
  *      collectionOperations={"POST", "GET"},
  *      itemOperations={"PUT", "GET"},
- *      normalizationContext={"groups"={"readCompetences"}},
- *      denormalizationContext={"groups"={"writeCompetences"}}
+ *     normalizationContext={"groups"={"Competence:read"}},
+ *     denormalizationContext={"groups"={"Competence:write"}}
  *      
  * )
  * @ORM\Entity(repositoryClass=CompetencesRepository::class)
@@ -30,32 +30,42 @@ class Competences
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"GroupeCompetences:read"})
-     * @Groups({"readCompetences", "writeCompetences"})
+     * @Groups({"GroupeCompetences:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"readCompetences", "writeCompetences"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      * @Assert\NotBlank(message="Le libelle doit etre obligatoire")
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"readCompetences", "writeCompetences"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $archivage=false;
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeDeCompetences::class, mappedBy="competences", cascade={"persist"})
-     * @Groups({"readCompetences", "writeCompetences"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $groupeDeCompetences;
 
     /**
      * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="competences", cascade={"persist"})
      * @ApiSubresource()
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $niveau;
 

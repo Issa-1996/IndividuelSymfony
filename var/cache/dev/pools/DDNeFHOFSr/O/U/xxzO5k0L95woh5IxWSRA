@@ -9,6 +9,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
     ],
     null,
     [
@@ -20,6 +21,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 'description',
                 'archivage',
                 'competences',
+                'referentiels',
                 'user',
             ],
             'attributesMetadata' => [
@@ -29,26 +31,41 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'description' => $o[3],
                     'archivage' => $o[4],
                     'competences' => $o[5],
-                    'user' => $o[6],
+                    'referentiels' => $o[6],
+                    'user' => $o[7],
                 ],
             ],
             'groups' => [
                 1 => [
                     'GroupeCompetences:read',
-                    'readCompetences',
-                    'writeCompetences',
+                    'GroupeCompetences:write',
+                    'Competence:read',
+                    'Competence:write',
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
+                    'Competence:read',
+                    'Competence:write',
+                    'Referentiel:read',
+                    'Referentiel:write',
+                ],
+                [
+                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
                 ],
                 [
                     'GroupeCompetences:read',
                 ],
                 [
                     'GroupeCompetences:read',
+                    'GroupeCompetences:write',
                 ],
                 [
                     'GroupeCompetences:read',
-                ],
-                [
-                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
                 ],
             ],
         ],

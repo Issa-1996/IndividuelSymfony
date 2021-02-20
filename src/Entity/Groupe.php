@@ -38,7 +38,8 @@ class Groupe
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"readGroupe", "writeGroupe"})
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $id;
 

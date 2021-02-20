@@ -32,20 +32,28 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
             'groups' => [
                 1 => [
                     'GroupeCompetences:read',
-                    'readCompetences',
-                    'writeCompetences',
+                    'GroupeCompetences:write',
+                    'Competence:read',
+                    'Competence:write',
                 ],
                 [
-                    'readCompetences',
-                    'writeCompetences',
+                    'Competence:read',
+                    'Competence:write',
+                    'GroupeCompetences:read',
+                    'GroupeCompetences:write',
                 ],
                 [
-                    'readCompetences',
-                    'writeCompetences',
+                    'Competence:read',
+                    'Competence:write',
                 ],
                 [
-                    'readCompetences',
-                    'writeCompetences',
+                    'Competence:read',
+                    'Competence:write',
+                ],
+                [
+                    'GroupeCompetences:read',
+                    'Competence:read',
+                    'Competence:write',
                 ],
             ],
         ],

@@ -135,12 +135,12 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'route_prefix' => '/admin',
                     'normalization_context' => [
                         'groups' => [
-                            'readCompetences',
+                            'Competence:read',
                         ],
                     ],
                     'denormalization_context' => [
                         'groups' => [
-                            'writeCompetences',
+                            'Competence:write',
                         ],
                     ],
                     'input' => null,

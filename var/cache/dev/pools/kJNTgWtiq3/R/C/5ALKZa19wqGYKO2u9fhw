@@ -140,7 +140,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     ],
                     'denormalization_context' => [
                         'groups' => [
-                            'write',
+                            'GroupeCompetences:write',
                         ],
                     ],
                     'input' => null,

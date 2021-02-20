@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *      collectionOperations={"GET", "POST"},
  *      itemOperations={"GET","PUT"},
  *      normalizationContext={"groups"={"GroupeCompetences:read"}},
- *      denormalizationContext={"groups"={"write"}}
+ *      denormalizationContext={"groups"={"GroupeCompetences:write"}}
  * )
  * @ORM\Entity(repositoryClass=GroupeDeCompetencesRepository::class)
  */
@@ -29,20 +29,30 @@ class GroupeDeCompetences
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"GroupeCompetences:read"})
-     * @Groups({"readCompetences", "writeCompetences"})
+     * @Groups({"GroupeCompetences:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      * @Assert\NotBlank(message="Le libelle est obligatoire!!!")
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      * @Assert\NotBlank(message="La Description est obligatoire!!!")
      */
     private $description;
@@ -56,13 +66,22 @@ class GroupeDeCompetences
     /**
      * @ApiSubresource()
      * @ORM\ManyToMany(targetEntity=Competences::class, inversedBy="groupeDeCompetences", cascade={"persist"})
-     *  @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      */
     private $competences;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="groupeDeCompetences")
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
+     */
+    private $referentiels;
 
     public function __construct()
     {
         $this->competences = new ArrayCollection();
+        $this->referentiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,6 +157,33 @@ class GroupeDeCompetences
     public function removeCompetence(Competences $competence): self
     {
         $this->competences->removeElement($competence);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Referentiel[]
+     */
+    public function getReferentiels(): Collection
+    {
+        return $this->referentiels;
+    }
+
+    public function addReferentiel(Referentiel $referentiel): self
+    {
+        if (!$this->referentiels->contains($referentiel)) {
+            $this->referentiels[] = $referentiel;
+            $referentiel->addGroupeDeCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferentiel(Referentiel $referentiel): self
+    {
+        if ($this->referentiels->removeElement($referentiel)) {
+            $referentiel->removeGroupeDeCompetence($this);
+        }
 
         return $this;
     }

@@ -47,9 +47,14 @@ class AddUser
                 $errors = $this->serialize->serialize($errors,"json");
                 return new JsonResponse($errors,Response::HTTP_BAD_REQUEST,[],true);
             }
+           // dd($user);
             $this->manager->persist($user);
             $this->manager->flush();
-            return new JsonResponse("success", Response::HTTP_OK);
+            if($avatar){
+                fclose($avatar);
+            }
+            //return new JsonResponse($user, Response::HTTP_OK);
+            return true;
         }
     }
 }

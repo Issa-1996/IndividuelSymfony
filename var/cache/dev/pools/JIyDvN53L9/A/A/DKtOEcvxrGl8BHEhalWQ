@@ -5,6 +5,12 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
         clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Id'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Id')),
         clone ($p['Doctrine\\ORM\\Mapping\\GeneratedValue'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\GeneratedValue')),
         clone ($p['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
+        clone ($p['Symfony\\Component\\Serializer\\Annotation\\Groups'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\Groups')),
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
     ],
     null,
     [
@@ -13,11 +19,39 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 2 => 'integer',
             ],
         ],
+        'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
+            'groups' => [
+                3 => [
+                    'Referentiel:read',
+                ],
+                [
+                    'Referentiel:write',
+                ],
+                [
+                    'Promo:read',
+                ],
+                [
+                    'Promo:write',
+                ],
+                [
+                    'GroupeCompetences:read',
+                ],
+                [
+                    'GroupeCompetences:write',
+                ],
+            ],
+        ],
     ],
     [
         $o[0],
         $o[1],
         $o[2],
+        $o[3],
+        $o[4],
+        $o[5],
+        $o[6],
+        $o[7],
+        $o[8],
     ],
     []
 ); }];

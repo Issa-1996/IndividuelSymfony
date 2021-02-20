@@ -1,0 +1,3 @@
+<?php //route_name_2ae4e798eec74aefa4623b769a7e074c
+
+return [PHP_INT_MAX, 'api_niveaux_get_item'];

@@ -15,8 +15,28 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
             ],
             'itemOperations' => [
                 [
-                    'PUT' => [
-                        'method' => 'PUT',
+                    'POST' => [
+                        'deserialize' => false,
+                        'validation_groups' => [
+                            'Default',
+                            'media_object_create',
+                        ],
+                        'swagger_context' => [
+                            'consumes' => [
+                                'multipart/form-data',
+                            ],
+                            'parameters' => [
+                                [
+                                    'in' => 'formData',
+                                    'name' => 'file',
+                                    'type' => 'file',
+                                    'description' => 'The file to upload',
+                                ],
+                            ],
+                        ],
+                        'input' => null,
+                        'output' => null,
+                        'route_name' => 'POST',
                         'input_formats' => [
                             'jsonld' => [
                                 'application/ld+json',

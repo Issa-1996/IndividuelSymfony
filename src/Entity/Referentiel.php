@@ -7,8 +7,9 @@ use App\Repository\ReferentielRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -18,7 +19,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *          "security_message"="vous avez pas acces a ce ressource"
  *      },
  *      collectionOperations={"POST", "GET"},
- *      itemOperations={"GET", "PUT"}
+ *      itemOperations={"GET", "PUT"},
+ *      normalizationContext={"groups"={"Referentiel:read"}},
+ *      denormalizationContext={"groups"={"Referentiel:write"}}
  * )
  * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
@@ -28,47 +31,75 @@ class Referentiel
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le libelle doit etre obligatoire")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La presentation doit etre obligatoire")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le programme doit etre obligatoire")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $programme;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Lescriteres d'admission doit etre obligatoire")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $critereAdmission;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Les critere d'evaluation doit etre obligatoire")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\OneToMany(targetEntity=Promo::class, mappedBy="referentiel")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $promo;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=GroupeDeCompetences::class, inversedBy="referentiels")
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
+     */
+    private $groupeDeCompetences;
 
     public function __construct()
     {
         $this->promo = new ArrayCollection();
+        $this->groupeDeCompetences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +193,30 @@ class Referentiel
                 $promo->setReferentiel(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupeDeCompetences[]
+     */
+    public function getGroupeDeCompetences(): Collection
+    {
+        return $this->groupeDeCompetences;
+    }
+
+    public function addGroupeDeCompetence(GroupeDeCompetences $groupeDeCompetence): self
+    {
+        if (!$this->groupeDeCompetences->contains($groupeDeCompetence)) {
+            $this->groupeDeCompetences[] = $groupeDeCompetence;
+        }
+
+        return $this;
+    }
+
+    public function removeGroupeDeCompetence(GroupeDeCompetences $groupeDeCompetence): self
+    {
+        $this->groupeDeCompetences->removeElement($groupeDeCompetence);
 
         return $this;
     }

@@ -11,6 +11,20 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
             'repositoryClass' => [
                 'App\\Repository\\NiveauRepository',
             ],
+            'attributes' => [
+                1 => [
+                    'normalization_context' => [
+                        'groups' => [
+                            'Niveau:read',
+                        ],
+                    ],
+                    'denormalization_context' => [
+                        'groups' => [
+                            'Niveau:write',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     [

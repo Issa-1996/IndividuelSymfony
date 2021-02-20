@@ -135,6 +135,16 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'security' => 'is_granted(\'ROLE_ADMIN\')',
                     'security_message' => 'vous avez pas acces a ce ressource',
                     'route_prefix' => '/admin',
+                    'normalization_context' => [
+                        'groups' => [
+                            'Referentiel:read',
+                        ],
+                    ],
+                    'denormalization_context' => [
+                        'groups' => [
+                            'Referentiel:write',
+                        ],
+                    ],
                     'input' => null,
                     'output' => null,
                 ],

@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      },
  *      collectionOperations={"GET","POST"},
  *      itemOperations={"GET","PUT"},
- *      denormalizationContext={"groups"={"writePromo"}},
- *      normalizationContext={"groups"={"readPromo"}}
+ *      normalizationContext={"groups"={"Promo:read"}},
+ *      denormalizationContext={"groups"={"Promo:write"}}
  * )
  * @ORM\Entity(repositoryClass=PromoRepository::class)
  */
@@ -32,72 +32,88 @@ class Promo
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"readGroupe", "writeGroupe"})
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le langue est obligatoire")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le titre est obligatoire")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
+     * @Groups({"Referentiel:read"})
+     * @Groups({"Referentiel:write"})
      */
     private $titre;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La description est obligatoire")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le lieu est obligatoire")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $dateFinProvisoire;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La fabrique  est obligatoire")
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $fabrique;
 
     /**
      * @ORM\Column(type="date")
      * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $dateFinReel;
 
     /**
      * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="promo", cascade={"persist"})
-     * @Groups({"readPromo", "writePromo"})
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $groupe;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="promo")
+     * @Groups({"Promo:read"})
+     * @Groups({"Promo:write"})
      */
     private $referentiel;
 

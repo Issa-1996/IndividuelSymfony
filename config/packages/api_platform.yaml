@@ -1,7 +1,4 @@
 api_platform:
-    collection:
-        pagination:
-            items_per_page: 10
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
@@ -9,3 +6,8 @@ api_platform:
         multipart: ['multipart/form-data']
     swagger:
         versions: [3]
+    collection:
+        pagination:
+            page_parameter_name: _page
+            items_per_page: 5
+

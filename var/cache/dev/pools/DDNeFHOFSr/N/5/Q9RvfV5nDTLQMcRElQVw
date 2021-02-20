@@ -42,8 +42,8 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 1 => [
                     'readGroupe',
                     'writeGroupe',
-                    'readPromo',
-                    'writePromo',
+                    'Promo:read',
+                    'Promo:write',
                 ],
                 [
                     'readGroupe',

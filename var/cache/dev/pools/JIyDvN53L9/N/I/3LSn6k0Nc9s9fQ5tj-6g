@@ -2,7 +2,9 @@
 
 return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
     $o = [
-        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Doctrine\\ORM\\Mapping\\ManyToOne'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\ManyToOne')),
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\ManyToOne'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\ManyToOne')),
+        clone ($p['Symfony\\Component\\Serializer\\Annotation\\Groups'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\Groups')),
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
     ],
     null,
     [
@@ -14,9 +16,21 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                 'promo',
             ],
         ],
+        'Symfony\\Component\\Serializer\\Annotation\\Groups' => [
+            'groups' => [
+                1 => [
+                    'Promo:read',
+                ],
+                [
+                    'Promo:write',
+                ],
+            ],
+        ],
     ],
     [
         $o[0],
+        $o[1],
+        $o[2],
     ],
     []
 ); }];

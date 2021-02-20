@@ -15,36 +15,37 @@ return [
         0 => '{^(?'
                 .'|/_error/(\\d+)(?:\\.([^/]++))?(*:35)'
                 .'|/api(?'
-                    .'|(?:/(index)(?:\\.([^/]++))?)?(*:77)'
+                    .'|/admin/users/([^/]++)(*:70)'
+                    .'|(?:/(index)(?:\\.([^/]++))?)?(*:105)'
                     .'|/(?'
-                        .'|docs(?:\\.([^/]++))?(*:107)'
-                        .'|contexts/(.+)(?:\\.([^/]++))?(*:143)'
+                        .'|docs(?:\\.([^/]++))?(*:136)'
+                        .'|contexts/(.+)(?:\\.([^/]++))?(*:172)'
                         .'|admin/(?'
                             .'|pro(?'
                                 .'|fil(?'
                                     .'|_de_sorties(?'
                                         .'|(?:\\.([^/]++))?(?'
-                                            .'|(*:204)'
+                                            .'|(*:233)'
                                         .')'
                                         .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                            .'|(*:242)'
+                                            .'|(*:271)'
                                         .')'
                                     .')'
                                     .'|s(?'
                                         .'|(?:\\.([^/]++))?(?'
-                                            .'|(*:274)'
+                                            .'|(*:303)'
                                         .')'
                                         .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                            .'|(*:312)'
+                                            .'|(*:341)'
                                         .')'
                                     .')'
                                 .')'
                                 .'|mos(?'
                                     .'|(?:\\.([^/]++))?(?'
-                                        .'|(*:347)'
+                                        .'|(*:376)'
                                     .')'
                                     .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                        .'|(*:385)'
+                                        .'|(*:414)'
                                     .')'
                                 .')'
                             .')'
@@ -52,117 +53,115 @@ return [
                                 .'|_de_(?'
                                     .'|competences(?'
                                         .'|(?:\\.([^/]++))?(?'
-                                            .'|(*:444)'
+                                            .'|(*:473)'
                                         .')'
                                         .'|/(?'
                                             .'|([^/\\.]++)(?:\\.([^/]++))?(?'
-                                                .'|(*:485)'
+                                                .'|(*:514)'
                                             .')'
                                             .'|([^/]++)/competences(?'
-                                                .'|(?:\\.([^/]++))?(*:532)'
-                                                .'|/([^/]++)/niveaux(?:\\.([^/]++))?(*:572)'
+                                                .'|(?:\\.([^/]++))?(*:561)'
+                                                .'|/([^/]++)/niveaux(?:\\.([^/]++))?(*:601)'
                                             .')'
                                         .')'
                                     .')'
                                     .'|tags(?'
                                         .'|(?:\\.([^/]++))?(?'
-                                            .'|(*:608)'
+                                            .'|(*:637)'
                                         .')'
                                         .'|/(?'
                                             .'|([^/\\.]++)(?:\\.([^/]++))?(?'
-                                                .'|(*:649)'
+                                                .'|(*:678)'
                                             .')'
-                                            .'|([^/]++)/tags(?:\\.([^/]++))?(*:686)'
+                                            .'|([^/]++)/tags(?:\\.([^/]++))?(*:715)'
                                         .')'
                                     .')'
                                 .')'
                                 .'|s(?'
                                     .'|(?:\\.([^/]++))?(?'
-                                        .'|(*:719)'
+                                        .'|(*:748)'
                                     .')'
                                     .'|/(?'
                                         .'|([^/\\.]++)(?:\\.([^/]++))?(?'
-                                            .'|(*:760)'
+                                            .'|(*:789)'
                                         .')'
                                         .'|([^/]++)/apprenants(?'
-                                            .'|(*:791)'
-                                            .'|(?:\\.([^/]++))?(*:814)'
+                                            .'|(*:820)'
+                                            .'|(?:\\.([^/]++))?(*:843)'
                                         .')'
                                     .')'
                                 .')'
                             .')'
                             .'|referentiels(?'
                                 .'|(?:\\.([^/]++))?(?'
-                                    .'|(*:859)'
+                                    .'|(*:888)'
                                 .')'
                                 .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                    .'|(*:897)'
+                                    .'|(*:926)'
                                 .')'
                             .')'
                             .'|c(?'
                                 .'|ompetences(?'
                                     .'|(?:\\.([^/]++))?(?'
-                                        .'|(*:942)'
+                                        .'|(*:971)'
                                     .')'
                                     .'|/(?'
                                         .'|([^/\\.]++)(?:\\.([^/]++))?(?'
-                                            .'|(*:983)'
+                                            .'|(*:1012)'
                                         .')'
-                                        .'|([^/]++)/niveaux(?:\\.([^/]++))?(*:1023)'
+                                        .'|([^/]++)/niveaux(?:\\.([^/]++))?(*:1053)'
                                     .')'
                                 .')'
                                 .'|_ms(?'
-                                    .'|(?:\\.([^/]++))?(*:1055)'
-                                    .'|/([^/\\.]++)(?:\\.([^/]++))?(*:1090)'
+                                    .'|(?:\\.([^/]++))?(*:1085)'
+                                    .'|/([^/\\.]++)(?:\\.([^/]++))?(*:1120)'
                                 .')'
                             .')'
                             .'|formateurs(?'
                                 .'|(?:\\.([^/]++))?(?'
-                                    .'|(*:1132)'
+                                    .'|(*:1162)'
                                 .')'
                                 .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                    .'|(*:1171)'
+                                    .'|(*:1201)'
                                 .')'
                             .')'
                             .'|users(?'
-                                .'|(?:\\.([^/]++))?(*:1205)'
-                                .'|(*:1214)'
-                                .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                    .'|(*:1252)'
-                                .')'
+                                .'|(?:\\.([^/]++))?(*:1235)'
+                                .'|(*:1244)'
+                                .'|/([^/\\.]++)(?:\\.([^/]++))?(*:1279)'
                             .')'
                             .'|apprenants(?'
                                 .'|(?:\\.([^/]++))?(?'
-                                    .'|(*:1294)'
+                                    .'|(*:1320)'
                                 .')'
                                 .'|/(?'
-                                    .'|([^/]++)(*:1316)'
-                                    .'|([^/\\.]++)(?:\\.([^/]++))?(*:1350)'
+                                    .'|([^/]++)(*:1342)'
+                                    .'|([^/\\.]++)(?:\\.([^/]++))?(*:1376)'
                                 .')'
                             .')'
                             .'|briefs(?'
                                 .'|(?:\\.([^/]++))?(?'
-                                    .'|(*:1388)'
+                                    .'|(*:1414)'
                                 .')'
                                 .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                    .'|(*:1427)'
+                                    .'|(*:1453)'
                                 .')'
                             .')'
                             .'|tags(?'
                                 .'|(?:\\.([^/]++))?(?'
-                                    .'|(*:1463)'
+                                    .'|(*:1489)'
                                 .')'
                                 .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                    .'|(*:1502)'
+                                    .'|(*:1528)'
                                 .')'
                             .')'
                         .')'
                         .'|niveaux(?'
                             .'|(?:\\.([^/]++))?(?'
-                                .'|(*:1542)'
+                                .'|(*:1568)'
                             .')'
                             .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                .'|(*:1581)'
+                                .'|(*:1607)'
                             .')'
                         .')'
                     .')'
@@ -171,123 +170,121 @@ return [
     ],
     [ // $dynamicRoutes
         35 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
-        77 => [[['_route' => 'api_entrypoint', '_controller' => 'api_platform.action.entrypoint', '_format' => '', '_api_respond' => 'true', 'index' => 'index'], ['index', '_format'], null, null, false, true, null]],
-        107 => [[['_route' => 'api_doc', '_controller' => 'api_platform.action.documentation', '_format' => '', '_api_respond' => 'true'], ['_format'], null, null, false, true, null]],
-        143 => [[['_route' => 'api_jsonld_context', '_controller' => 'api_platform.jsonld.action.context', '_format' => 'jsonld', '_api_respond' => 'true'], ['shortName', '_format'], null, null, false, true, null]],
-        204 => [
+        70 => [[['_route' => 'update', '_controller' => 'App\\Controller\\UserController::updateUser'], ['id'], ['POST' => 0], null, false, true, null]],
+        105 => [[['_route' => 'api_entrypoint', '_controller' => 'api_platform.action.entrypoint', '_format' => '', '_api_respond' => 'true', 'index' => 'index'], ['index', '_format'], null, null, false, true, null]],
+        136 => [[['_route' => 'api_doc', '_controller' => 'api_platform.action.documentation', '_format' => '', '_api_respond' => 'true'], ['_format'], null, null, false, true, null]],
+        172 => [[['_route' => 'api_jsonld_context', '_controller' => 'api_platform.jsonld.action.context', '_format' => 'jsonld', '_api_respond' => 'true'], ['shortName', '_format'], null, null, false, true, null]],
+        233 => [
             [['_route' => 'api_profil_de_sorties_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\ProfilDeSortie', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_profil_de_sorties_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\ProfilDeSortie', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        242 => [
+        271 => [
             [['_route' => 'api_profil_de_sorties_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\ProfilDeSortie', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_profil_de_sorties_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\ProfilDeSortie', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        274 => [
+        303 => [
             [['_route' => 'api_profils_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Profil', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_profils_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Profil', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        312 => [
+        341 => [
             [['_route' => 'api_profils_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Profil', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
             [['_route' => 'api_profils_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Profil', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_profils_DELETE_item', '_controller' => 'api_platform.action.delete_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Profil', '_api_item_operation_name' => 'DELETE'], ['id', '_format'], ['DELETE' => 0], null, false, true, null],
         ],
-        347 => [
+        376 => [
             [['_route' => 'api_promos_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Promo', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_promos_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Promo', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        385 => [
+        414 => [
             [['_route' => 'api_promos_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Promo', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_promos_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Promo', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        444 => [
+        473 => [
             [['_route' => 'api_groupe_de_competences_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeCompetences', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_groupe_de_competences_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeCompetences', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        485 => [
+        514 => [
             [['_route' => 'api_groupe_de_competences_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeCompetences', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_groupe_de_competences_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeCompetences', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        532 => [[['_route' => 'api_groupe_de_competences_competences_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_subresource_operation_name' => 'api_groupe_de_competences_competences_get_subresource', '_api_subresource_context' => ['property' => 'competences', 'identifiers' => [['id', 'App\\Entity\\GroupeDeCompetences', true]], 'collection' => true, 'operationId' => 'api_groupe_de_competences_competences_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        572 => [[['_route' => 'api_groupe_de_competences_competences_niveaux_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_subresource_operation_name' => 'api_groupe_de_competences_competences_niveaux_get_subresource', '_api_subresource_context' => ['property' => 'niveau', 'identifiers' => [['id', 'App\\Entity\\GroupeDeCompetences', true], ['competences', 'App\\Entity\\Competences', true]], 'collection' => true, 'operationId' => 'api_groupe_de_competences_competences_niveaux_get_subresource']], ['id', 'competences', '_format'], ['GET' => 0], null, false, true, null]],
-        608 => [
+        561 => [[['_route' => 'api_groupe_de_competences_competences_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_subresource_operation_name' => 'api_groupe_de_competences_competences_get_subresource', '_api_subresource_context' => ['property' => 'competences', 'identifiers' => [['id', 'App\\Entity\\GroupeDeCompetences', true]], 'collection' => true, 'operationId' => 'api_groupe_de_competences_competences_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        601 => [[['_route' => 'api_groupe_de_competences_competences_niveaux_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_subresource_operation_name' => 'api_groupe_de_competences_competences_niveaux_get_subresource', '_api_subresource_context' => ['property' => 'niveau', 'identifiers' => [['id', 'App\\Entity\\GroupeDeCompetences', true], ['competences', 'App\\Entity\\Competences', true]], 'collection' => true, 'operationId' => 'api_groupe_de_competences_competences_niveaux_get_subresource']], ['id', 'competences', '_format'], ['GET' => 0], null, false, true, null]],
+        637 => [
             [['_route' => 'api_groupe_de_tags_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeTag', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_groupe_de_tags_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeTag', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        649 => [
+        678 => [
             [['_route' => 'api_groupe_de_tags_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeTag', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_groupe_de_tags_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\GroupeDeTag', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        686 => [[['_route' => 'api_groupe_de_tags_tags_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_subresource_operation_name' => 'api_groupe_de_tags_tags_get_subresource', '_api_subresource_context' => ['property' => 'tag', 'identifiers' => [['id', 'App\\Entity\\GroupeDeTag', true]], 'collection' => true, 'operationId' => 'api_groupe_de_tags_tags_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        719 => [
+        715 => [[['_route' => 'api_groupe_de_tags_tags_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_subresource_operation_name' => 'api_groupe_de_tags_tags_get_subresource', '_api_subresource_context' => ['property' => 'tag', 'identifiers' => [['id', 'App\\Entity\\GroupeDeTag', true]], 'collection' => true, 'operationId' => 'api_groupe_de_tags_tags_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        748 => [
             [['_route' => 'api_groupes_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_groupes_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        760 => [
+        789 => [
             [['_route' => 'api_groupes_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_groupes_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        791 => [[['_route' => 'api_groupes_DELETE_item', '_controller' => 'api_platform.action.delete_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_item_operation_name' => 'DELETE'], ['id'], ['DELETE' => 0], null, false, false, null]],
-        814 => [[['_route' => 'api_groupes_apprenants_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_subresource_operation_name' => 'api_groupes_apprenants_get_subresource', '_api_subresource_context' => ['property' => 'apprenant', 'identifiers' => [['id', 'App\\Entity\\Groupe', true]], 'collection' => true, 'operationId' => 'api_groupes_apprenants_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        859 => [
+        820 => [[['_route' => 'api_groupes_DELETE_item', '_controller' => 'api_platform.action.delete_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Groupe', '_api_item_operation_name' => 'DELETE'], ['id'], ['DELETE' => 0], null, false, false, null]],
+        843 => [[['_route' => 'api_groupes_apprenants_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_subresource_operation_name' => 'api_groupes_apprenants_get_subresource', '_api_subresource_context' => ['property' => 'apprenant', 'identifiers' => [['id', 'App\\Entity\\Groupe', true]], 'collection' => true, 'operationId' => 'api_groupes_apprenants_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        888 => [
             [['_route' => 'api_referentiels_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Referentiel', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_referentiels_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Referentiel', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        897 => [
+        926 => [
             [['_route' => 'api_referentiels_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Referentiel', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_referentiels_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Referentiel', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        942 => [
+        971 => [
             [['_route' => 'api_competences_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_competences_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        983 => [
+        1012 => [
             [['_route' => 'api_competences_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
             [['_route' => 'api_competences_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Competences', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
         ],
-        1023 => [[['_route' => 'api_competences_niveaux_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_subresource_operation_name' => 'api_competences_niveaux_get_subresource', '_api_subresource_context' => ['property' => 'niveau', 'identifiers' => [['id', 'App\\Entity\\Competences', true]], 'collection' => true, 'operationId' => 'api_competences_niveaux_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        1055 => [[['_route' => 'api_c_ms_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\CM', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null]],
-        1090 => [[['_route' => 'api_c_ms_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\CM', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        1132 => [
+        1053 => [[['_route' => 'api_competences_niveaux_get_subresource', '_controller' => 'api_platform.action.get_subresource', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_subresource_operation_name' => 'api_competences_niveaux_get_subresource', '_api_subresource_context' => ['property' => 'niveau', 'identifiers' => [['id', 'App\\Entity\\Competences', true]], 'collection' => true, 'operationId' => 'api_competences_niveaux_get_subresource']], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        1085 => [[['_route' => 'api_c_ms_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\CM', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null]],
+        1120 => [[['_route' => 'api_c_ms_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\CM', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        1162 => [
             [['_route' => 'api_formateurs_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Formateur', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_formateurs_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Formateur', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        1171 => [
+        1201 => [
             [['_route' => 'api_formateurs_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Formateur', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_formateurs_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Formateur', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        1205 => [[['_route' => 'api_users_post_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_collection_operation_name' => 'post'], ['_format'], ['POST' => 0], null, false, true, null]],
-        1214 => [[['_route' => 'api_users_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_collection_operation_name' => 'GET'], [], ['GET' => 0], null, false, false, null]],
-        1252 => [
-            [['_route' => 'api_users_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
-            [['_route' => 'api_users_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
-        ],
-        1294 => [
+        1235 => [[['_route' => 'api_users_post_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_collection_operation_name' => 'post'], ['_format'], ['POST' => 0], null, false, true, null]],
+        1244 => [[['_route' => 'api_users_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_collection_operation_name' => 'GET'], [], ['GET' => 0], null, false, false, null]],
+        1279 => [[['_route' => 'api_users_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\User', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        1320 => [
             [['_route' => 'api_apprenants_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_apprenants_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        1316 => [[['_route' => 'api_apprenants_get_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_item_operation_name' => 'get'], ['id'], ['GET' => 0], null, false, true, null]],
-        1350 => [[['_route' => 'api_apprenants_put_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_item_operation_name' => 'put'], ['id', '_format'], ['PUT' => 0], null, false, true, null]],
-        1388 => [
+        1342 => [[['_route' => 'api_apprenants_get_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_item_operation_name' => 'get'], ['id'], ['GET' => 0], null, false, true, null]],
+        1376 => [[['_route' => 'api_apprenants_put_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Apprenant', '_api_item_operation_name' => 'put'], ['id', '_format'], ['PUT' => 0], null, false, true, null]],
+        1414 => [
             [['_route' => 'api_briefs_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Brief', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_briefs_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Brief', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        1427 => [
+        1453 => [
             [['_route' => 'api_briefs_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Brief', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_briefs_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Brief', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        1463 => [
+        1489 => [
             [['_route' => 'api_tags_POST_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_collection_operation_name' => 'POST'], ['_format'], ['POST' => 0], null, false, true, null],
             [['_route' => 'api_tags_GET_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_collection_operation_name' => 'GET'], ['_format'], ['GET' => 0], null, false, true, null],
         ],
-        1502 => [
+        1528 => [
             [['_route' => 'api_tags_GET_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_item_operation_name' => 'GET'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_tags_PUT_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Tag', '_api_item_operation_name' => 'PUT'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
         ],
-        1542 => [
+        1568 => [
             [['_route' => 'api_niveaux_get_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_collection_operation_name' => 'get'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_niveaux_post_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_collection_operation_name' => 'post'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        1581 => [
+        1607 => [
             [['_route' => 'api_niveaux_get_item', '_controller' => 'api_platform.action.get_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_item_operation_name' => 'get'], ['id', '_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_niveaux_delete_item', '_controller' => 'api_platform.action.delete_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_item_operation_name' => 'delete'], ['id', '_format'], ['DELETE' => 0], null, false, true, null],
             [['_route' => 'api_niveaux_put_item', '_controller' => 'api_platform.action.put_item', '_format' => null, '_api_resource_class' => 'App\\Entity\\Niveau', '_api_item_operation_name' => 'put'], ['id', '_format'], ['PUT' => 0], null, false, true, null],

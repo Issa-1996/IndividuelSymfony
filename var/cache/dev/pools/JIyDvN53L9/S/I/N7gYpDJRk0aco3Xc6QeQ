@@ -4,6 +4,10 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
     $o = [
         clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Column'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Column')),
         clone ($p['Symfony\\Component\\Serializer\\Annotation\\Groups'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\Groups')),
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
+        clone $p['Symfony\\Component\\Serializer\\Annotation\\Groups'],
     ],
     null,
     [
@@ -18,12 +22,28 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
                     'grp:read',
                     'grp:write',
                 ],
+                [
+                    'Niveau:read',
+                ],
+                [
+                    'Niveau:write',
+                ],
+                [
+                    'Competence:read',
+                ],
+                [
+                    'Competence:write',
+                ],
             ],
         ],
     ],
     [
         $o[0],
         $o[1],
+        $o[2],
+        $o[3],
+        $o[4],
+        $o[5],
     ],
     []
 ); }];

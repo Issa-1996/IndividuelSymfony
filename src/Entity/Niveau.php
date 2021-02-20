@@ -9,7 +9,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NiveauRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"Niveau:read"}},
+ *     denormalizationContext={"groups"={"Niveau:write"}}
+ * )
  */
 class Niveau
 {
@@ -17,25 +20,45 @@ class Niveau
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"grp:read", "grp:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
+     * @Groups({"Niveau:read"})
+     * @Groups({"Niveau:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"grp:read", "grp:write"})
+     * @Groups({"Niveau:read"})
+     * @Groups({"Niveau:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"grp:read", "grp:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
+     * @Groups({"Niveau:read"})
+     * @Groups({"Niveau:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"grp:read", "grp:write"})
+     * @Groups({"Niveau:read"})
+     * @Groups({"Niveau:write"})
+     * @Groups({"Competence:read"})
+     * @Groups({"Competence:write"})
+     * @Groups({"GroupeCompetences:read"})
+     * @Groups({"GroupeCompetences:write"})
      */
     private $groupeAction;
 
