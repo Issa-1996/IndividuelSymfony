@@ -74,7 +74,7 @@ class ChainAdapter implements AdapterInterface, CacheInterface, PruneableInterfa
                 $item->metadata = $item->newMetadata = $sourceItem->metadata = $sourceMetadata;
 
                 if (isset($item->metadata[CacheItem::METADATA_EXPIRY])) {
-                    $item->expiresAt(\DateTime::createFromFormat('U.u', $item->metadata[CacheItem::METADATA_EXPIRY]));
+                    $item->expiresAt(\DateTime::createFromFormat('U.u', sprintf('%.6F', $item->metadata[CacheItem::METADATA_EXPIRY])));
                 } elseif (0 < $defaultLifetime) {
                     $item->expiresAfter($defaultLifetime);
                 }
@@ -152,7 +152,7 @@ class ChainAdapter implements AdapterInterface, CacheInterface, PruneableInterfa
         $missing = [];
         $misses = [];
         $nextAdapterIndex = $adapterIndex + 1;
-        $nextAdapter = isset($this->adapters[$nextAdapterIndex]) ? $this->adapters[$nextAdapterIndex] : null;
+        $nextAdapter = $this->adapters[$nextAdapterIndex] ?? null;
 
         foreach ($items as $k => $item) {
             if (!$nextAdapter || $item->isHit()) {

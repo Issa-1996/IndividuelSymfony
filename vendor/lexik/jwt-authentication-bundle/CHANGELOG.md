@@ -1,7 +1,57 @@
 CHANGELOG
 =========
 
-For a diff between two versions https://github.com/lexik/LexikJWTAuthenticationBundle/compare/v1.0.0...v2.9.0
+For a diff between two versions https://github.com/lexik/LexikJWTAuthenticationBundle/compare/v1.0.0...v2.11.1
+
+## [2.11.2](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.11.1) (2020-02-17)
+1cdcc65 - bug #840 [Security] On Authentication failure, replace MessageData (mpiot)
+bb1e6c3 - bug #838 Fix wiring GenerateKeyPairCommand when key paths are null (chalasr)
+
+* bug [\#840](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/840) [Security] On Authentication failure, replace MessageData ([mpiot](https://github.com/mpiot))
+* bug [\#838](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/838) Fix wiring GenerateKeyPairCommand when key paths are null ([chalasr](https://github.com/chalasr))
+
+## [2.11.1](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.11.1) (2020-02-10)
+
+* bug [\#835](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/835) Fix #834: Re-add namshi/jose as required dependency until v3 ([filisko](https://github.com/filisko))
+
+## [2.11.0](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.11.0) (2020-02-9)
+
+* bug [\#833](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/833) KeyLoaderInterface::getPassphrase() might return null and we need a string ([drupol](https://github.com/drupol))
+* feature [\#832](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/832) Make AbstractKeyLoader::getSigningKey() and AbstractKeyLoader::getPublicKey public ([drupol](https://github.com/drupol))
+* feature [\#817](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/817) Feat: add keypair generation command ([bpolaszek](https://github.com/bpolaszek))
+* feature [\#816](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/816) Remove support for lcobucci/jwt <3.4 & symfony/* <4.4 ([chalasr](https://github.com/chalasr))
+
+## [2.10.6](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.6) (2020-01-20)
+
+* bug [\#827](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/827) Use named constructor for lcobucci/jwt Ecdsa signers ([chalasr](https://github.com/chalasr))
+* bug [\#826](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/826) Fix creating tokens when iat is already set in the payload ([chalasr](https://github.com/chalasr))
+
+## [2.10.5](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.5) (2020-12-19)
+
+* bug [\#815](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/815) Fix compatibility for lcobucci/jwt v3.x (bis) ([chalasr](https://github.com/chalasr))
+
+## [2.10.4](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.4) (2020-12-18)
+
+* bug [\#813](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/813) Fix undefined variable ([chalasr](https://github.com/chalasr))
+
+## [2.10.3](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.3) (2020-11-30)
+
+* bug [\#804](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/804) Fix ability to set extra standard claims in the input payload (bis) ([chalasr](https://github.com/chalasr))
+* bug [\#807](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/807) Fix compatibility with locbucci/jwt 3.2 ([chalasr](https://github.com/chalasr))
+
+## [2.10.2](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.2) (2020-11-30)
+
+* bug [\#801](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/801) Fix ability to set extra standard claims in the input payload ([chalasr](https://github.com/chalasr))
+* bug [\#796](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/796) Set Token on ExpiredTokenException ([AdrienBr](https://github.com/AdrienBr))
+
+## [2.10.1](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.1) (2020-11-28)
+
+* bug [\#797](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/797) Fix support for lcobucci/jwt v3.4 and 4.0 ([chalasr](https://github.com/chalasr))
+
+## [2.10.0](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.10.0) (2020-11-23)
+
+* feature [\#790](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/790) Fix Symfony 5.2 getProviderKey deprecation ([ogizanagi](https://github.com/ogizanagi))
+* feature [\#792](https://github.com/lexik/LexikJWTAuthenticationBundle/pull/792) PHP 8 Support ([chalasr](https://github.com/chalasr))
 
 ## [2.9.0](https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.9.0) (2020-10-27)
 

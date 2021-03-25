@@ -1,0 +1,3 @@
+<?php //route_name_dec7574d7b058d73f87953fea69272ed
+
+return [PHP_INT_MAX, 'api_comptes_get_id_trans_item'];

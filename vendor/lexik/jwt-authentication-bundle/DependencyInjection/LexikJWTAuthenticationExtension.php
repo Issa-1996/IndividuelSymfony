@@ -27,7 +27,7 @@ class LexikJWTAuthenticationExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
@@ -63,7 +63,6 @@ class LexikJWTAuthenticationExtension extends Extension
             $e->setPath('lexik_jwt_authentication');
 
             throw $e;
-
         }
 
         $container->setParameter('lexik_jwt_authentication.pass_phrase', $config['pass_phrase']);
@@ -121,6 +120,13 @@ class LexikJWTAuthenticationExtension extends Extension
                 ->getDefinition('lexik_jwt_authentication.handler.authentication_success')
                 ->replaceArgument(2, new IteratorArgument($cookieProviders));
         }
+
+        $container
+            ->getDefinition('lexik_jwt_authentication.generate_keypair_command')
+            ->replaceArgument(1, $config['secret_key'])
+            ->replaceArgument(2, $config['public_key'])
+            ->replaceArgument(3, $config['pass_phrase'])
+            ->replaceArgument(4, $encoderConfig['signature_algorithm']);
     }
 
     private static function createTokenExtractors(ContainerBuilder $container, array $tokenExtractorsConfig)

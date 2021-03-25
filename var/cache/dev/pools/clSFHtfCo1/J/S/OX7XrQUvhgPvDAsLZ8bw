@@ -1,0 +1,3 @@
+<?php //route_name_f4dc1c424b01fd88617ff33be11cc3cb
+
+return [PHP_INT_MAX, 'api_transactions_get_trans_code_item'];

@@ -1,0 +1,190 @@
+<?php //resource_metadata_a7ab8ad480b59326b80c7ce51fcef290
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['ApiPlatform\\Core\\Metadata\\Resource\\ResourceMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('ApiPlatform\\Core\\Metadata\\Resource\\ResourceMetadata')),
+    ],
+    null,
+    [
+        'ApiPlatform\\Core\\Metadata\\Resource\\ResourceMetadata' => [
+            'shortName' => [
+                'Compte',
+            ],
+            'description' => [
+                '',
+            ],
+            'itemOperations' => [
+                [
+                    'get_id_trans' => [
+                        'method' => 'GET',
+                        'path' => '/compte/{id}/transaction',
+                        'input' => null,
+                        'output' => null,
+                        'stateless' => null,
+                        'input_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                        'output_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                    ],
+                    'GET' => [
+                        'method' => 'GET',
+                        'stateless' => null,
+                        'input_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                        'output_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                    ],
+                    'PUT' => [
+                        'method' => 'PUT',
+                        'stateless' => null,
+                        'input_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                        'output_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'collectionOperations' => [
+                [
+                    'post' => [
+                        'method' => 'POST',
+                        'path' => '/api/admin/compte',
+                        'input' => null,
+                        'output' => null,
+                        'stateless' => null,
+                        'input_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                        'output_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                    ],
+                    'GET' => [
+                        'method' => 'GET',
+                        'stateless' => null,
+                        'input_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                        'output_formats' => [
+                            'jsonld' => [
+                                'application/ld+json',
+                            ],
+                            'json' => [
+                                'application/json',
+                            ],
+                            'html' => [
+                                'text/html',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'graphql' => [
+                [
+                    'item_query' => [],
+                    'collection_query' => [],
+                    'delete' => [],
+                    'update' => [],
+                    'create' => [],
+                ],
+            ],
+            'attributes' => [
+                [
+                    'route_prefix' => '/admin',
+                    'normalization_context' => [
+                        'groups' => [
+                            'Compte:read',
+                        ],
+                    ],
+                    'denormalization_context' => [
+                        'groups' => [
+                            'Compte:write',
+                        ],
+                    ],
+                    'input' => null,
+                    'output' => null,
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

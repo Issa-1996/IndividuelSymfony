@@ -1,0 +1,147 @@
+<?php //App_Entity_Transaction
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Transaction',
+                'id',
+                'montant',
+                'dateDepot',
+                'dateRetrait',
+                'codeTransaction',
+                'frais',
+                'fraisDepot',
+                'fraisRetrait',
+                'fraisEtat',
+                'fraisSysteme',
+                'retraitClient',
+                'depotClient',
+                'userRetrait',
+                'userDepot',
+                'compteDepot',
+                'compteRetrait',
+                'montantTotal',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'montant' => $o[2],
+                    'dateDepot' => $o[3],
+                    'dateRetrait' => $o[4],
+                    'codeTransaction' => $o[5],
+                    'frais' => $o[6],
+                    'fraisDepot' => $o[7],
+                    'fraisRetrait' => $o[8],
+                    'fraisEtat' => $o[9],
+                    'fraisSysteme' => $o[10],
+                    'retraitClient' => $o[11],
+                    'depotClient' => $o[12],
+                    'userRetrait' => $o[13],
+                    'userDepot' => $o[14],
+                    'compteDepot' => $o[15],
+                    'compteRetrait' => $o[16],
+                    'montantTotal' => $o[17],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'Transaction:read',
+                    'Transaction:write',
+                    'Compte:read',
+                    'Compte:write',
+                    'Client:read',
+                    'Client:write',
+                    'User:read',
+                    'User:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:write',
+                    'Transaction:read',
+                ],
+                [
+                    'Transaction:write',
+                    'Transaction:read',
+                ],
+                [
+                    'Transaction:write',
+                    'Transaction:read',
+                ],
+                [
+                    'Transaction:write',
+                    'Transaction:read',
+                ],
+                [
+                    'Transaction:write',
+                ],
+                [
+                    'Transaction:write',
+                    'Transaction:read',
+                ],
+                [
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

@@ -1,0 +1,45 @@
+<?php //App_Entity_Profil
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Profil',
+                'id',
+                'libelle',
+                'user',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'libelle' => $o[2],
+                    'user' => $o[3],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'User:read',
+                    'User:write',
+                    'Profil:read',
+                    'Profil:write',
+                ],
+                [
+                    'Profil:read',
+                    'Profil:write',
+                ],
+                [
+                    'Profil:write',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

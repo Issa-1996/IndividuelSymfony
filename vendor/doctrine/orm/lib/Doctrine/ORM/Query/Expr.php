@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,15 +20,22 @@
 
 namespace Doctrine\ORM\Query;
 
+use Traversable;
+
+use function func_get_args;
+use function implode;
+use function is_bool;
+use function is_iterable;
+use function is_numeric;
+use function is_string;
+use function iterator_to_array;
+use function str_replace;
+
 /**
  * This class is used to generate DQL expressions via a set of PHP static functions.
  *
  * @link    www.doctrine-project.org
- * @since   2.0
- * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author  Jonathan Wage <jonwage@gmail.com>
- * @author  Roman Borschel <roman@code-factory.org>
- * @author  Benjamin Eberlei <kontakt@beberlei.de>
+ *
  * @todo Rename: ExpressionBuilder
  */
 class Expr
@@ -442,9 +450,13 @@ class Expr
      */
     public function in($x, $y)
     {
-        if (is_array($y)) {
+        if (is_iterable($y)) {
+            if ($y instanceof Traversable) {
+                $y = iterator_to_array($y);
+            }
+
             foreach ($y as &$literal) {
-                if ( ! ($literal instanceof Expr\Literal)) {
+                if (! ($literal instanceof Expr\Literal)) {
                     $literal = $this->_quoteLiteral($literal);
                 }
             }
@@ -463,9 +475,13 @@ class Expr
      */
     public function notIn($x, $y)
     {
-        if (is_array($y)) {
+        if (is_iterable($y)) {
+            if ($y instanceof Traversable) {
+                $y = iterator_to_array($y);
+            }
+
             foreach ($y as &$literal) {
-                if ( ! ($literal instanceof Expr\Literal)) {
+                if (! ($literal instanceof Expr\Literal)) {
                     $literal = $this->_quoteLiteral($literal);
                 }
             }
@@ -527,7 +543,7 @@ class Expr
     /**
      * Creates a CONCAT() function expression with the given arguments.
      *
-     * @param mixed $x First argument to be used in CONCAT() function.
+     * @param mixed $x     First argument to be used in CONCAT() function.
      * @param mixed $y,... Other arguments to be used in CONCAT() function.
      *
      * @return Expr\Func
@@ -549,7 +565,7 @@ class Expr
     public function substring($x, $from, $len = null)
     {
         $args = [$x, $from];
-        if (null !== $len) {
+        if ($len !== null) {
             $args[] = $len;
         }
 
@@ -613,10 +629,10 @@ class Expr
      */
     private function _quoteLiteral($literal)
     {
-        if (is_numeric($literal) && !is_string($literal)) {
+        if (is_numeric($literal) && ! is_string($literal)) {
             return (string) $literal;
-        } else if (is_bool($literal)) {
-            return $literal ? "true" : "false";
+        } elseif (is_bool($literal)) {
+            return $literal ? 'true' : 'false';
         }
 
         return "'" . str_replace("'", "''", $literal) . "'";
@@ -625,9 +641,9 @@ class Expr
     /**
      * Creates an instance of BETWEEN() function, with the given argument.
      *
-     * @param mixed          $val Valued to be inspected by range values.
-     * @param integer|string $x   Starting range value to be used in BETWEEN() function.
-     * @param integer|string $y   End point value to be used in BETWEEN() function.
+     * @param mixed      $val Valued to be inspected by range values.
+     * @param int|string $x   Starting range value to be used in BETWEEN() function.
+     * @param int|string $y   End point value to be used in BETWEEN() function.
      *
      * @return string A BETWEEN expression.
      */

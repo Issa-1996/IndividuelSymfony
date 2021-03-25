@@ -66,10 +66,10 @@ class Profil extends \App\Entity\Profil implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'libelle', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'users', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'archivage'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'libelle', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'user'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'libelle', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'users', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'archivage'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'libelle', '' . "\0" . 'App\\Entity\\Profil' . "\0" . 'user'];
     }
 
     /**
@@ -216,12 +216,12 @@ class Profil extends \App\Entity\Profil implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getUsers(): \Doctrine\Common\Collections\Collection
+    public function getUser(): \Doctrine\Common\Collections\Collection
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsers', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUser', []);
 
-        return parent::getUsers();
+        return parent::getUser();
     }
 
     /**
@@ -244,28 +244,6 @@ class Profil extends \App\Entity\Profil implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeUser', [$user]);
 
         return parent::removeUser($user);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getArchivage(): ?bool
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArchivage', []);
-
-        return parent::getArchivage();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setArchivage(?bool $archivage): \App\Entity\Profil
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setArchivage', [$archivage]);
-
-        return parent::setArchivage($archivage);
     }
 
 }

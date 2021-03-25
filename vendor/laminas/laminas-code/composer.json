@@ -4,6 +4,7 @@
     "license": "BSD-3-Clause",
     "keywords": [
         "laminas",
+        "laminasframework",
         "code"
     ],
     "homepage": "https://laminas.dev",
@@ -18,26 +19,26 @@
     "config": {
         "sort-packages": true
     },
-    "extra": {
-    },
     "require": {
-        "php": "^7.3 || ~8.0.0",
-        "laminas/laminas-eventmanager": "^3.3",
-        "laminas/laminas-zendframework-bridge": "^1.1"
+        "php": "^7.4 || ~8.0.0",
+        "laminas/laminas-eventmanager": "^3.3"
     },
     "require-dev": {
         "ext-phar": "*",
         "doctrine/annotations": "^1.10.4",
-        "laminas/laminas-coding-standard": "^1.0.0",
+        "laminas/laminas-coding-standard": "^2.1.4",
         "laminas/laminas-stdlib": "^3.3.0",
-        "phpunit/phpunit": "^9.4.2"
+        "phpunit/phpunit": "^9.4.2",
+        "psalm/plugin-phpunit": "^0.14.0",
+        "vimeo/psalm": "^4.3.1"
     },
     "conflict": {
         "phpspec/prophecy": "<1.9.0"
     },
     "suggest": {
         "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
-        "laminas/laminas-stdlib": "Laminas\\Stdlib component"
+        "laminas/laminas-stdlib": "Laminas\\Stdlib component",
+        "laminas/laminas-zendframework-bridge": "A bridge with Zend Framework"
     },
     "autoload": {
         "psr-4": {
@@ -57,9 +58,10 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
     },
     "replace": {
-        "zendframework/zend-code": "^3.4.1"
+        "zendframework/zend-code": "self.version"
     }
 }

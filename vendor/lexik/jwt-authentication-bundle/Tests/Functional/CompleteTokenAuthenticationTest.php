@@ -14,9 +14,9 @@ use Symfony\Component\Security\Core\User\User;
  */
 class CompleteTokenAuthenticationTest extends TestCase
 {
-    protected function setUp()
+    protected function doSetUp()
     {
-        parent::setUp();
+        parent::doSetUp();
 
         static::$client = static::createClient();
     }
@@ -27,7 +27,7 @@ class CompleteTokenAuthenticationTest extends TestCase
         static::accessSecuredRoute();
 
         $response = static::$client->getResponse();
-        $content  = json_decode($response->getContent(), true);
+        $content = json_decode($response->getContent(), true);
 
         $this->assertSuccessful($response);
 

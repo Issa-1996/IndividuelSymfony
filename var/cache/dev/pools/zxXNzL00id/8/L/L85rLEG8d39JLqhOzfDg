@@ -1,0 +1,94 @@
+<?php //App_Entity_Compte
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Compte',
+                'id',
+                'numeroCompte',
+                'solde',
+                'dateCreation',
+                'status',
+                'user',
+                'transactionDepot',
+                'transactionRetrait',
+                'dateDernierAccess',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'numeroCompte' => $o[2],
+                    'solde' => $o[3],
+                    'dateCreation' => $o[4],
+                    'status' => $o[5],
+                    'user' => $o[6],
+                    'transactionDepot' => $o[7],
+                    'transactionRetrait' => $o[8],
+                    'dateDernierAccess' => $o[9],
+                ],
+            ],
+            'groups' => [
+                1 => [
+                    'User:read',
+                    'User:write',
+                    'Transaction:read',
+                    'Transaction:write',
+                    'Compte:read',
+                    'Compte:write',
+                    'Agence:read',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                    'Transaction:read',
+                    'Transaction:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                ],
+                [
+                    'Compte:read',
+                    'Compte:write',
+                ],
+                [
+                    'Compte:read',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

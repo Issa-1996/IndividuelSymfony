@@ -7,18 +7,19 @@ namespace Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader;
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  *
- * @internal
+ * @method string|null getPublicKey()
+ * @method string|null getSigningKey()
  */
 interface KeyLoaderInterface
 {
-    const TYPE_PUBLIC  = 'public';
+    const TYPE_PUBLIC = 'public';
 
     const TYPE_PRIVATE = 'private';
 
     /**
      * Loads a key from a given type (public or private).
      *
-     * @param resource|string|null
+     * @param resource|string|null $type
      *
      * @return resource|string|null
      */

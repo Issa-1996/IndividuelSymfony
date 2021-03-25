@@ -17,15 +17,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 interface JWTTokenManagerInterface
 {
     /**
-     * @param UserInterface $user
-     *
      * @return string The JWT token
      */
     public function create(UserInterface $user);
 
     /**
-     * @param TokenInterface $token
-     *
      * @return array|false The JWT token payload or false if an error occurs
      */
     public function decode(TokenInterface $token);
@@ -33,7 +29,7 @@ interface JWTTokenManagerInterface
     /**
      * Sets the field used as identifier to load an user from a JWT payload.
      *
-     * @param string
+     * @param string $field
      */
     public function setUserIdentityField($field);
 
