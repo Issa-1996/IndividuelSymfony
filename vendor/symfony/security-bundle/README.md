@@ -1,9 +1,6 @@
 SecurityBundle
 ==============
 
-SecurityBundle provides a tight integration of the Security component into the
-Symfony full-stack framework.
-
 Resources
 ---------
 

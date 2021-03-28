@@ -23,8 +23,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidator
  * Validates an item using the Symfony validator component.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
- *
- * @final
  */
 class Validator implements ValidatorInterface
 {
@@ -50,10 +48,6 @@ class Validator implements ValidatorInterface
                 ($service = $this->container->get($validationGroups)) &&
                 \is_callable($service)
             ) {
-                if (!$service instanceof ValidationGroupsGeneratorInterface) {
-                    @trigger_error(sprintf('Using a public validation groups generator service not implementing "%s" is deprecated since 2.6 and will be removed in 3.0.', ValidationGroupsGeneratorInterface::class), \E_USER_DEPRECATED);
-                }
-
                 $validationGroups = $service($data);
             } elseif (\is_callable($validationGroups)) {
                 $validationGroups = $validationGroups($data);

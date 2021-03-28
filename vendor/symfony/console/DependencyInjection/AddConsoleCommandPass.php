@@ -29,14 +29,12 @@ class AddConsoleCommandPass implements CompilerPassInterface
     private $commandLoaderServiceId;
     private $commandTag;
     private $noPreloadTag;
-    private $privateTagName;
 
-    public function __construct(string $commandLoaderServiceId = 'console.command_loader', string $commandTag = 'console.command', string $noPreloadTag = 'container.no_preload', string $privateTagName = 'container.private')
+    public function __construct(string $commandLoaderServiceId = 'console.command_loader', string $commandTag = 'console.command', string $noPreloadTag = 'container.no_preload')
     {
         $this->commandLoaderServiceId = $commandLoaderServiceId;
         $this->commandTag = $commandTag;
         $this->noPreloadTag = $noPreloadTag;
-        $this->privateTagName = $privateTagName;
     }
 
     public function process(ContainerBuilder $container)
@@ -64,7 +62,7 @@ class AddConsoleCommandPass implements CompilerPassInterface
             }
 
             if (null === $commandName) {
-                if (!$definition->isPublic() || $definition->isPrivate() || $definition->hasTag($this->privateTagName)) {
+                if (!$definition->isPublic() || $definition->isPrivate()) {
                     $commandId = 'console.command.public_alias.'.$id;
                     $container->setAlias($commandId, $id)->setPublic(true);
                     $id = $commandId;

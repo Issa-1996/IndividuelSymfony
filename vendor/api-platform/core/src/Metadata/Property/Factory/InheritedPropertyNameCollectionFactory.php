@@ -17,7 +17,9 @@ use ApiPlatform\Core\Metadata\Property\PropertyNameCollection;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceNameCollectionFactoryInterface;
 
 /**
- * @deprecated since 2.6, to be removed in 3.0
+ * Creates a property name collection from eventual child inherited properties.
+ *
+ * @author Antoine Bluchet <soyuka@gmail.com>
  */
 final class InheritedPropertyNameCollectionFactory implements PropertyNameCollectionFactoryInterface
 {
@@ -26,8 +28,6 @@ final class InheritedPropertyNameCollectionFactory implements PropertyNameCollec
 
     public function __construct(ResourceNameCollectionFactoryInterface $resourceNameCollectionFactory, PropertyNameCollectionFactoryInterface $decorated = null)
     {
-        @trigger_error(sprintf('"%s" is deprecated since 2.6 and will be removed in 3.0.', __CLASS__), \E_USER_DEPRECATED);
-
         $this->resourceNameCollectionFactory = $resourceNameCollectionFactory;
         $this->decorated = $decorated;
     }
@@ -37,8 +37,6 @@ final class InheritedPropertyNameCollectionFactory implements PropertyNameCollec
      */
     public function create(string $resourceClass, array $options = []): PropertyNameCollection
     {
-        @trigger_error(sprintf('"%s" is deprecated since 2.6 and will be removed in 3.0.', __CLASS__), \E_USER_DEPRECATED);
-
         $propertyNames = [];
 
         // Inherited from parent
@@ -53,7 +51,7 @@ final class InheritedPropertyNameCollectionFactory implements PropertyNameCollec
                 continue;
             }
 
-            if (is_subclass_of($resourceClass, $knownResourceClass)) {
+            if (is_subclass_of($knownResourceClass, $resourceClass)) {
                 foreach ($this->create($knownResourceClass) as $propertyName) {
                     $propertyNames[$propertyName] = $propertyName;
                 }

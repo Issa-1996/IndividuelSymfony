@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -22,6 +21,9 @@ namespace Doctrine\ORM\Mapping;
 
 /**
  * Is used to map the columns specified in the SELECT list of the query to the properties or fields of the entity class.
+ *
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since   2.3
  *
  * @Annotation
  * @Target("ANNOTATION")

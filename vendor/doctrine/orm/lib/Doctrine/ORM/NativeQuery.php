@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,18 +19,18 @@
 
 namespace Doctrine\ORM;
 
-use function array_values;
-use function is_int;
-use function key;
-use function ksort;
-
 /**
  * Represents a native SQL query.
+ *
+ * @author Roman Borschel <roman@code-factory.org>
+ * @since 2.0
  */
 final class NativeQuery extends AbstractQuery
 {
-    /** @var string */
-    private $sql;
+    /**
+     * @var string
+     */
+    private $_sql;
 
     /**
      * Sets the SQL of the query.
@@ -40,9 +39,9 @@ final class NativeQuery extends AbstractQuery
      *
      * @return self This query instance.
      */
-    public function setSQL($sql): self
+    public function setSQL($sql) : self
     {
-        $this->sql = $sql;
+        $this->_sql = $sql;
 
         return $this;
     }
@@ -56,7 +55,7 @@ final class NativeQuery extends AbstractQuery
      */
     public function getSQL()
     {
-        return $this->sql;
+        return $this->_sql;
     }
 
     /**
@@ -70,7 +69,7 @@ final class NativeQuery extends AbstractQuery
         foreach ($this->getParameters() as $parameter) {
             $name  = $parameter->getName();
             $value = $this->processParameterValue($parameter->getValue());
-            $type  = $parameter->getValue() === $value
+            $type  = ($parameter->getValue() === $value)
                 ? $parameter->getType()
                 : Query\ParameterTypeInferer::inferType($value);
 
@@ -87,10 +86,7 @@ final class NativeQuery extends AbstractQuery
         }
 
         return $this->_em->getConnection()->executeQuery(
-            $this->sql,
-            $parameters,
-            $types,
-            $this->_queryCacheProfile
+            $this->_sql, $parameters, $types, $this->_queryCacheProfile
         );
     }
 }

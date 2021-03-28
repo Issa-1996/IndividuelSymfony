@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
 use function array_keys;
 use function explode;
 use function implode;
@@ -31,11 +30,9 @@ class DoctrineMigrationsExtension extends Extension
     /**
      * Responds to the migrations configuration parameter.
      *
-     * @param mixed[][] $configs
-     *
-     * @psalm-param array<string, array<string, array<string, string>|string>>> $configs
+     * @param string[][] $configs
      */
-    public function load(array $configs, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $container) : void
     {
         $configuration = new Configuration();
 
@@ -85,23 +82,19 @@ class DoctrineMigrationsExtension extends Extension
             $container->setDefinition('doctrine.migrations.storage.table_storage', $storageDefinition);
             $container->setAlias('doctrine.migrations.metadata_storage', 'doctrine.migrations.storage.table_storage');
 
-            if ($storageConfiguration['table_name'] !== null) {
+            if ($storageConfiguration['table_name']!== null) {
                 $storageDefinition->addMethodCall('setTableName', [$storageConfiguration['table_name']]);
             }
-
-            if ($storageConfiguration['version_column_name'] !== null) {
+            if ($storageConfiguration['version_column_name']!== null) {
                 $storageDefinition->addMethodCall('setVersionColumnName', [$storageConfiguration['version_column_name']]);
             }
-
-            if ($storageConfiguration['version_column_length'] !== null) {
+            if ($storageConfiguration['version_column_length']!== null) {
                 $storageDefinition->addMethodCall('setVersionColumnLength', [$storageConfiguration['version_column_length']]);
             }
-
-            if ($storageConfiguration['executed_at_column_name'] !== null) {
+            if ($storageConfiguration['executed_at_column_name']!== null) {
                 $storageDefinition->addMethodCall('setExecutedAtColumnName', [$storageConfiguration['executed_at_column_name']]);
             }
-
-            if ($storageConfiguration['execution_time_column_name'] !== null) {
+            if ($storageConfiguration['execution_time_column_name']!== null) {
                 $storageDefinition->addMethodCall('setExecutionTimeColumnName', [$storageConfiguration['execution_time_column_name']]);
             }
 
@@ -118,21 +111,20 @@ class DoctrineMigrationsExtension extends Extension
         $container->setParameter('doctrine.migrations.preferred_connection', $config['connection']);
     }
 
-    private function checkIfBundleRelativePath(string $path, ContainerBuilder $container): string
+    private function checkIfBundleRelativePath(string $path, ContainerBuilder $container) : string
     {
         if (isset($path[0]) && $path[0] === '@') {
             $pathParts  = explode('/', $path);
             $bundleName = substr($pathParts[0], 1);
 
             $bundlePath = $this->getBundlePath($bundleName, $container);
-
             return $bundlePath . substr($path, strlen('@' . $bundleName));
         }
 
         return $path;
     }
 
-    private function getBundlePath(string $bundleName, ContainerBuilder $container): string
+    private function getBundlePath(string $bundleName, ContainerBuilder $container) : string
     {
         $bundleMetadata = $container->getParameter('kernel.bundles_metadata');
 
@@ -152,12 +144,12 @@ class DoctrineMigrationsExtension extends Extension
      *
      * @return string The XSD base path
      */
-    public function getXsdValidationBasePath(): string
+    public function getXsdValidationBasePath() : string
     {
         return __DIR__ . '/../Resources/config/schema';
     }
 
-    public function getNamespace(): string
+    public function getNamespace() : string
     {
         return 'http://symfony.com/schema/dic/doctrine/migrations/3.0';
     }

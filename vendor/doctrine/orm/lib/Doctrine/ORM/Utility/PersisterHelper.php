@@ -23,20 +23,21 @@ namespace Doctrine\ORM\Utility;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\QueryException;
-use RuntimeException;
-
-use function sprintf;
 
 /**
  * The PersisterHelper contains logic to infer binding types which is used in
  * several persisters.
  *
  * @link   www.doctrine-project.org
+ * @since  2.5
+ * @author Jasper N. Brouwer <jasper@nerdsweide.nl>
  */
 class PersisterHelper
 {
     /**
-     * @param string $fieldName
+     * @param string                 $fieldName
+     * @param ClassMetadata          $class
+     * @param EntityManagerInterface $em
      *
      * @return array<int, string>
      *
@@ -48,7 +49,7 @@ class PersisterHelper
             return [$class->fieldMappings[$fieldName]['type']];
         }
 
-        if (! isset($class->associationMappings[$fieldName])) {
+        if ( ! isset($class->associationMappings[$fieldName])) {
             return [];
         }
 
@@ -75,11 +76,13 @@ class PersisterHelper
     }
 
     /**
-     * @param string $columnName
+     * @param string                 $columnName
+     * @param ClassMetadata          $class
+     * @param EntityManagerInterface $em
      *
      * @return string
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public static function getTypeOfColumn($columnName, ClassMetadata $class, EntityManagerInterface $em)
     {
@@ -93,12 +96,12 @@ class PersisterHelper
 
         // iterate over to-one association mappings
         foreach ($class->associationMappings as $assoc) {
-            if (! isset($assoc['joinColumns'])) {
+            if ( ! isset($assoc['joinColumns'])) {
                 continue;
             }
 
             foreach ($assoc['joinColumns'] as $joinColumn) {
-                if ($joinColumn['name'] === $columnName) {
+                if ($joinColumn['name'] == $columnName) {
                     $targetColumnName = $joinColumn['referencedColumnName'];
                     $targetClass      = $em->getClassMetadata($assoc['targetEntity']);
 
@@ -109,12 +112,12 @@ class PersisterHelper
 
         // iterate over to-many association mappings
         foreach ($class->associationMappings as $assoc) {
-            if (! (isset($assoc['joinTable']) && isset($assoc['joinTable']['joinColumns']))) {
+            if ( ! (isset($assoc['joinTable']) && isset($assoc['joinTable']['joinColumns']))) {
                 continue;
             }
 
             foreach ($assoc['joinTable']['joinColumns'] as $joinColumn) {
-                if ($joinColumn['name'] === $columnName) {
+                if ($joinColumn['name'] == $columnName) {
                     $targetColumnName = $joinColumn['referencedColumnName'];
                     $targetClass      = $em->getClassMetadata($assoc['targetEntity']);
 
@@ -123,7 +126,7 @@ class PersisterHelper
             }
         }
 
-        throw new RuntimeException(sprintf(
+        throw new \RuntimeException(sprintf(
             'Could not resolve type of column "%s" of class "%s"',
             $columnName,
             $class->getName()

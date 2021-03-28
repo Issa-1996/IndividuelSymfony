@@ -12,7 +12,7 @@ class EncodingNegotiatorTest extends TestCase
      */
     private $negotiator;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->negotiator = new EncodingNegotiator();
     }

@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
  */
 class PrototypeConfigurator extends AbstractServiceConfigurator
 {
-    public const FACTORY = 'load';
+    const FACTORY = 'load';
 
     use Traits\AbstractTrait;
     use Traits\ArgumentTrait;

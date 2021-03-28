@@ -12,7 +12,6 @@
 namespace Symfony\Component\Serializer\Normalizer;
 
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 
 /**
  * Normalizes errors according to the API Problem spec (RFC 7807).
@@ -38,27 +37,21 @@ class ProblemNormalizer implements NormalizerInterface, CacheableSupportsMethodI
 
     /**
      * {@inheritdoc}
-     *
-     * @return array
      */
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($exception, string $format = null, array $context = [])
     {
-        if (!$object instanceof FlattenException) {
-            throw new InvalidArgumentException(sprintf('The object must implement "%s".', FlattenException::class));
-        }
-
         $context += $this->defaultContext;
         $debug = $this->debug && ($context['debug'] ?? true);
 
         $data = [
             'type' => $context['type'],
             'title' => $context['title'],
-            'status' => $context['status'] ?? $object->getStatusCode(),
-            'detail' => $debug ? $object->getMessage() : $object->getStatusText(),
+            'status' => $context['status'] ?? $exception->getStatusCode(),
+            'detail' => $debug ? $exception->getMessage() : $exception->getStatusText(),
         ];
         if ($debug) {
-            $data['class'] = $object->getClass();
-            $data['trace'] = $object->getTrace();
+            $data['class'] = $exception->getClass();
+            $data['trace'] = $exception->getTrace();
         }
 
         return $data;

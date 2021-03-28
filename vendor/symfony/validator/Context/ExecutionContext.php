@@ -128,7 +128,6 @@ class ExecutionContext implements ExecutionContextInterface
      * @var array
      */
     private $initializedObjects;
-    private $cachedObjectsRefs;
 
     /**
      * @param mixed $root The root value of the validated object graph
@@ -142,7 +141,6 @@ class ExecutionContext implements ExecutionContextInterface
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
         $this->violations = new ConstraintViolationList();
-        $this->cachedObjectsRefs = new \SplObjectStorage();
     }
 
     /**
@@ -347,26 +345,5 @@ class ExecutionContext implements ExecutionContextInterface
     public function isObjectInitialized(string $cacheKey): bool
     {
         return isset($this->initializedObjects[$cacheKey]);
-    }
-
-    /**
-     * @internal
-     *
-     * @param object $object
-     *
-     * @return string
-     */
-    public function generateCacheKey($object)
-    {
-        if (!isset($this->cachedObjectsRefs[$object])) {
-            $this->cachedObjectsRefs[$object] = spl_object_hash($object);
-        }
-
-        return $this->cachedObjectsRefs[$object];
-    }
-
-    public function __clone()
-    {
-        $this->violations = clone $this->violations;
     }
 }

@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class ServiceConfigurator extends AbstractServiceConfigurator
 {
-    public const FACTORY = 'services';
+    const FACTORY = 'services';
 
     use Traits\AbstractTrait;
     use Traits\ArgumentTrait;

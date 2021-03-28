@@ -126,7 +126,7 @@ class AutowirePass extends AbstractRecursivePass
         $this->methodCalls = $this->autowireCalls($reflectionClass, $isRoot);
 
         if ($constructor) {
-            [, $arguments] = array_shift($this->methodCalls);
+            list(, $arguments) = array_shift($this->methodCalls);
 
             if ($arguments !== $value->getArguments()) {
                 $value->setArguments($arguments);
@@ -152,7 +152,7 @@ class AutowirePass extends AbstractRecursivePass
 
         foreach ($this->methodCalls as $i => $call) {
             $this->decoratedMethodIndex = $i;
-            [$method, $arguments] = $call;
+            list($method, $arguments) = $call;
 
             if ($method instanceof \ReflectionFunctionAbstract) {
                 $reflectionMethod = $method;

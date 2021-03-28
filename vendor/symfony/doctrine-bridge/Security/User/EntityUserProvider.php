@@ -62,10 +62,7 @@ class EntityUserProvider implements UserProviderInterface, PasswordUpgraderInter
         }
 
         if (null === $user) {
-            $e = new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
-            $e->setUsername($username);
-
-            throw $e;
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
         return $user;
@@ -95,10 +92,7 @@ class EntityUserProvider implements UserProviderInterface, PasswordUpgraderInter
 
             $refreshedUser = $repository->find($id);
             if (null === $refreshedUser) {
-                $e = new UsernameNotFoundException('User with id '.json_encode($id).' not found.');
-                $e->setUsername(json_encode($id));
-
-                throw $e;
+                throw new UsernameNotFoundException('User with id '.json_encode($id).' not found.');
             }
         }
 
@@ -159,3 +153,6 @@ class EntityUserProvider implements UserProviderInterface, PasswordUpgraderInter
         return $this->getObjectManager()->getClassMetadata($this->classOrAlias);
     }
 }
+
+interface_exists(ObjectManager::class);
+interface_exists(ObjectRepository::class);

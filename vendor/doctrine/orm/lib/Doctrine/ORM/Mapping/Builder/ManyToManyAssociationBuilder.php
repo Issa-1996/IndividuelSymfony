@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,14 +22,21 @@ namespace Doctrine\ORM\Mapping\Builder;
 /**
  * ManyToMany Association Builder
  *
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        www.doctrine-project.com
+ * @since       2.0
+ * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
 class ManyToManyAssociationBuilder extends OneToManyAssociationBuilder
 {
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $joinTableName;
 
-    /** @var mixed[] */
+    /**
+     * @var array
+     */
     private $inverseJoinColumns = [];
 
     /**
@@ -76,20 +82,17 @@ class ManyToManyAssociationBuilder extends OneToManyAssociationBuilder
      */
     public function build()
     {
-        $mapping              = $this->mapping;
+        $mapping = $this->mapping;
         $mapping['joinTable'] = [];
         if ($this->joinColumns) {
             $mapping['joinTable']['joinColumns'] = $this->joinColumns;
         }
-
         if ($this->inverseJoinColumns) {
             $mapping['joinTable']['inverseJoinColumns'] = $this->inverseJoinColumns;
         }
-
         if ($this->joinTableName) {
             $mapping['joinTable']['name'] = $this->joinTableName;
         }
-
         $cm = $this->builder->getClassMetadata();
         $cm->mapManyToMany($mapping);
 

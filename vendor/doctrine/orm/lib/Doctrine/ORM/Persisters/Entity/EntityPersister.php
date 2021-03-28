@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,27 +19,27 @@
 
 namespace Doctrine\ORM\Persisters\Entity;
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Entity persister interface
  * Define the behavior that should be implemented by all entity persisters.
+ *
+ * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since 2.5
  */
 interface EntityPersister
 {
     /**
-     * @return ClassMetadata
+     * @return \Doctrine\ORM\Mapping\ClassMetadata
      */
     public function getClassMetadata();
 
     /**
      * Gets the ResultSetMapping used for hydration.
      *
-     * @return ResultSetMapping
+     * @return \Doctrine\ORM\Query\ResultSetMapping
      */
     public function getResultSetMapping();
 
@@ -48,37 +47,37 @@ interface EntityPersister
      * Get all queued inserts.
      *
      * @return array
-     */
+    */
     public function getInserts();
 
      /**
-      * @return string
-      *
-      * @TODO - It should not be here.
-      * But its necessary since JoinedSubclassPersister#executeInserts invoke the root persister.
-      *
-      * Gets the INSERT SQL used by the persister to persist a new entity.
-      */
+     * @TODO - It should not be here.
+     * But its necessary since JoinedSubclassPersister#executeInserts invoke the root persister.
+     *
+     * Gets the INSERT SQL used by the persister to persist a new entity.
+     *
+     * @return string
+     */
     public function getInsertSQL();
 
     /**
      * Gets the SELECT SQL to select one or more entities by a set of field criteria.
      *
-     * @param mixed[]|Criteria $criteria
-     * @param mixed[]|null     $assoc
-     * @param int|null         $lockMode
-     * @param int|null         $limit
-     * @param int|null         $offset
-     * @param mixed[]|null     $orderBy
+     * @param array|\Doctrine\Common\Collections\Criteria $criteria
+     * @param array|null                                  $assoc
+     * @param int|null                                    $lockMode
+     * @param int|null                                    $limit
+     * @param int|null                                    $offset
+     * @param array|null                                  $orderBy
      *
      * @return string
      */
-    public function getSelectSQL($criteria, $assoc = null, $lockMode = null, $limit = null, $offset = null, ?array $orderBy = null);
+    public function getSelectSQL($criteria, $assoc = null, $lockMode = null, $limit = null, $offset = null, array $orderBy = null);
 
     /**
      * Get the COUNT SQL to count entities (optionally based on a criteria)
      *
-     * @param mixed[]|Criteria $criteria
+     * @param array|\Doctrine\Common\Collections\Criteria $criteria
      *
      * @return string
      */
@@ -95,6 +94,8 @@ interface EntityPersister
 
     /**
      * Expands Criteria Parameters by walking the expressions and grabbing all parameters and types from it.
+     *
+     * @param \Doctrine\Common\Collections\Criteria $criteria
      *
      * @return array
      */
@@ -160,7 +161,7 @@ interface EntityPersister
     /**
      * Count entities (optionally filtered by a criteria)
      *
-     * @param  mixed[]|Criteria $criteria
+     * @param  array|\Doctrine\Common\Collections\Criteria $criteria
      *
      * @return int
      */
@@ -196,7 +197,7 @@ interface EntityPersister
      *
      * @todo Check identity map? loadById method? Try to guess whether $criteria is the id?
      */
-    public function load(array $criteria, $entity = null, $assoc = null, array $hints = [], $lockMode = null, $limit = null, ?array $orderBy = null);
+    public function load(array $criteria, $entity = null, $assoc = null, array $hints = [], $lockMode = null, $limit = null, array $orderBy = null);
 
     /**
      * Loads an entity by identifier.
@@ -222,7 +223,7 @@ interface EntityPersister
      *
      * @return object The loaded and managed entity instance or NULL if the entity can not be found.
      *
-     * @throws MappingException
+     * @throws \Doctrine\ORM\Mapping\MappingException
      */
     public function loadOneToOneEntity(array $assoc, $sourceEntity, array $identifier = []);
 
@@ -243,6 +244,8 @@ interface EntityPersister
     /**
      * Loads Entities matching the given Criteria object.
      *
+     * @param \Doctrine\Common\Collections\Criteria $criteria
+     *
      * @return array
      */
     public function loadCriteria(Criteria $criteria);
@@ -257,7 +260,7 @@ interface EntityPersister
      *
      * @return array
      */
-    public function loadAll(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null);
+    public function loadAll(array $criteria = [], array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * Gets (sliced or full) elements of the given collection.
@@ -276,7 +279,7 @@ interface EntityPersister
      *
      * @param array                $assoc        The association mapping of the association being loaded.
      * @param object               $sourceEntity The entity that owns the collection.
-     * @param PersistentCollection $collection   The collection to fill.
+     * @param PersistentCollection $collection         The collection to fill.
      *
      * @return array
      */
@@ -318,9 +321,10 @@ interface EntityPersister
     /**
      * Checks whether the given managed entity exists in the database.
      *
-     * @param object $entity
+     * @param object        $entity
+     * @param Criteria|null $extraConditions
      *
-     * @return bool TRUE if the entity exists in the database, FALSE otherwise.
+     * @return boolean TRUE if the entity exists in the database, FALSE otherwise.
      */
-    public function exists($entity, ?Criteria $extraConditions = null);
+    public function exists($entity, Criteria $extraConditions = null);
 }

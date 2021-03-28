@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -22,14 +21,18 @@ namespace Doctrine\ORM\Query\AST;
 
 class Literal extends Node
 {
-    public const STRING  = 1;
-    public const BOOLEAN = 2;
-    public const NUMERIC = 3;
+    const STRING = 1;
+    const BOOLEAN = 2;
+    const NUMERIC = 3;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     public $type;
 
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $value;
 
     /**
@@ -38,7 +41,7 @@ class Literal extends Node
      */
     public function __construct($type, $value)
     {
-        $this->type  = $type;
+        $this->type = $type;
         $this->value = $value;
     }
 

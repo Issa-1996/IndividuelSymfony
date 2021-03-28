@@ -22,7 +22,7 @@ use Psr\Log\LogLevel;
  */
 class Logger extends AbstractLogger
 {
-    private const LEVELS = [
+    private static $levels = [
         LogLevel::DEBUG => 0,
         LogLevel::INFO => 1,
         LogLevel::NOTICE => 2,
@@ -43,7 +43,7 @@ class Logger extends AbstractLogger
             $minLevel = null === $output || 'php://stdout' === $output || 'php://stderr' === $output ? LogLevel::ERROR : LogLevel::WARNING;
 
             if (isset($_ENV['SHELL_VERBOSITY']) || isset($_SERVER['SHELL_VERBOSITY'])) {
-                switch ((int) ($_ENV['SHELL_VERBOSITY'] ?? $_SERVER['SHELL_VERBOSITY'])) {
+                switch ((int) (isset($_ENV['SHELL_VERBOSITY']) ? $_ENV['SHELL_VERBOSITY'] : $_SERVER['SHELL_VERBOSITY'])) {
                     case -1: $minLevel = LogLevel::ERROR; break;
                     case 1: $minLevel = LogLevel::NOTICE; break;
                     case 2: $minLevel = LogLevel::INFO; break;
@@ -52,11 +52,11 @@ class Logger extends AbstractLogger
             }
         }
 
-        if (!isset(self::LEVELS[$minLevel])) {
+        if (!isset(self::$levels[$minLevel])) {
             throw new InvalidArgumentException(sprintf('The log level "%s" does not exist.', $minLevel));
         }
 
-        $this->minLevelIndex = self::LEVELS[$minLevel];
+        $this->minLevelIndex = self::$levels[$minLevel];
         $this->formatter = $formatter ?: [$this, 'format'];
         if ($output && false === $this->handle = \is_resource($output) ? $output : @fopen($output, 'a')) {
             throw new InvalidArgumentException(sprintf('Unable to open "%s".', $output));
@@ -70,11 +70,11 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = [])
     {
-        if (!isset(self::LEVELS[$level])) {
+        if (!isset(self::$levels[$level])) {
             throw new InvalidArgumentException(sprintf('The log level "%s" does not exist.', $level));
         }
 
-        if (self::LEVELS[$level] < $this->minLevelIndex) {
+        if (self::$levels[$level] < $this->minLevelIndex) {
             return;
         }
 

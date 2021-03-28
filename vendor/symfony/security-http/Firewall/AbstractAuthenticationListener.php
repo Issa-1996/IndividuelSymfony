@@ -179,7 +179,7 @@ abstract class AbstractAuthenticationListener extends AbstractListener
         }
 
         $token = $this->tokenStorage->getToken();
-        if ($token instanceof UsernamePasswordToken && $this->providerKey === $token->getFirewallName()) {
+        if ($token instanceof UsernamePasswordToken && $this->providerKey === $token->getProviderKey()) {
             $this->tokenStorage->setToken(null);
         }
 

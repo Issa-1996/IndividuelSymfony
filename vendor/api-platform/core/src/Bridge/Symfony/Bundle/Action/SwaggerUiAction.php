@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ApiPlatform\Core\Bridge\Symfony\Bundle\Action;
 
 use ApiPlatform\Core\Api\FormatsProviderInterface;
-use ApiPlatform\Core\Bridge\Symfony\Bundle\SwaggerUi\SwaggerUiAction as OpenApiSwaggerUiAction;
 use ApiPlatform\Core\Documentation\Documentation;
 use ApiPlatform\Core\Exception\RuntimeException;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
@@ -28,8 +27,6 @@ use Twig\Environment as TwigEnvironment;
 
 /**
  * Displays the documentation.
- *
- * @deprecated please refer to ApiPlatform\Core\Bridge\Symfony\Bundle\SwaggerUi\SwaggerUiAction for further changes
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
@@ -60,14 +57,11 @@ final class SwaggerUiAction
     private $graphiQlEnabled;
     private $graphQlPlaygroundEnabled;
     private $swaggerVersions;
-    private $swaggerUiAction;
-    private $assetPackage;
 
     /**
-     * @param int[]      $swaggerVersions
-     * @param mixed|null $assetPackage
+     * @param int[] $swaggerVersions
      */
-    public function __construct(ResourceNameCollectionFactoryInterface $resourceNameCollectionFactory, ResourceMetadataFactoryInterface $resourceMetadataFactory, NormalizerInterface $normalizer, TwigEnvironment $twig, UrlGeneratorInterface $urlGenerator, string $title = '', string $description = '', string $version = '', $formats = [], $oauthEnabled = false, $oauthClientId = '', $oauthClientSecret = '', $oauthType = '', $oauthFlow = '', $oauthTokenUrl = '', $oauthAuthorizationUrl = '', $oauthScopes = [], bool $showWebby = true, bool $swaggerUiEnabled = false, bool $reDocEnabled = false, bool $graphqlEnabled = false, bool $graphiQlEnabled = false, bool $graphQlPlaygroundEnabled = false, array $swaggerVersions = [2, 3], OpenApiSwaggerUiAction $swaggerUiAction = null, $assetPackage = null)
+    public function __construct(ResourceNameCollectionFactoryInterface $resourceNameCollectionFactory, ResourceMetadataFactoryInterface $resourceMetadataFactory, NormalizerInterface $normalizer, TwigEnvironment $twig, UrlGeneratorInterface $urlGenerator, string $title = '', string $description = '', string $version = '', $formats = [], $oauthEnabled = false, $oauthClientId = '', $oauthClientSecret = '', $oauthType = '', $oauthFlow = '', $oauthTokenUrl = '', $oauthAuthorizationUrl = '', $oauthScopes = [], bool $showWebby = true, bool $swaggerUiEnabled = false, bool $reDocEnabled = false, bool $graphqlEnabled = false, bool $graphiQlEnabled = false, bool $graphQlPlaygroundEnabled = false, array $swaggerVersions = [2, 3])
     {
         $this->resourceNameCollectionFactory = $resourceNameCollectionFactory;
         $this->resourceMetadataFactory = $resourceMetadataFactory;
@@ -92,12 +86,6 @@ final class SwaggerUiAction
         $this->graphiQlEnabled = $graphiQlEnabled;
         $this->graphQlPlaygroundEnabled = $graphQlPlaygroundEnabled;
         $this->swaggerVersions = $swaggerVersions;
-        $this->swaggerUiAction = $swaggerUiAction;
-        $this->assetPackage = $assetPackage;
-
-        if (null === $this->swaggerUiAction) {
-            @trigger_error(sprintf('The use of "%s" is deprecated since API Platform 2.6, use "%s" instead.', __CLASS__, OpenApiSwaggerUiAction::class), \E_USER_DEPRECATED);
-        }
 
         if (\is_array($formats)) {
             $this->formats = $formats;
@@ -105,16 +93,12 @@ final class SwaggerUiAction
             return;
         }
 
-        @trigger_error(sprintf('Passing an array or an instance of "%s" as 5th parameter of the constructor of "%s" is deprecated since API Platform 2.5, pass an array instead', FormatsProviderInterface::class, __CLASS__), \E_USER_DEPRECATED);
+        @trigger_error(sprintf('Passing an array or an instance of "%s" as 5th parameter of the constructor of "%s" is deprecated since API Platform 2.5, pass an array instead', FormatsProviderInterface::class, __CLASS__), E_USER_DEPRECATED);
         $this->formatsProvider = $formats;
     }
 
     public function __invoke(Request $request)
     {
-        if ($this->swaggerUiAction) {
-            return $this->swaggerUiAction->__invoke($request);
-        }
-
         $attributes = RequestAttributesExtractor::extractAttributes($request);
 
         // BC check to be removed in 3.0
@@ -146,7 +130,6 @@ final class SwaggerUiAction
             'graphqlEnabled' => $this->graphqlEnabled,
             'graphiQlEnabled' => $this->graphiQlEnabled,
             'graphQlPlaygroundEnabled' => $this->graphQlPlaygroundEnabled,
-            'assetPackage' => $this->assetPackage,
         ];
 
         $swaggerContext = ['spec_version' => $request->query->getInt('spec_version', $this->swaggerVersions[0] ?? 2)];

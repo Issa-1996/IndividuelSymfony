@@ -20,9 +20,7 @@
 
 namespace Doctrine\ORM\Cache\Region;
 
-use BadMethodCallException;
 use Doctrine\Common\Cache\Cache as CacheAdapter;
-use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\ClearableCache;
 use Doctrine\ORM\Cache\CacheEntry;
 use Doctrine\ORM\Cache\CacheKey;
@@ -30,34 +28,41 @@ use Doctrine\ORM\Cache\CollectionCacheEntry;
 use Doctrine\ORM\Cache\Lock;
 use Doctrine\ORM\Cache\Region;
 
-use function get_class;
-use function sprintf;
-
 /**
  * The simplest cache region compatible with all doctrine-cache drivers.
+ *
+ * @since   2.5
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class DefaultRegion implements Region
 {
-    public const REGION_KEY_SEPARATOR = '_';
+    const REGION_KEY_SEPARATOR = '_';
 
-    /** @var CacheAdapter */
+    /**
+     * @var CacheAdapter
+     */
     protected $cache;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $name;
 
-    /** @var int */
+    /**
+     * @var integer
+     */
     protected $lifetime = 0;
 
     /**
-     * @param string $name
-     * @param int    $lifetime
+     * @param string       $name
+     * @param CacheAdapter $cache
+     * @param integer      $lifetime
      */
     public function __construct($name, CacheAdapter $cache, $lifetime = 0)
     {
         $this->cache    = $cache;
         $this->name     = (string) $name;
-        $this->lifetime = (int) $lifetime;
+        $this->lifetime = (integer) $lifetime;
     }
 
     /**
@@ -69,7 +74,7 @@ class DefaultRegion implements Region
     }
 
     /**
-     * @return CacheProvider
+     * @return \Doctrine\Common\Cache\CacheProvider
      */
     public function getCache()
     {
@@ -120,6 +125,7 @@ class DefaultRegion implements Region
     }
 
     /**
+     * @param CacheKey $key
      * @return string
      */
     protected function getCacheEntryKey(CacheKey $key)
@@ -130,7 +136,7 @@ class DefaultRegion implements Region
     /**
      * {@inheritdoc}
      */
-    public function put(CacheKey $key, CacheEntry $entry, ?Lock $lock = null)
+    public function put(CacheKey $key, CacheEntry $entry, Lock $lock = null)
     {
         return $this->cache->save($this->getCacheEntryKey($key), $entry, $this->lifetime);
     }
@@ -149,7 +155,7 @@ class DefaultRegion implements Region
     public function evictAll()
     {
         if (! $this->cache instanceof ClearableCache) {
-            throw new BadMethodCallException(sprintf(
+            throw new \BadMethodCallException(sprintf(
                 'Clearing all cache entries is not supported by the supplied cache adapter of type %s',
                 get_class($this->cache)
             ));

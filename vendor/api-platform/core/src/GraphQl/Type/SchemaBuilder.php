@@ -54,7 +54,6 @@ final class SchemaBuilder implements SchemaBuilderInterface
 
         $queryFields = ['node' => $this->fieldsBuilder->getNodeQueryFields()];
         $mutationFields = [];
-        $subscriptionFields = [];
 
         foreach ($this->resourceNameCollectionFactory->create() as $resourceClass) {
             $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
@@ -85,10 +84,6 @@ final class SchemaBuilder implements SchemaBuilderInterface
                     continue;
                 }
 
-                if ('update' === $operationName) {
-                    $subscriptionFields += $this->fieldsBuilder->getSubscriptionFields($resourceClass, $resourceMetadata, $operationName);
-                }
-
                 $mutationFields += $this->fieldsBuilder->getMutationFields($resourceClass, $resourceMetadata, $operationName);
             }
         }
@@ -113,13 +108,6 @@ final class SchemaBuilder implements SchemaBuilderInterface
             $schema['mutation'] = new ObjectType([
                 'name' => 'Mutation',
                 'fields' => $mutationFields,
-            ]);
-        }
-
-        if ($subscriptionFields) {
-            $schema['subscription'] = new ObjectType([
-                'name' => 'Subscription',
-                'fields' => $subscriptionFields,
             ]);
         }
 

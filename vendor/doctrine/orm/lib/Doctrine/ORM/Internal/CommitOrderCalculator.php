@@ -20,22 +20,22 @@
 
 namespace Doctrine\ORM\Internal;
 
-use stdClass;
-
-use function array_reverse;
-
 /**
  * CommitOrderCalculator implements topological sorting, which is an ordering
  * algorithm for directed graphs (DG) and/or directed acyclic graphs (DAG) by
  * using a depth-first searching (DFS) to traverse the graph built in memory.
  * This algorithm have a linear running time based on nodes (V) and dependency
  * between the nodes (E), resulting in a computational complexity of O(V + E).
+ *
+ * @since  2.0
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Roman Borschel <roman@code-factory.org>
  */
 class CommitOrderCalculator
 {
-    public const NOT_VISITED = 0;
-    public const IN_PROGRESS = 1;
-    public const VISITED     = 2;
+    const NOT_VISITED = 0;
+    const IN_PROGRESS = 1;
+    const VISITED     = 2;
 
     /**
      * Matrix of nodes (aka. vertex).
@@ -52,14 +52,14 @@ class CommitOrderCalculator
      * - <b>dependencyList</b> (array<string>)
      * Map of node dependencies defined as hashes.
      *
-     * @var array<stdClass>
+     * @var array<\stdClass>
      */
     private $nodeList = [];
 
     /**
      * Volatile variable holding calculated nodes during sorting process.
      *
-     * @psalm-var list<object>
+     * @var array
      */
     private $sortedNodeList = [];
 
@@ -68,7 +68,7 @@ class CommitOrderCalculator
      *
      * @param string $hash
      *
-     * @return bool
+     * @return boolean
      */
     public function hasNode($hash)
     {
@@ -85,7 +85,7 @@ class CommitOrderCalculator
      */
     public function addNode($hash, $node)
     {
-        $vertex = new stdClass();
+        $vertex = new \stdClass();
 
         $vertex->hash           = $hash;
         $vertex->state          = self::NOT_VISITED;
@@ -98,16 +98,16 @@ class CommitOrderCalculator
     /**
      * Adds a new dependency (edge) to the graph using their hashes.
      *
-     * @param string $fromHash
-     * @param string $toHash
-     * @param int    $weight
+     * @param string  $fromHash
+     * @param string  $toHash
+     * @param integer $weight
      *
      * @return void
      */
     public function addDependency($fromHash, $toHash, $weight)
     {
         $vertex = $this->nodeList[$fromHash];
-        $edge   = new stdClass();
+        $edge   = new \stdClass();
 
         $edge->from   = $fromHash;
         $edge->to     = $toHash;
@@ -122,7 +122,7 @@ class CommitOrderCalculator
      *
      * {@internal Highly performance-sensitive method.}
      *
-     * @psalm-return list<object>
+     * @return array
      */
     public function sort()
     {
@@ -147,7 +147,7 @@ class CommitOrderCalculator
      *
      * {@internal Highly performance-sensitive method.}
      *
-     * @param stdClass $vertex
+     * @param \stdClass $vertex
      */
     private function visit($vertex)
     {
@@ -162,10 +162,9 @@ class CommitOrderCalculator
                     break;
 
                 case self::IN_PROGRESS:
-                    if (
-                        isset($adjacentVertex->dependencyList[$vertex->hash]) &&
-                        $adjacentVertex->dependencyList[$vertex->hash]->weight < $edge->weight
-                    ) {
+                    if (isset($adjacentVertex->dependencyList[$vertex->hash]) &&
+                        $adjacentVertex->dependencyList[$vertex->hash]->weight < $edge->weight) {
+
                         // If we have some non-visited dependencies in the in-progress dependency, we
                         // need to visit them before adding the node.
                         foreach ($adjacentVertex->dependencyList as $adjacentEdge) {
@@ -180,7 +179,6 @@ class CommitOrderCalculator
 
                         $this->sortedNodeList[] = $adjacentVertex->value;
                     }
-
                     break;
 
                 case self::NOT_VISITED:

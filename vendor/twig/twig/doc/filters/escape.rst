@@ -95,7 +95,9 @@ Custom Escapers
 
 You can define custom escapers by calling the ``setEscaper()`` method on the
 escaper extension instance. The first argument is the escaper name (to be
-used in the ``escape`` call) and the second one must be a valid PHP callable::
+used in the ``escape`` call) and the second one must be a valid PHP callable:
+
+.. code-block:: php
 
     $twig = new \Twig\Environment($loader);
     $twig->getExtension(\Twig\Extension\EscaperExtension::class)->setEscaper('csv', 'csv_escaper');

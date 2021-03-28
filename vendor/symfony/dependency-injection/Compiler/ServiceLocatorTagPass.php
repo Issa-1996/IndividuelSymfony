@@ -106,6 +106,7 @@ final class ServiceLocatorTagPass extends AbstractRecursivePass
 
         $locator = (new Definition(ServiceLocator::class))
             ->addArgument($refMap)
+            ->setPublic(false)
             ->addTag('container.service_locator');
 
         if (null !== $callerId && $container->hasDefinition($callerId)) {
@@ -122,6 +123,7 @@ final class ServiceLocatorTagPass extends AbstractRecursivePass
             // to have them specialized per consumer service, we use a cloning factory
             // to derivate customized instances from the prototype one.
             $container->register($id .= '.'.$callerId, ServiceLocator::class)
+                ->setPublic(false)
                 ->setFactory([new Reference($locatorId), 'withContext'])
                 ->addTag('container.service_locator_context', ['id' => $callerId])
                 ->addArgument($callerId)

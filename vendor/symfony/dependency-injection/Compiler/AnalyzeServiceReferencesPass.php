@@ -12,7 +12,6 @@
 namespace Symfony\Component\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
@@ -36,7 +35,6 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
     private $hasProxyDumper;
     private $lazy;
     private $byConstructor;
-    private $byFactory;
     private $definitions;
     private $aliases;
 
@@ -60,7 +58,6 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         $this->graph->clear();
         $this->lazy = false;
         $this->byConstructor = false;
-        $this->byFactory = false;
         $this->definitions = $container->getDefinitions();
         $this->aliases = $container->getAliases();
 
@@ -82,7 +79,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         $inExpression = $this->inExpression();
 
         if ($value instanceof ArgumentInterface) {
-            $this->lazy = !$this->byFactory || !$value instanceof IteratorArgument;
+            $this->lazy = true;
             parent::processValue($value->getValues());
             $this->lazy = $lazy;
 
@@ -132,11 +129,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 
         $byConstructor = $this->byConstructor;
         $this->byConstructor = $isRoot || $byConstructor;
-
-        $byFactory = $this->byFactory;
-        $this->byFactory = true;
         $this->processValue($value->getFactory());
-        $this->byFactory = $byFactory;
         $this->processValue($value->getArguments());
 
         $properties = $value->getProperties();

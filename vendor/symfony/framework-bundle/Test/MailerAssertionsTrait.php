@@ -118,14 +118,10 @@ trait MailerAssertionsTrait
 
     private static function getMessageMailerEvents(): MessageEvents
     {
-        if (self::$container->has('mailer.message_logger_listener')) {
-            return self::$container->get('mailer.message_logger_listener')->getEvents();
+        if (!self::$container->has('mailer.logger_message_listener')) {
+            static::fail('A client must have Mailer enabled to make email assertions. Did you forget to require symfony/mailer?');
         }
 
-        if (self::$container->has('mailer.logger_message_listener')) {
-            return self::$container->get('mailer.logger_message_listener')->getEvents();
-        }
-
-        static::fail('A client must have Mailer enabled to make email assertions. Did you forget to require symfony/mailer?');
+        return self::$container->get('mailer.logger_message_listener')->getEvents();
     }
 }

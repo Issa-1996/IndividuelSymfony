@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,12 +19,13 @@
 
 namespace Doctrine\ORM\Query;
 
-use function str_repeat;
-
 /**
  * A parse tree printer for Doctrine Query Language parser.
  *
+ * @author      Janne Vanhala <jpvanhal@cc.hut.fi>
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        http://www.phpdoctrine.org
+ * @since       2.0
  */
 class Printer
 {
@@ -91,7 +91,7 @@ class Printer
      */
     public function println($str)
     {
-        if (! $this->_silent) {
+        if ( ! $this->_silent) {
             echo str_repeat('    ', $this->_indent), $str, "\n";
         }
     }

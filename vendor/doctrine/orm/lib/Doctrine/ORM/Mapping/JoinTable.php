@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,15 +25,23 @@ namespace Doctrine\ORM\Mapping;
  */
 final class JoinTable implements Annotation
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $name;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $schema;
 
-    /** @var array<\Doctrine\ORM\Mapping\JoinColumn> */
+    /**
+     * @var array<\Doctrine\ORM\Mapping\JoinColumn>
+     */
     public $joinColumns = [];
 
-    /** @var array<\Doctrine\ORM\Mapping\JoinColumn> */
+    /**
+     * @var array<\Doctrine\ORM\Mapping\JoinColumn>
+     */
     public $inverseJoinColumns = [];
 }

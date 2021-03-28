@@ -65,8 +65,6 @@ final class EntrypointNormalizer implements NormalizerInterface, CacheableSuppor
             }
         }
 
-        ksort($entrypoint);
-
         return $entrypoint;
     }
 

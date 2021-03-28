@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Doctrine\Migrations\Configuration\Exception;
 
 use LogicException;
-
 use function sprintf;
 use function var_export;
 
@@ -14,7 +13,7 @@ final class UnknownConfigurationValue extends LogicException implements Configur
     /**
      * @param mixed $value
      */
-    public static function new(string $key, $value): self
+    public static function new(string $key, $value) : self
     {
         return new self(
             sprintf(

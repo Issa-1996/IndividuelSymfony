@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,27 +23,33 @@ namespace Doctrine\ORM\Query\AST;
  * ArithmeticFactor ::= [("+" | "-")] ArithmeticPrimary
  *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class ArithmeticFactor extends Node
 {
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $arithmeticPrimary;
 
     /**
      * NULL represents no sign, TRUE means positive and FALSE means negative sign.
      *
-     * @var bool|null
+     * @var null|boolean
      */
     public $sign;
 
     /**
      * @param mixed     $arithmeticPrimary
-     * @param bool|null $sign
+     * @param null|bool $sign
      */
     public function __construct($arithmeticPrimary, $sign = null)
     {
         $this->arithmeticPrimary = $arithmeticPrimary;
-        $this->sign              = $sign;
+        $this->sign = $sign;
     }
 
     /**

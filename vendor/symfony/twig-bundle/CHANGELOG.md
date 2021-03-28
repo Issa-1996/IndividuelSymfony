@@ -1,11 +1,6 @@
 CHANGELOG
 =========
 
-5.2.0
------
-
- * deprecated the public `twig` service to private
-
 5.0.0
 -----
 

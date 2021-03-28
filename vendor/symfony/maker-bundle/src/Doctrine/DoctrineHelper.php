@@ -124,8 +124,6 @@ final class DoctrineHelper
             }
         }
 
-        sort($entities);
-
         return $entities;
     }
 

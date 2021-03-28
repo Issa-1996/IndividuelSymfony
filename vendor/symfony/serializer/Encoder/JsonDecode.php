@@ -25,14 +25,14 @@ class JsonDecode implements DecoderInterface
     /**
      * True to return the result as an associative array, false for a nested stdClass hierarchy.
      */
-    public const ASSOCIATIVE = 'json_decode_associative';
+    const ASSOCIATIVE = 'json_decode_associative';
 
-    public const OPTIONS = 'json_decode_options';
+    const OPTIONS = 'json_decode_options';
 
     /**
      * Specifies the recursion depth.
      */
-    public const RECURSION_DEPTH = 'json_decode_recursion_depth';
+    const RECURSION_DEPTH = 'json_decode_recursion_depth';
 
     private $defaultContext = [
         self::ASSOCIATIVE => false,

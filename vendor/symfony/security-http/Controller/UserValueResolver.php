@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
  * Supports the argument type of {@see UserInterface}.
@@ -35,10 +34,6 @@ final class UserValueResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        if ($argument->getAttribute() instanceof CurrentUser) {
-            return true;
-        }
-
         // only security user implementations are supported
         if (UserInterface::class !== $argument->getType()) {
             return false;

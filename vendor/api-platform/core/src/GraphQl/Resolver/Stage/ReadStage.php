@@ -17,14 +17,12 @@ use ApiPlatform\Core\Api\IriConverterInterface;
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\SubresourceDataProviderInterface;
 use ApiPlatform\Core\Exception\ItemNotFoundException;
-use ApiPlatform\Core\GraphQl\Resolver\Util\IdentifierTrait;
 use ApiPlatform\Core\GraphQl\Serializer\ItemNormalizer;
 use ApiPlatform\Core\GraphQl\Serializer\SerializerContextBuilderInterface;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
-use ApiPlatform\Core\Util\ArrayTrait;
 use ApiPlatform\Core\Util\ClassInfoTrait;
+use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Read stage of GraphQL resolvers.
@@ -35,9 +33,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class ReadStage implements ReadStageInterface
 {
-    use ArrayTrait;
     use ClassInfoTrait;
-    use IdentifierTrait;
 
     private $resourceMetadataFactory;
     private $iriConverter;
@@ -67,19 +63,22 @@ final class ReadStage implements ReadStageInterface
         }
 
         $args = $context['args'];
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
+
         $normalizationContext = $this->serializerContextBuilder->create($resourceClass, $operationName, $context, true);
 
         if (!$context['is_collection']) {
-            $identifier = $this->getIdentifierFromContext($context);
+            $identifier = $this->getIdentifier($context);
             $item = $this->getItem($identifier, $normalizationContext);
 
-            if ($identifier && ($context['is_mutation'] || $context['is_subscription'])) {
+            if ($identifier && $context['is_mutation']) {
                 if (null === $item) {
-                    throw new NotFoundHttpException(sprintf('Item "%s" not found.', $args['input']['id']));
+                    throw Error::createLocatedError(sprintf('Item "%s" not found.', $args['input']['id']), $info->fieldNodes, $info->path);
                 }
 
                 if ($resourceClass !== $this->getObjectClass($item)) {
-                    throw new \UnexpectedValueException(sprintf('Item "%s" did not match expected type "%s".', $args['input']['id'], $resourceMetadata->getShortName()));
+                    throw Error::createLocatedError(sprintf('Item "%s" did not match expected type "%s".', $args['input']['id'], $resourceMetadata->getShortName()), $info->fieldNodes, $info->path);
                 }
             }
 
@@ -93,20 +92,29 @@ final class ReadStage implements ReadStageInterface
         $normalizationContext['filters'] = $this->getNormalizedFilters($args);
 
         $source = $context['source'];
-        /** @var ResolveInfo $info */
-        $info = $context['info'];
         if (isset($source[$rootProperty = $info->fieldName], $source[ItemNormalizer::ITEM_IDENTIFIERS_KEY], $source[ItemNormalizer::ITEM_RESOURCE_CLASS_KEY])) {
             $rootResolvedFields = $source[ItemNormalizer::ITEM_IDENTIFIERS_KEY];
             $rootResolvedClass = $source[ItemNormalizer::ITEM_RESOURCE_CLASS_KEY];
             $subresourceCollection = $this->getSubresource($rootResolvedClass, $rootResolvedFields, $rootProperty, $resourceClass, $normalizationContext, $operationName);
             if (!is_iterable($subresourceCollection)) {
-                throw new \UnexpectedValueException('Expected subresource collection to be iterable.');
+                throw new \UnexpectedValueException('Expected subresource collection to be iterable');
             }
 
             return $subresourceCollection;
         }
 
         return $this->collectionDataProvider->getCollection($resourceClass, $operationName, $normalizationContext);
+    }
+
+    private function getIdentifier(array $context): ?string
+    {
+        $args = $context['args'];
+
+        if ($context['is_mutation']) {
+            return $args['input']['id'] ?? null;
+        }
+
+        return $args['id'] ?? null;
     }
 
     /**
@@ -136,22 +144,6 @@ final class ReadStage implements ReadStageInterface
                 if (strpos($name, '_list')) {
                     $name = substr($name, 0, \strlen($name) - \strlen('_list'));
                 }
-
-                // If the value contains arrays, we need to merge them for the filters to understand this syntax, proper to GraphQL to preserve the order of the arguments.
-                if ($this->isSequentialArrayOfArrays($value)) {
-                    if (\count($value[0]) > 1) {
-                        $deprecationMessage = "The filter syntax \"$name: {";
-                        $filterArgsOld = [];
-                        $filterArgsNew = [];
-                        foreach ($value[0] as $filterArgName => $filterArgValue) {
-                            $filterArgsOld[] = "$filterArgName: \"$filterArgValue\"";
-                            $filterArgsNew[] = sprintf('{%s: "%s"}', $filterArgName, $filterArgValue);
-                        }
-                        $deprecationMessage .= sprintf('%s}" is deprecated since API Platform 2.6, use the following syntax instead: "%s: [%s]".', implode(', ', $filterArgsOld), $name, implode(', ', $filterArgsNew));
-                        @trigger_error($deprecationMessage, \E_USER_DEPRECATED);
-                    }
-                    $value = array_merge(...$value);
-                }
                 $filters[$name] = $this->getNormalizedFilters($value);
             }
 
@@ -172,7 +164,7 @@ final class ReadStage implements ReadStageInterface
         $resolvedIdentifiers = [];
         $rootIdentifiers = array_keys($rootResolvedFields);
         foreach ($rootIdentifiers as $rootIdentifier) {
-            $resolvedIdentifiers[$rootIdentifier] = [$rootResolvedClass, $rootIdentifier];
+            $resolvedIdentifiers[] = [$rootIdentifier, $rootResolvedClass];
         }
 
         return $this->subresourceDataProvider->getSubresource($subresourceClass, $rootResolvedFields, $normalizationContext + [

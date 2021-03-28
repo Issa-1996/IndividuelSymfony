@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,34 +19,47 @@
 
 namespace Doctrine\ORM\Query\AST\Functions;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\ORM\Query\AST\Node;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-
-use function strcasecmp;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * "TRIM" "(" [["LEADING" | "TRAILING" | "BOTH"] [char] "FROM"] StringPrimary ")"
  *
+ *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
+ * @author  Benjamin Eberlei <kontakt@beberlei.de>
  */
 class TrimFunction extends FunctionNode
 {
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $leading;
 
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $trailing;
 
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $both;
 
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $trimChar = false;
 
-    /** @var Node */
+    /**
+     * @var \Doctrine\ORM\Query\AST\Node
+     */
     public $stringPrimary;
 
     /**
@@ -55,10 +67,10 @@ class TrimFunction extends FunctionNode
      */
     public function getSql(SqlWalker $sqlWalker)
     {
-        $stringPrimary = $sqlWalker->walkStringPrimary($this->stringPrimary);
-        $platform      = $sqlWalker->getConnection()->getDatabasePlatform();
-        $trimMode      = $this->getTrimMode();
-        $trimChar      = $this->trimChar !== false
+        $stringPrimary  = $sqlWalker->walkStringPrimary($this->stringPrimary);
+        $platform       = $sqlWalker->getConnection()->getDatabasePlatform();
+        $trimMode       = $this->getTrimMode();
+        $trimChar       = ($this->trimChar !== false)
             ? $sqlWalker->getConnection()->quote($this->trimChar)
             : false;
 
@@ -113,6 +125,8 @@ class TrimFunction extends FunctionNode
     }
 
     /**
+     * @param \Doctrine\ORM\Query\Parser $parser
+     *
      * @return void
      */
     private function parseTrimMode(Parser $parser)

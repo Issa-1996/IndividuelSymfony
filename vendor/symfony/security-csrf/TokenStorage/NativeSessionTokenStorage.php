@@ -23,7 +23,7 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
     /**
      * The namespace used to store values in the session.
      */
-    public const SESSION_NAMESPACE = '_csrf';
+    const SESSION_NAMESPACE = '_csrf';
 
     private $sessionStarted = false;
     private $namespace;

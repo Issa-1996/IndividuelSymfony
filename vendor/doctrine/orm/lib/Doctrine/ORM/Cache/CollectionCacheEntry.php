@@ -22,6 +22,9 @@ namespace Doctrine\ORM\Cache;
 
 /**
  * Collection cache entry
+ *
+ * @since   2.5
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class CollectionCacheEntry implements CacheEntry
 {
@@ -45,7 +48,7 @@ class CollectionCacheEntry implements CacheEntry
      *
      * This method allows for Doctrine\Common\Cache\PhpFileCache compatibility
      *
-     * @param array<string, mixed> $values array containing property values
+     * @param array $values array containing property values
      *
      * @return CollectionCacheEntry
      */

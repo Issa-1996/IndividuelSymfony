@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,12 +24,14 @@ use Throwable;
 
 /**
  * Tools related Exceptions.
+ *
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
 class ToolsException extends ORMException
 {
-    public static function schemaToolFailure(string $sql, Throwable $e): self
+    public static function schemaToolFailure(string $sql, Throwable $e) : self
     {
-        return new self("Schema-Tool failed with Error '" . $e->getMessage() . "' while executing DDL: " . $sql, '0', $e);
+        return new self("Schema-Tool failed with Error '" . $e->getMessage() . "' while executing DDL: " . $sql, "0", $e);
     }
 
     /**

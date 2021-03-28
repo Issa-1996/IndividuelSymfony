@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,38 +25,52 @@ namespace Doctrine\ORM\Mapping;
  */
 final class Column implements Annotation
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $name;
 
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $type = 'string';
 
-    /** @var int */
+    /**
+     * @var integer
+     */
     public $length;
 
     /**
      * The precision for a decimal (exact numeric) column (Applies only for decimal column).
      *
-     * @var int
+     * @var integer
      */
     public $precision = 0;
 
     /**
      * The scale for a decimal (exact numeric) column (Applies only for decimal column).
      *
-     * @var int
+     * @var integer
      */
     public $scale = 0;
 
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $unique = false;
 
-    /** @var bool */
+    /**
+     * @var boolean
+     */
     public $nullable = false;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public $options = [];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $columnDefinition;
 }

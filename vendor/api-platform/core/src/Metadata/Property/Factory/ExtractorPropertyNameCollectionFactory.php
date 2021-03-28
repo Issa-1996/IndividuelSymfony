@@ -49,7 +49,7 @@ final class ExtractorPropertyNameCollectionFactory implements PropertyNameCollec
             try {
                 $propertyNameCollection = $this->decorated->create($resourceClass, $options);
             } catch (ResourceClassNotFoundException $resourceClassNotFoundException) {
-                // Ignore not found exceptions from decorated factory
+                // Ignore not found exceptions from parent
             }
 
             foreach ($propertyNameCollection as $propertyName) {

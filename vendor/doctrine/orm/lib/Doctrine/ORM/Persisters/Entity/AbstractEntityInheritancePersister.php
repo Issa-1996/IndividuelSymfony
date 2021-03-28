@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,15 +19,17 @@
 
 namespace Doctrine\ORM\Persisters\Entity;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
-
-use function sprintf;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Base class for entity persisters that implement a certain inheritance mapping strategy.
  * All these persisters are assumed to use a discriminator column to discriminate entity
  * types in the hierarchy.
+ *
+ * @author Roman Borschel <roman@code-factory.org>
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @since 2.0
  */
 abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
 {
@@ -40,8 +41,8 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
         $data = parent::prepareInsertData($entity);
 
         // Populate the discriminator column
-        $discColumn                                                          = $this->class->discriminatorColumn;
-        $this->columnTypes[$discColumn['name']]                              = $discColumn['type'];
+        $discColumn = $this->class->discriminatorColumn;
+        $this->columnTypes[$discColumn['name']] = $discColumn['type'];
         $data[$this->getDiscriminatorColumnTableName()][$discColumn['name']] = $this->class->discriminatorValue;
 
         return $data;
@@ -59,7 +60,7 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
      */
     protected function getSelectColumnSQL($field, ClassMetadata $class, $alias = 'r')
     {
-        $tableAlias   = $alias === 'r' ? '' : $alias;
+        $tableAlias   = $alias == 'r' ? '' : $alias;
         $fieldMapping = $class->fieldMappings[$field];
         $columnAlias  = $this->getSQLColumnAlias($fieldMapping['columnName']);
         $sql          = sprintf(
@@ -71,8 +72,8 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
         $this->currentPersisterContext->rsm->addFieldResult($alias, $columnAlias, $field, $class->name);
 
         if (isset($fieldMapping['requireSQLConversion'])) {
-            $type = Type::getType($fieldMapping['type']);
-            $sql  = $type->convertToPHPValueSQL($sql, $this->platform);
+            $type   = Type::getType($fieldMapping['type']);
+            $sql    = $type->convertToPHPValueSQL($sql, $this->platform);
         }
 
         return $sql . ' AS ' . $columnAlias;
@@ -82,6 +83,7 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
      * @param string $tableAlias
      * @param string $joinColumnName
      * @param string $quotedColumnName
+     *
      * @param string $type
      *
      * @return string

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,25 +19,34 @@
 
 namespace Doctrine\ORM\Event;
 
-use Doctrine\Common\EventArgs;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Provides event arguments for the onClear event.
  *
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        www.doctrine-project.org
+ * @since       2.0
+ * @author      Roman Borschel <roman@code-factory.de>
+ * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class OnClearEventArgs extends EventArgs
+class OnClearEventArgs extends \Doctrine\Common\EventArgs
 {
-    /** @var EntityManagerInterface */
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $entityClass;
 
     /**
-     * @param string|null $entityClass Optional entity class.
+     * Constructor.
+     *
+     * @param EntityManagerInterface $em
+     * @param string|null            $entityClass Optional entity class.
      */
     public function __construct(EntityManagerInterface $em, $entityClass = null)
     {
@@ -49,7 +57,7 @@ class OnClearEventArgs extends EventArgs
     /**
      * Retrieves associated EntityManager.
      *
-     * @return EntityManager
+     * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {
@@ -73,6 +81,6 @@ class OnClearEventArgs extends EventArgs
      */
     public function clearsAllEntities()
     {
-        return $this->entityClass === null;
+        return ($this->entityClass === null);
     }
 }

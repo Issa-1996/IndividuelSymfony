@@ -8,8 +8,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\Migrations\Configuration\Connection\Exception\FileNotFound;
 use Doctrine\Migrations\Configuration\Connection\Exception\InvalidConfiguration;
-use InvalidArgumentException;
-
 use function file_exists;
 use function is_array;
 
@@ -26,12 +24,8 @@ final class ConfigurationFile implements ConnectionLoader
         $this->filename = $filename;
     }
 
-    public function getConnection(?string $name = null): Connection
+    public function getConnection() : Connection
     {
-        if ($name !== null) {
-            throw new InvalidArgumentException('Only one connection is supported');
-        }
-
         if (! file_exists($this->filename)) {
             throw FileNotFound::new($this->filename);
         }

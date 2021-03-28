@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,14 +22,18 @@ namespace Doctrine\ORM;
 /**
  * Is thrown when a transaction is required for the current operation, but there is none open.
  *
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        www.doctrine-project.com
+ * @since       1.0
+ * @author      Benjamin Eberlei <kontakt@beberlei.de>
+ * @author      Roman Borschel <roman@code-factory.org>
  */
 class TransactionRequiredException extends ORMException
 {
     /**
      * @return TransactionRequiredException
      */
-    public static function transactionRequired()
+    static public function transactionRequired()
     {
         return new self('An open transaction is required for this operation.');
     }

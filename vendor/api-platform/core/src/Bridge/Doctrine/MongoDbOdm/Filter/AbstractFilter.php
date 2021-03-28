@@ -32,8 +32,8 @@ use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
  */
 abstract class AbstractFilter implements FilterInterface
 {
-    use MongoDbOdmPropertyHelperTrait;
     use PropertyHelperTrait;
+    use MongoDbOdmPropertyHelperTrait;
 
     protected $managerRegistry;
     protected $logger;

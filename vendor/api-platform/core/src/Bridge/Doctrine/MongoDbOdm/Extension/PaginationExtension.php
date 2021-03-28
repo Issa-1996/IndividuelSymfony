@@ -16,7 +16,6 @@ namespace ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension;
 use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Paginator;
 use ApiPlatform\Core\DataProvider\Pagination;
 use ApiPlatform\Core\Exception\RuntimeException;
-use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use Doctrine\ODM\MongoDB\Aggregation\Builder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
@@ -34,13 +33,11 @@ use Doctrine\Persistence\ManagerRegistry;
 final class PaginationExtension implements AggregationResultCollectionExtensionInterface
 {
     private $managerRegistry;
-    private $resourceMetadataFactory;
     private $pagination;
 
-    public function __construct(ManagerRegistry $managerRegistry, ResourceMetadataFactoryInterface $resourceMetadataFactory, Pagination $pagination)
+    public function __construct(ManagerRegistry $managerRegistry, Pagination $pagination)
     {
         $this->managerRegistry = $managerRegistry;
-        $this->resourceMetadataFactory = $resourceMetadataFactory;
         $this->pagination = $pagination;
     }
 
@@ -116,11 +113,7 @@ final class PaginationExtension implements AggregationResultCollectionExtensionI
             throw new RuntimeException(sprintf('The manager for "%s" must be an instance of "%s".', $resourceClass, DocumentManager::class));
         }
 
-        $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
-        $attribute = $resourceMetadata->getCollectionOperationAttribute($operationName, 'doctrine_mongodb', [], true);
-        $executeOptions = $attribute['execute_options'] ?? [];
-
-        return new Paginator($aggregationBuilder->execute($executeOptions), $manager->getUnitOfWork(), $resourceClass, $aggregationBuilder->getPipeline());
+        return new Paginator($aggregationBuilder->execute(), $manager->getUnitOfWork(), $resourceClass, $aggregationBuilder->getPipeline());
     }
 
     private function addCountToContext(Builder $aggregationBuilder, array $context): array

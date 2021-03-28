@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
@@ -82,7 +81,7 @@ class RememberMeAuthenticator implements InteractiveAuthenticatorInterface
             throw new \LogicException('No remember me token is set.');
         }
 
-        return new SelfValidatingPassport(new UserBadge($token->getUsername(), [$token, 'getUser']));
+        return new SelfValidatingPassport($token->getUser());
     }
 
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface

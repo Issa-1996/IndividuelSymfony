@@ -26,7 +26,7 @@ class JWTUserToken extends AbstractToken implements GuardTokenInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $roles = [], UserInterface $user = null, $rawToken = null, $firewallName = null)
+    public function __construct(array $roles = [], UserInterface $user = null, $rawToken = null, $providerKey = null)
     {
         parent::__construct($roles);
 
@@ -37,7 +37,7 @@ class JWTUserToken extends AbstractToken implements GuardTokenInterface
         $this->setRawToken($rawToken);
         $this->setAuthenticated(true);
 
-        $this->providerKey = $firewallName;
+        $this->providerKey = $providerKey;
     }
 
     /**
@@ -57,19 +57,11 @@ class JWTUserToken extends AbstractToken implements GuardTokenInterface
     }
 
     /**
-     * @deprecated since 2.10, use getFirewallName() instead
+     * Returns the provider key.
+     *
+     * @return string The provider key
      */
     public function getProviderKey()
-    {
-        @trigger_error(sprintf('The "%s" method is deprecated since version 2.10 and will be removed in 3.0. Use "%s::getFirewallName()" instead.', __METHOD__, self::class), E_USER_DEPRECATED);
-
-        return $this->getFirewallName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirewallName()
     {
         return $this->providerKey;
     }

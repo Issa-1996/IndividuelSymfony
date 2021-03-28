@@ -28,13 +28,11 @@ final class ValidationExceptionListener
 {
     private $serializer;
     private $errorFormats;
-    private $exceptionToStatus;
 
-    public function __construct(SerializerInterface $serializer, array $errorFormats, array $exceptionToStatus = [])
+    public function __construct(SerializerInterface $serializer, array $errorFormats)
     {
         $this->serializer = $serializer;
         $this->errorFormats = $errorFormats;
-        $this->exceptionToStatus = $exceptionToStatus;
     }
 
     /**
@@ -42,26 +40,16 @@ final class ValidationExceptionListener
      */
     public function onKernelException(ExceptionEvent $event): void
     {
-        $exception = method_exists($event, 'getThrowable') ? $event->getThrowable() : $event->getException(); // @phpstan-ignore-line
+        $exception = method_exists($event, 'getThrowable') ? $event->getThrowable() : $event->getException();
         if (!$exception instanceof ValidationException) {
             return;
-        }
-        $exceptionClass = \get_class($exception);
-        $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-
-        foreach ($this->exceptionToStatus as $class => $status) {
-            if (is_a($exceptionClass, $class, true)) {
-                $statusCode = $status;
-
-                break;
-            }
         }
 
         $format = ErrorFormatGuesser::guessErrorFormat($event->getRequest(), $this->errorFormats);
 
         $event->setResponse(new Response(
                 $this->serializer->serialize($exception->getConstraintViolationList(), $format['key']),
-                $statusCode,
+                Response::HTTP_BAD_REQUEST,
                 [
                     'Content-Type' => sprintf('%s; charset=utf-8', $format['value'][0]),
                     'X-Content-Type-Options' => 'nosniff',

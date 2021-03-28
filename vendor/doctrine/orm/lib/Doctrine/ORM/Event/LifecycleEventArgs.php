@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,7 +19,6 @@
 
 namespace Doctrine\ORM\Event;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
 
 /**
@@ -28,6 +26,9 @@ use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
  * of entities.
  *
  * @link   www.doctrine-project.org
+ * @since  2.0
+ * @author Roman Borschel <roman@code-factory.de>
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
 class LifecycleEventArgs extends BaseLifecycleEventArgs
 {
@@ -44,7 +45,7 @@ class LifecycleEventArgs extends BaseLifecycleEventArgs
     /**
      * Retrieves associated EntityManager.
      *
-     * @return EntityManager
+     * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {

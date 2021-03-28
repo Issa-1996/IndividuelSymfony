@@ -58,8 +58,6 @@ class TestContainer extends Container
 
     /**
      * {@inheritdoc}
-     *
-     * @return array|bool|float|int|string|null
      */
     public function getParameter(string $name)
     {

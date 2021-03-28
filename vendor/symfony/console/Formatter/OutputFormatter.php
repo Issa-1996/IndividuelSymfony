@@ -25,14 +25,6 @@ class OutputFormatter implements WrappableOutputFormatterInterface
     private $styles = [];
     private $styleStack;
 
-    public function __clone()
-    {
-        $this->styleStack = clone $this->styleStack;
-        foreach ($this->styles as $key => $value) {
-            $this->styles[$key] = clone $value;
-        }
-    }
-
     /**
      * Escapes "<" special char in given text.
      *
@@ -161,7 +153,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             if ($open = '/' != $text[1]) {
                 $tag = $matches[1][$i][0];
             } else {
-                $tag = $matches[3][$i][0] ?? '';
+                $tag = isset($matches[3][$i][0]) ? $matches[3][$i][0] : '';
             }
 
             if (!$open && !$tag) {

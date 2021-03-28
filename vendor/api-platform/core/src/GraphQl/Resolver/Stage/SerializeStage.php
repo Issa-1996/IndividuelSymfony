@@ -15,10 +15,11 @@ namespace ApiPlatform\Core\GraphQl\Resolver\Stage;
 
 use ApiPlatform\Core\DataProvider\Pagination;
 use ApiPlatform\Core\DataProvider\PaginatorInterface;
-use ApiPlatform\Core\GraphQl\Resolver\Util\IdentifierTrait;
 use ApiPlatform\Core\GraphQl\Serializer\ItemNormalizer;
 use ApiPlatform\Core\GraphQl\Serializer\SerializerContextBuilderInterface;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
+use GraphQL\Error\Error;
+use GraphQL\Type\Definition\ResolveInfo;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
@@ -30,8 +31,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 final class SerializeStage implements SerializeStageInterface
 {
-    use IdentifierTrait;
-
     private $resourceMetadataFactory;
     private $normalizer;
     private $serializerContextBuilder;
@@ -52,15 +51,12 @@ final class SerializeStage implements SerializeStageInterface
     {
         $isCollection = $context['is_collection'];
         $isMutation = $context['is_mutation'];
-        $isSubscription = $context['is_subscription'];
 
         $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
         if (!$resourceMetadata->getGraphqlAttribute($operationName, 'serialize', true, true)) {
             if ($isCollection) {
                 if ($this->pagination->isGraphQlEnabled($resourceClass, $operationName, $context)) {
-                    return 'cursor' === $this->pagination->getGraphQlPaginationType($resourceClass, $operationName) ?
-                        $this->getDefaultCursorBasedPaginatedData() :
-                        $this->getDefaultPageBasedPaginatedData();
+                    return $this->getDefaultPaginatedData();
                 }
 
                 return [];
@@ -70,19 +66,19 @@ final class SerializeStage implements SerializeStageInterface
                 return $this->getDefaultMutationData($context);
             }
 
-            if ($isSubscription) {
-                return $this->getDefaultSubscriptionData($context);
-            }
-
             return null;
         }
 
         $normalizationContext = $this->serializerContextBuilder->create($resourceClass, $operationName, $context, true);
 
+        $args = $context['args'];
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
+
         $data = null;
         if (!$isCollection) {
             if ($isMutation && 'delete' === $operationName) {
-                $data = ['id' => $this->getIdentifierFromContext($context)];
+                $data = ['id' => $args['input']['id'] ?? null];
             } else {
                 $data = $this->normalizer->normalize($itemOrCollection, ItemNormalizer::FORMAT, $normalizationContext);
             }
@@ -95,35 +91,34 @@ final class SerializeStage implements SerializeStageInterface
                     $data[$index] = $this->normalizer->normalize($object, ItemNormalizer::FORMAT, $normalizationContext);
                 }
             } else {
-                $data = 'cursor' === $this->pagination->getGraphQlPaginationType($resourceClass, $operationName) ?
-                    $this->serializeCursorBasedPaginatedCollection($itemOrCollection, $normalizationContext, $context) :
-                    $this->serializePageBasedPaginatedCollection($itemOrCollection, $normalizationContext);
+                $data = $this->serializePaginatedCollection($itemOrCollection, $normalizationContext, $context);
             }
         }
 
         if (null !== $data && !\is_array($data)) {
-            throw new \UnexpectedValueException('Expected serialized data to be a nullable array.');
+            throw Error::createLocatedError('Expected serialized data to be a nullable array.', $info->fieldNodes, $info->path);
         }
 
-        if ($isMutation || $isSubscription) {
+        if ($isMutation) {
             $wrapFieldName = lcfirst($resourceMetadata->getShortName());
 
-            return [$wrapFieldName => $data] + ($isMutation ? $this->getDefaultMutationData($context) : $this->getDefaultSubscriptionData($context));
+            return [$wrapFieldName => $data] + $this->getDefaultMutationData($context);
         }
 
         return $data;
     }
 
     /**
-     * @throws \LogicException
-     * @throws \UnexpectedValueException
+     * @throws Error
      */
-    private function serializeCursorBasedPaginatedCollection(iterable $collection, array $normalizationContext, array $context): array
+    private function serializePaginatedCollection(iterable $collection, array $normalizationContext, array $context): array
     {
         $args = $context['args'];
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
 
         if (!($collection instanceof PaginatorInterface)) {
-            throw new \LogicException(sprintf('Collection returned by the collection data provider must implement %s.', PaginatorInterface::class));
+            throw Error::createLocatedError(sprintf('Collection returned by the collection data provider must implement %s', PaginatorInterface::class), $info->fieldNodes, $info->path);
         }
 
         $offset = 0;
@@ -132,14 +127,16 @@ final class SerializeStage implements SerializeStageInterface
         if (isset($args['after'])) {
             $after = base64_decode($args['after'], true);
             if (false === $after || '' === $args['after']) {
-                throw new \UnexpectedValueException('' === $args['after'] ? 'Empty cursor is invalid' : sprintf('Cursor %s is invalid', $args['after']));
+                $msg = '' === $args['after'] ? 'Empty cursor is invalid' : sprintf('Cursor %s is invalid', $args['after']);
+                throw Error::createLocatedError($msg, $info->fieldNodes, $info->path);
             }
             $offset = 1 + (int) $after;
         }
         if (isset($args['before'])) {
             $before = base64_decode($args['before'], true);
             if (false === $before || '' === $args['before']) {
-                throw new \UnexpectedValueException('' === $args['before'] ? 'Empty cursor is invalid' : sprintf('Cursor %s is invalid', $args['before']));
+                $msg = '' === $args['before'] ? 'Empty cursor is invalid' : sprintf('Cursor %s is invalid', $args['before']);
+                throw Error::createLocatedError($msg, $info->fieldNodes, $info->path);
             }
             $offset = (int) $before - $nbPageItems;
         }
@@ -148,7 +145,7 @@ final class SerializeStage implements SerializeStageInterface
         }
         $offset = 0 > $offset ? 0 : $offset;
 
-        $data = $this->getDefaultCursorBasedPaginatedData();
+        $data = $this->getDefaultPaginatedData();
 
         if (($totalItems = $collection->getTotalItems()) > 0) {
             $data['totalCount'] = $totalItems;
@@ -172,44 +169,13 @@ final class SerializeStage implements SerializeStageInterface
         return $data;
     }
 
-    /**
-     * @throws \LogicException
-     */
-    private function serializePageBasedPaginatedCollection(iterable $collection, array $normalizationContext): array
-    {
-        if (!($collection instanceof PaginatorInterface)) {
-            throw new \LogicException(sprintf('Collection returned by the collection data provider must implement %s.', PaginatorInterface::class));
-        }
-
-        $data = $this->getDefaultPageBasedPaginatedData();
-        $data['paginationInfo']['totalCount'] = $collection->getTotalItems();
-        $data['paginationInfo']['lastPage'] = $collection->getLastPage();
-        $data['paginationInfo']['itemsPerPage'] = $collection->getItemsPerPage();
-
-        foreach ($collection as $object) {
-            $data['collection'][] = $this->normalizer->normalize($object, ItemNormalizer::FORMAT, $normalizationContext);
-        }
-
-        return $data;
-    }
-
-    private function getDefaultCursorBasedPaginatedData(): array
+    private function getDefaultPaginatedData(): array
     {
         return ['totalCount' => 0., 'edges' => [], 'pageInfo' => ['startCursor' => null, 'endCursor' => null, 'hasNextPage' => false, 'hasPreviousPage' => false]];
-    }
-
-    private function getDefaultPageBasedPaginatedData(): array
-    {
-        return ['collection' => [], 'paginationInfo' => ['itemsPerPage' => 0., 'totalCount' => 0., 'lastPage' => 0.]];
     }
 
     private function getDefaultMutationData(array $context): array
     {
         return ['clientMutationId' => $context['args']['input']['clientMutationId'] ?? null];
-    }
-
-    private function getDefaultSubscriptionData(array $context): array
-    {
-        return ['clientSubscriptionId' => $context['args']['input']['clientSubscriptionId'] ?? null];
     }
 }

@@ -11,7 +11,6 @@ use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function get_class;
 use function gettype;
 use function is_object;
@@ -73,7 +72,7 @@ final class ConsoleLogger extends AbstractLogger
     /**
      * {@inheritdoc}
      */
-    public function log($level, $message, array $context = []): void
+    public function log($level, $message, array $context = []) : void
     {
         if (! isset($this->verbosityLevelMap[$level])) {
             throw new InvalidArgumentException(sprintf('The log level "%s" does not exist.', $level));
@@ -102,7 +101,7 @@ final class ConsoleLogger extends AbstractLogger
      *
      * @param mixed[] $context
      */
-    private function interpolate(string $message, array $context): string
+    private function interpolate(string $message, array $context) : string
     {
         if (strpos($message, '{') === false) {
             return $message;

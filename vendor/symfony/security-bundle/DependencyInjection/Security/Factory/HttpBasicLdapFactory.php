@@ -45,14 +45,7 @@ class HttpBasicLdapFactory extends HttpBasicFactory
         ;
 
         // entry point
-        $entryPointId = $defaultEntryPoint;
-
-        if (null === $entryPointId) {
-            $entryPointId = 'security.authentication.basic_entry_point.'.$id;
-            $container
-                ->setDefinition($entryPointId, new ChildDefinition('security.authentication.basic_entry_point'))
-                ->addArgument($config['realm']);
-        }
+        $entryPointId = $this->registerEntryPoint($container, $id, $config, $defaultEntryPoint);
 
         if (!empty($config['query_string'])) {
             if ('' === $config['search_dn'] || '' === $config['search_password']) {

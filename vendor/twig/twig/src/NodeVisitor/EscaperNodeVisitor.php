@@ -29,8 +29,6 @@ use Twig\NodeTraverser;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @internal
  */
 final class EscaperNodeVisitor implements NodeVisitorInterface
 {

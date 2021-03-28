@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle\Tests\Services\KeyLoader;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Tests\ForwardCompatTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,15 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractTestKeyLoader extends TestCase
 {
-    use ForwardCompatTestCaseTrait;
-
     /** @var KeyLoaderInterface */
     protected $keyLoader;
 
     /**
      * {@inheritdoc}
      */
-    public function doSetUp()
+    public function setUp()
     {
         $this->removeKeysIfExist();
     }
@@ -37,7 +34,7 @@ abstract class AbstractTestKeyLoader extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function doTearDown()
+    public function tearDown()
     {
         $this->removeKeysIfExist();
     }
@@ -50,7 +47,7 @@ abstract class AbstractTestKeyLoader extends TestCase
     protected function removeKeysIfExist()
     {
         $privateKey = 'private.pem';
-        $publicKey = 'public.pem';
+        $publicKey  = 'public.pem';
 
         if (file_exists($publicKey)) {
             unlink($publicKey);

@@ -13,6 +13,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 interface JWTEncoderInterface
 {
     /**
+     * @param array $data
+     *
      * @return string the encoded token string
      *
      * @throws JWTEncodeFailureException If an error occurred while trying to create

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,20 +28,32 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 /**
  * Class, which can handle completion of hydration cycle and produce some of tasks.
  * In current implementation triggers deferred postLoad event.
+ *
+ * @author Artur Eshenbrener <strate@yandex.ru>
+ * @since 2.5
  */
 final class HydrationCompleteHandler
 {
-    /** @var ListenersInvoker */
+    /**
+     * @var ListenersInvoker
+     */
     private $listenersInvoker;
 
-    /** @var EntityManagerInterface */
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
 
-    /** @var mixed[][] */
+    /**
+     * @var array[]
+     */
     private $deferredPostLoadInvocations = [];
 
     /**
      * Constructor for this object
+     *
+     * @param ListenersInvoker $listenersInvoker
+     * @param EntityManagerInterface $em
      */
     public function __construct(ListenersInvoker $listenersInvoker, EntityManagerInterface $em)
     {
@@ -53,7 +64,8 @@ final class HydrationCompleteHandler
     /**
      * Method schedules invoking of postLoad entity to the very end of current hydration cycle.
      *
-     * @param object $entity
+     * @param ClassMetadata $class
+     * @param object        $entity
      */
     public function deferPostLoadInvoking(ClassMetadata $class, $entity)
     {

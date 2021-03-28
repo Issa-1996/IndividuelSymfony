@@ -22,33 +22,44 @@ namespace Doctrine\ORM\Cache;
 
 /**
  * Cache regions configuration
+ *
+ * @since   2.5
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class RegionsConfiguration
 {
-    /** @var array<string,int> */
+    /**
+     * @var array
+     */
     private $lifetimes = [];
 
-    /** @var array<string,int> */
+    /**
+     * @var array
+     */
     private $lockLifetimes = [];
 
-    /** @var int */
+    /**
+     * @var integer
+     */
     private $defaultLifetime;
 
-    /** @var int */
+    /**
+     * @var integer
+     */
     private $defaultLockLifetime;
 
     /**
-     * @param int $defaultLifetime
-     * @param int $defaultLockLifetime
+     * @param integer $defaultLifetime
+     * @param integer $defaultLockLifetime
      */
     public function __construct($defaultLifetime = 3600, $defaultLockLifetime = 60)
     {
-        $this->defaultLifetime     = (int) $defaultLifetime;
-        $this->defaultLockLifetime = (int) $defaultLockLifetime;
+        $this->defaultLifetime      = (integer) $defaultLifetime;
+        $this->defaultLockLifetime  = (integer) $defaultLockLifetime;
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getDefaultLifetime()
     {
@@ -56,15 +67,15 @@ class RegionsConfiguration
     }
 
     /**
-     * @param int $defaultLifetime
+     * @param integer $defaultLifetime
      */
     public function setDefaultLifetime($defaultLifetime)
     {
-        $this->defaultLifetime = (int) $defaultLifetime;
+        $this->defaultLifetime = (integer) $defaultLifetime;
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getDefaultLockLifetime()
     {
@@ -72,48 +83,52 @@ class RegionsConfiguration
     }
 
     /**
-     * @param int $defaultLockLifetime
+     * @param integer $defaultLockLifetime
      */
     public function setDefaultLockLifetime($defaultLockLifetime)
     {
-        $this->defaultLockLifetime = (int) $defaultLockLifetime;
+        $this->defaultLockLifetime = (integer) $defaultLockLifetime;
     }
 
     /**
      * @param string $regionName
      *
-     * @return int
+     * @return integer
      */
     public function getLifetime($regionName)
     {
-        return $this->lifetimes[$regionName] ?? $this->defaultLifetime;
+        return isset($this->lifetimes[$regionName])
+            ? $this->lifetimes[$regionName]
+            : $this->defaultLifetime;
     }
 
     /**
-     * @param string $name
-     * @param int    $lifetime
+     * @param string  $name
+     * @param integer $lifetime
      */
     public function setLifetime($name, $lifetime)
     {
-        $this->lifetimes[$name] = (int) $lifetime;
+        $this->lifetimes[$name] = (integer) $lifetime;
     }
 
     /**
      * @param string $regionName
      *
-     * @return int
+     * @return integer
      */
     public function getLockLifetime($regionName)
     {
-        return $this->lockLifetimes[$regionName] ?? $this->defaultLockLifetime;
+        return isset($this->lockLifetimes[$regionName])
+            ? $this->lockLifetimes[$regionName]
+            : $this->defaultLockLifetime;
     }
 
     /**
-     * @param string $name
-     * @param int    $lifetime
+     * @param string  $name
+     * @param integer $lifetime
      */
     public function setLockLifetime($name, $lifetime)
     {
-        $this->lockLifetimes[$name] = (int) $lifetime;
+        $this->lockLifetimes[$name] = (integer) $lifetime;
     }
 }

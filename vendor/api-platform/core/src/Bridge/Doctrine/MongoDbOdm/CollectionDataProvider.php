@@ -18,7 +18,6 @@ use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension\AggregationResultColle
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\RuntimeException;
-use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,16 +32,14 @@ use Doctrine\Persistence\ManagerRegistry;
 final class CollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
     private $managerRegistry;
-    private $resourceMetadataFactory;
     private $collectionExtensions;
 
     /**
      * @param AggregationCollectionExtensionInterface[] $collectionExtensions
      */
-    public function __construct(ManagerRegistry $managerRegistry, ResourceMetadataFactoryInterface $resourceMetadataFactory, iterable $collectionExtensions = [])
+    public function __construct(ManagerRegistry $managerRegistry, iterable $collectionExtensions = [])
     {
         $this->managerRegistry = $managerRegistry;
-        $this->resourceMetadataFactory = $resourceMetadataFactory;
         $this->collectionExtensions = $collectionExtensions;
     }
 
@@ -75,10 +72,6 @@ final class CollectionDataProvider implements CollectionDataProviderInterface, R
             }
         }
 
-        $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
-        $attribute = $resourceMetadata->getCollectionOperationAttribute($operationName, 'doctrine_mongodb', [], true);
-        $executeOptions = $attribute['execute_options'] ?? [];
-
-        return $aggregationBuilder->hydrate($resourceClass)->execute($executeOptions);
+        return $aggregationBuilder->hydrate($resourceClass)->execute();
     }
 }

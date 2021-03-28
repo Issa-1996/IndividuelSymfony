@@ -45,12 +45,7 @@ final class ReflectionClassRecursiveIterator
                     $sourceFile = realpath($sourceFile);
                 }
 
-                try {
-                    require_once $sourceFile;
-                } catch (\Throwable $t) {
-                    // invalid PHP file (example: missing parent class)
-                    continue;
-                }
+                require_once $sourceFile;
 
                 $includedFiles[$sourceFile] = true;
             }

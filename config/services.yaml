@@ -6,6 +6,8 @@
 parameters:
 
 services:
+    App\DataPersister\ProfilDataPersister:
+        decorates: 'api_platform.doctrine.orm.data_persister'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

@@ -8,7 +8,6 @@ use BadMethodCallException;
 use Doctrine\ODM\PHPCR\DocumentManager as PhpcrDocumentManager;
 use Doctrine\Persistence\ObjectManager;
 use OutOfBoundsException;
-
 use function array_key_exists;
 use function array_keys;
 use function get_class;
@@ -199,8 +198,6 @@ class ReferenceRepository
      * Checks if reference has identity stored
      *
      * @param string $name
-     *
-     * @return bool
      */
     public function hasIdentity($name)
     {

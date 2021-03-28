@@ -48,11 +48,6 @@ final class MakeMigration extends AbstractMaker implements ApplicationAwareMaker
         return 'make:migration';
     }
 
-    public static function getCommandDescription(): string
-    {
-        return 'Creates a new migration based on database changes';
-    }
-
     public function setApplication(Application $application)
     {
         $this->application = $application;
@@ -61,6 +56,7 @@ final class MakeMigration extends AbstractMaker implements ApplicationAwareMaker
     public function configureCommand(Command $command, InputConfiguration $inputConf)
     {
         $command
+            ->setDescription('Creates a new migration based on database changes')
             ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeMigration.txt'))
         ;
 
@@ -91,15 +87,10 @@ final class MakeMigration extends AbstractMaker implements ApplicationAwareMaker
         // end 2.x support
 
         $generateMigrationCommand = $this->application->find('doctrine:migrations:diff');
-        $generateMigrationCommandInput = new ArgvInput($options);
-
-        if (!$input->isInteractive()) {
-            $generateMigrationCommandInput->setInteractive(false);
-        }
 
         $commandOutput = new MigrationDiffFilteredOutput($io->getOutput());
         try {
-            $returnCode = $generateMigrationCommand->run($generateMigrationCommandInput, $commandOutput);
+            $returnCode = $generateMigrationCommand->run(new ArgvInput($options), $commandOutput);
 
             // non-zero code would ideally mean the internal command has already printed an errror
             // this happens if you "decline" generating a migration when you already

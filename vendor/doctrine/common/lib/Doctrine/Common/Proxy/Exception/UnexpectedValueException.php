@@ -1,16 +1,14 @@
 <?php
-
 namespace Doctrine\Common\Proxy\Exception;
 
-use Throwable;
 use UnexpectedValueException as BaseUnexpectedValueException;
-
-use function sprintf;
 
 /**
  * Proxy Unexpected Value Exception.
  *
  * @link   www.doctrine-project.org
+ * @since  2.4
+ * @author Marco Pivetta <ocramius@gmail.com>
  */
 class UnexpectedValueException extends BaseUnexpectedValueException implements ProxyException
 {
@@ -25,9 +23,10 @@ class UnexpectedValueException extends BaseUnexpectedValueException implements P
     }
 
     /**
-     * @param string $className
-     * @param string $methodName
-     * @param string $parameterName
+     * @param string          $className
+     * @param string          $methodName
+     * @param string          $parameterName
+     * @param \Exception|null $previous
      *
      * @return self
      */
@@ -35,7 +34,7 @@ class UnexpectedValueException extends BaseUnexpectedValueException implements P
         $className,
         $methodName,
         $parameterName,
-        ?Throwable $previous = null
+        \Exception $previous = null
     ) {
         return new self(
             sprintf(
@@ -52,10 +51,11 @@ class UnexpectedValueException extends BaseUnexpectedValueException implements P
     /**
      * @param string $className
      * @param string $methodName
+     * @param \Exception|null $previous
      *
      * @return self
      */
-    public static function invalidReturnTypeHint($className, $methodName, ?Throwable $previous = null)
+    public static function invalidReturnTypeHint($className, $methodName, \Exception $previous = null)
     {
         return new self(
             sprintf(

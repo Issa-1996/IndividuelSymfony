@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\JWTAuthenticationBundle\Tests\Functional;
 
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -31,7 +32,7 @@ abstract class TestCase extends WebTestCase
         }
 
         $client = static::$kernel->getContainer()->get('test.client');
-        $token = null === $token ? self::getAuthenticatedToken() : $token;
+        $token  = null === $token ? self::getAuthenticatedToken() : $token;
 
         if (null === $token) {
             throw new \LogicException('Unable to create an authenticated client from a null JWT token');
@@ -65,7 +66,7 @@ abstract class TestCase extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected function doSetUp()
+    protected function setUp()
     {
         $fs = new Filesystem();
         $fs->remove(sys_get_temp_dir().'/LexikJWTAuthenticationBundle/');

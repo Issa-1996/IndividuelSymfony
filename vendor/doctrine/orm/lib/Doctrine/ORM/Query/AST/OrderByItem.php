@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,19 +19,26 @@
 
 namespace Doctrine\ORM\Query\AST;
 
-use function strtoupper;
-
 /**
  * OrderByItem ::= (ResultVariable | StateFieldPathExpression) ["ASC" | "DESC"]
  *
+ * 
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class OrderByItem extends Node
 {
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $expression;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $type;
 
     /**
@@ -48,7 +54,7 @@ class OrderByItem extends Node
      */
     public function isAsc()
     {
-        return strtoupper($this->type) === 'ASC';
+        return strtoupper($this->type) == 'ASC';
     }
 
     /**
@@ -56,7 +62,7 @@ class OrderByItem extends Node
      */
     public function isDesc()
     {
-        return strtoupper($this->type) === 'DESC';
+        return strtoupper($this->type) == 'DESC';
     }
 
     /**

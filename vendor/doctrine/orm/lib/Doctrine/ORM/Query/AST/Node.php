@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,21 +19,14 @@
 
 namespace Doctrine\ORM\Query\AST;
 
-use Doctrine\ORM\Query\SqlWalker;
-
-use function get_class;
-use function get_object_vars;
-use function is_array;
-use function is_object;
-use function str_repeat;
-use function var_export;
-
-use const PHP_EOL;
-
 /**
  * Abstract class of an AST node.
  *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 abstract class Node
 {
@@ -43,7 +35,7 @@ abstract class Node
      *
      * Implementation is not mandatory for all nodes.
      *
-     * @param SqlWalker $walker
+     * @param \Doctrine\ORM\Query\SqlWalker $walker
      *
      * @return string
      *
@@ -76,21 +68,21 @@ abstract class Node
         $str = '';
 
         if ($obj instanceof Node) {
-            $str  .= get_class($obj) . '(' . PHP_EOL;
+            $str .= get_class($obj) . '(' . PHP_EOL;
             $props = get_object_vars($obj);
 
             foreach ($props as $name => $prop) {
                 $ident += 4;
-                $str   .= str_repeat(' ', $ident) . '"' . $name . '": '
+                $str .= str_repeat(' ', $ident) . '"' . $name . '": '
                       . $this->dump($prop) . ',' . PHP_EOL;
                 $ident -= 4;
             }
 
             $str .= str_repeat(' ', $ident) . ')';
-        } elseif (is_array($obj)) {
+        } else if (is_array($obj)) {
             $ident += 4;
-            $str   .= 'array(';
-            $some   = false;
+            $str .= 'array(';
+            $some = false;
 
             foreach ($obj as $k => $v) {
                 $str .= PHP_EOL . str_repeat(' ', $ident) . '"'
@@ -99,8 +91,8 @@ abstract class Node
             }
 
             $ident -= 4;
-            $str   .= ($some ? PHP_EOL . str_repeat(' ', $ident) : '') . ')';
-        } elseif (is_object($obj)) {
+            $str .= ($some ? PHP_EOL . str_repeat(' ', $ident) : '') . ')';
+        } else if (is_object($obj)) {
             $str .= 'instanceof(' . get_class($obj) . ')';
         } else {
             $str .= var_export($obj, true);

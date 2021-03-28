@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,75 +23,97 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * A set of rules for determining the column, alias and table quotes.
+ *
+ * @since   2.3
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 interface QuoteStrategy
 {
     /**
      * Gets the (possibly quoted) column name for safe use in an SQL statement.
      *
-     * @param string $fieldName
+     * @param string           $fieldName
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
      *
      * @return string
      */
-    public function getColumnName($fieldName, ClassMetadata $class, AbstractPlatform $platform);
+    function getColumnName($fieldName, ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) primary table name for safe use in an SQL statement.
      *
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
+     *
      * @return string
      */
-    public function getTableName(ClassMetadata $class, AbstractPlatform $platform);
+    function getTableName(ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) sequence name for safe use in an SQL statement.
      *
-     * @param mixed[] $definition
+     * @param array            $definition
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
      *
      * @return string
      */
-    public function getSequenceName(array $definition, ClassMetadata $class, AbstractPlatform $platform);
+    function getSequenceName(array $definition, ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) name of the join table.
      *
-     * @param mixed[] $association
+     * @param array            $association
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
      *
      * @return string
      */
-    public function getJoinTableName(array $association, ClassMetadata $class, AbstractPlatform $platform);
+    function getJoinTableName(array $association, ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) join column name.
      *
-     * @param mixed[] $joinColumn
+     * @param array            $joinColumn
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
      *
      * @return string
      */
-    public function getJoinColumnName(array $joinColumn, ClassMetadata $class, AbstractPlatform $platform);
+    function getJoinColumnName(array $joinColumn, ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) join column name.
      *
-     * @param mixed[] $joinColumn
+     * @param array            $joinColumn
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
      *
      * @return string
      */
-    public function getReferencedJoinColumnName(array $joinColumn, ClassMetadata $class, AbstractPlatform $platform);
+    function getReferencedJoinColumnName(array $joinColumn, ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the (possibly quoted) identifier column names for safe use in an SQL statement.
      *
+     * @param ClassMetadata    $class
+     * @param AbstractPlatform $platform
+     *
      * @return array
      */
-    public function getIdentifierColumnNames(ClassMetadata $class, AbstractPlatform $platform);
+    function getIdentifierColumnNames(ClassMetadata $class, AbstractPlatform $platform);
 
     /**
      * Gets the column alias.
      *
-     * @param string $columnName
-     * @param int    $counter
+     * @param string             $columnName
+     * @param integer            $counter
+     * @param AbstractPlatform   $platform
+     * @param ClassMetadata|null $class
      *
      * @return string
      */
-    public function getColumnAlias($columnName, $counter, AbstractPlatform $platform, ?ClassMetadata $class = null);
+    function getColumnAlias($columnName, $counter, AbstractPlatform $platform, ClassMetadata $class = null);
+
 }

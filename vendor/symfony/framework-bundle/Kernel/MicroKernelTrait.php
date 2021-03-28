@@ -29,7 +29,7 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @method void configureRoutes(RoutingConfigurator $routes)
- * @method void configureContainer(ContainerConfigurator $container)
+ * @method void configureContainer(ContainerConfigurator $c)
  */
 trait MicroKernelTrait
 {
@@ -62,26 +62,6 @@ trait MicroKernelTrait
      *     $c->parameters()->set('halloween', 'lot of fun');
      */
     //abstract protected function configureContainer(ContainerConfigurator $c): void;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheDir(): string
-    {
-        if (isset($_SERVER['APP_CACHE_DIR'])) {
-            return $_SERVER['APP_CACHE_DIR'].'/'.$this->environment;
-        }
-
-        return parent::getCacheDir();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLogDir(): string
-    {
-        return $_SERVER['APP_LOG_DIR'] ?? parent::getLogDir();
-    }
 
     /**
      * {@inheritdoc}

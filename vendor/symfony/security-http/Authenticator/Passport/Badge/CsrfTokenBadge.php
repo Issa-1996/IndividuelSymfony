@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\EventListener\CsrfProtectionListener;
  * @author Wouter de Jong <wouter@wouterj.nl>
  *
  * @final
- * @experimental in 5.2
+ * @experimental in5.1
  */
 class CsrfTokenBadge implements BadgeInterface
 {

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,14 +23,20 @@ namespace Doctrine\ORM\Query\AST;
  * ArithmeticTerm ::= ArithmeticFactor {("*" | "/") ArithmeticFactor}*
  *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class ArithmeticTerm extends Node
 {
-    /** @var mixed[] */
+    /**
+     * @var array
+     */
     public $arithmeticFactors;
 
     /**
-     * @param mixed[] $arithmeticFactors
+     * @param array $arithmeticFactors
      */
     public function __construct(array $arithmeticFactors)
     {

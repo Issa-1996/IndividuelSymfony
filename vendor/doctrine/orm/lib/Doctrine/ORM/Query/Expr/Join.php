@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,37 +19,51 @@
 
 namespace Doctrine\ORM\Query\Expr;
 
-use function strtoupper;
-
 /**
  * Expression class for DQL join.
  *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class Join
 {
-    public const INNER_JOIN = 'INNER';
-    public const LEFT_JOIN  = 'LEFT';
+    const INNER_JOIN    = 'INNER';
+    const LEFT_JOIN     = 'LEFT';
 
-    public const ON   = 'ON';
-    public const WITH = 'WITH';
+    const ON            = 'ON';
+    const WITH          = 'WITH';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $joinType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $join;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $alias;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $conditionType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $condition;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $indexBy;
 
     /**
@@ -63,16 +76,16 @@ class Join
      */
     public function __construct($joinType, $join, $alias = null, $conditionType = null, $condition = null, $indexBy = null)
     {
-        $this->joinType      = $joinType;
-        $this->join          = $join;
-        $this->alias         = $alias;
-        $this->conditionType = $conditionType;
-        $this->condition     = $condition;
-        $this->indexBy       = $indexBy;
+        $this->joinType       = $joinType;
+        $this->join           = $join;
+        $this->alias          = $alias;
+        $this->conditionType  = $conditionType;
+        $this->condition      = $condition;
+        $this->indexBy        = $indexBy;
     }
 
     /**
-     * @return string
+     * @return string 
      */
     public function getJoinType()
     {

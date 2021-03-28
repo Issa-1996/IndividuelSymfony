@@ -15,8 +15,6 @@ namespace ApiPlatform\Core\DataProvider;
 
 use ApiPlatform\Core\Exception\InvalidIdentifierException;
 use ApiPlatform\Core\Exception\RuntimeException;
-use ApiPlatform\Core\Identifier\CompositeIdentifierParser;
-use ApiPlatform\Core\Identifier\ContextAwareIdentifierConverterInterface;
 use ApiPlatform\Core\Identifier\IdentifierConverterInterface;
 
 /**
@@ -77,15 +75,7 @@ trait OperationDataProviderTrait
             throw new RuntimeException('Subresources not supported');
         }
 
-        // TODO: SubresourceDataProvider wants: ['id' => ['id' => 1], 'relatedDummies' => ['id' => 2]], identifiers is ['id' => 1, 'relatedDummies' => 2]
-        $subresourceIdentifiers = [];
-        foreach ($attributes['identifiers'] as $parameterName => [$class, $property]) {
-            if (false !== ($attributes['identifiers'][$parameterName][2] ?? null)) {
-                $subresourceIdentifiers[$parameterName] = [$property => $identifiers[$parameterName]];
-            }
-        }
-
-        return $this->subresourceDataProvider->getSubresource($attributes['resource_class'], $subresourceIdentifiers, $attributes['subresource_context'] + $context, $attributes['subresource_operation_name']);
+        return $this->subresourceDataProvider->getSubresource($attributes['resource_class'], $identifiers, $attributes['subresource_context'] + $context, $attributes['subresource_operation_name']);
     }
 
     /**
@@ -95,36 +85,38 @@ trait OperationDataProviderTrait
      */
     private function extractIdentifiers(array $parameters, array $attributes)
     {
-        $identifiersKeys = $attributes['identifiers'] ?? ['id' => [$attributes['resource_class'], 'id']];
-        $identifiers = [];
-
-        $identifiersNumber = \count($identifiersKeys);
-        foreach ($identifiersKeys as $parameterName => $identifiedBy) {
-            if (!isset($parameters[$parameterName])) {
-                if ($attributes['has_composite_identifier']) {
-                    $identifiers = CompositeIdentifierParser::parse($parameters['id']);
-                    if (($currentIdentifiersNumber = \count($identifiers)) !== $identifiersNumber) {
-                        throw new InvalidIdentifierException(sprintf('Expected %d identifiers, got %d', $identifiersNumber, $currentIdentifiersNumber));
-                    }
-
-                    return $this->identifierConverter->convert($identifiers, $identifiedBy[0]);
-                }
-
-                // TODO: Subresources tuple may have a third item representing if it is a "collection", this behavior will be removed in 3.0
-                if (false === ($identifiedBy[2] ?? null)) {
-                    continue;
-                }
-
-                throw new InvalidIdentifierException(sprintf('Parameter "%s" not found', $parameterName));
+        if (isset($attributes['item_operation_name'])) {
+            if (!isset($parameters['id'])) {
+                throw new InvalidIdentifierException('Parameter "id" not found');
             }
 
-            $identifiers[$parameterName] = $parameters[$parameterName];
+            $id = $parameters['id'];
+
+            if (null !== $this->identifierConverter) {
+                return $this->identifierConverter->convert((string) $id, $attributes['resource_class']);
+            }
+
+            return $id;
         }
 
-        if ($this->identifierConverter instanceof ContextAwareIdentifierConverterInterface) {
-            return $this->identifierConverter->convert($identifiers, $attributes['resource_class'], ['identifiers' => $identifiersKeys]);
+        if (!isset($attributes['subresource_context'])) {
+            throw new RuntimeException('Either "item_operation_name" or "collection_operation_name" must be defined, unless the "_api_receive" request attribute is set to false.');
         }
 
-        return $this->identifierConverter->convert($identifiers, $attributes['resource_class']);
+        $identifiers = [];
+
+        foreach ($attributes['subresource_context']['identifiers'] as $key => [$id, $resourceClass, $hasIdentifier]) {
+            if (false === $hasIdentifier) {
+                continue;
+            }
+
+            $identifiers[$id] = $parameters[$id];
+
+            if (null !== $this->identifierConverter) {
+                $identifiers[$id] = $this->identifierConverter->convert((string) $identifiers[$id], $resourceClass);
+            }
+        }
+
+        return $identifiers;
     }
 }

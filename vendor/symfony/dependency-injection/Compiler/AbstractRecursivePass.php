@@ -127,7 +127,7 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
         }
 
         if ($factory) {
-            [$class, $method] = $factory;
+            list($class, $method) = $factory;
             if ($class instanceof Reference) {
                 $class = $this->container->findDefinition((string) $class)->getClass();
             } elseif ($class instanceof Definition) {

@@ -12,11 +12,12 @@
 namespace Symfony\Bundle\SecurityBundle\DependencyInjection;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\EntryPointFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\RememberMeFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
 use Symfony\Bundle\SecurityBundle\Security\LegacyLogoutHandlerListener;
+use Symfony\Bundle\SecurityBundle\SecurityUserValueResolver;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
@@ -28,16 +29,18 @@ use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Encoder\NativePasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
 use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Event\CheckPassportEvent;
+use Symfony\Component\Security\Http\Controller\UserValueResolver;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Twig\Extension\AbstractExtension;
 
 /**
@@ -102,18 +105,17 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         $config = $this->processConfiguration($mainConfig, $configs);
 
         // load services
-        $loader = new PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
-
-        $loader->load('security.php');
-        $loader->load('security_listeners.php');
-        $loader->load('security_rememberme.php');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('security.xml');
+        $loader->load('security_listeners.xml');
+        $loader->load('security_rememberme.xml');
 
         if ($this->authenticatorManagerEnabled = $config['enable_authenticator_manager']) {
             if ($config['always_authenticate_before_granting']) {
                 throw new InvalidConfigurationException('The security option "always_authenticate_before_granting" cannot be used when "enable_authenticator_manager" is set to true. If you rely on this behavior, set it to false.');
             }
 
-            $loader->load('security_authenticator.php');
+            $loader->load('security_authenticator.xml');
 
             // The authenticator system no longer has anonymous tokens. This makes sure AccessListener
             // and AuthorizationChecker do not throw AuthenticationCredentialsNotFoundException when no
@@ -122,21 +124,21 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             $container->getDefinition('security.authorization_checker')->setArgument(4, false);
             $container->getDefinition('security.authorization_checker')->setArgument(5, false);
         } else {
-            $loader->load('security_legacy.php');
+            $loader->load('security_legacy.xml');
         }
 
         if (class_exists(AbstractExtension::class)) {
-            $loader->load('templating_twig.php');
+            $loader->load('templating_twig.xml');
         }
 
-        $loader->load('collectors.php');
-        $loader->load('guard.php');
+        $loader->load('collectors.xml');
+        $loader->load('guard.xml');
 
         if ($container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug')) {
-            $loader->load('security_debug.php');
+            $loader->load('security_debug.xml');
         }
 
-        if (!class_exists(\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)) {
+        if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
             $container->removeDefinition('security.expression_language');
             $container->removeDefinition('security.access.expression_voter');
         }
@@ -147,7 +149,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('security.authentication.session_strategy.strategy', $config['session_fixation_strategy']);
 
         if (isset($config['access_decision_manager']['service'])) {
-            $container->setAlias('security.access.decision_manager', $config['access_decision_manager']['service']);
+            $container->setAlias('security.access.decision_manager', $config['access_decision_manager']['service'])->setPrivate(true);
         } else {
             $container
                 ->getDefinition('security.access.decision_manager')
@@ -171,8 +173,12 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         }
 
         if (class_exists(Application::class)) {
-            $loader->load('console.php');
+            $loader->load('console.xml');
             $container->getDefinition('security.command.user_password_encoder')->replaceArgument(1, array_keys($config['encoders']));
+        }
+
+        if (!class_exists(UserValueResolver::class)) {
+            $container->getDefinition('security.user_value_resolver')->setClass(SecurityUserValueResolver::class);
         }
 
         $container->registerForAutoconfiguration(VoterInterface::class)
@@ -241,13 +247,10 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         }
         $arguments[1] = $userProviderIteratorsArgument = new IteratorArgument($userProviders);
         $contextListenerDefinition->setArguments($arguments);
-        $nbUserProviders = \count($userProviders);
 
-        if ($nbUserProviders > 1) {
+        if (\count($userProviders) > 1) {
             $container->setDefinition('security.user_providers', new Definition(ChainUserProvider::class, [$userProviderIteratorsArgument]))
                 ->setPublic(false);
-        } elseif (0 === $nbUserProviders) {
-            $container->removeDefinition('security.listener.user_provider');
         } else {
             $container->setAlias('security.user_providers', new Alias(current($providerIds)))->setPublic(false);
         }
@@ -268,7 +271,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
 
             $configId = 'security.firewall.map.config.'.$name;
 
-            [$matcher, $listeners, $exceptionListener, $logoutListener] = $this->createFirewall($container, $name, $firewall, $authenticationProviders, $providerIds, $configId);
+            list($matcher, $listeners, $exceptionListener, $logoutListener) = $this->createFirewall($container, $name, $firewall, $authenticationProviders, $providerIds, $configId);
 
             $contextId = 'security.firewall.map.context.'.$name;
             $isLazy = !$firewall['stateless'] && (!empty($firewall['anonymous']['lazy']) || $firewall['lazy']);
@@ -315,9 +318,9 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         if (isset($firewall['request_matcher'])) {
             $matcher = new Reference($firewall['request_matcher']);
         } elseif (isset($firewall['pattern']) || isset($firewall['host'])) {
-            $pattern = $firewall['pattern'] ?? null;
-            $host = $firewall['host'] ?? null;
-            $methods = $firewall['methods'] ?? [];
+            $pattern = isset($firewall['pattern']) ? $firewall['pattern'] : null;
+            $host = isset($firewall['host']) ? $firewall['host'] : null;
+            $methods = isset($firewall['methods']) ? $firewall['methods'] : [];
             $matcher = $this->createRequestMatcher($container, $pattern, $host, null, $methods);
         }
 
@@ -338,12 +341,6 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
                 throw new InvalidConfigurationException(sprintf('Invalid firewall "%s": user provider "%s" not found.', $id, $firewall['provider']));
             }
             $defaultProvider = $providerIds[$normalizedName];
-
-            if ($this->authenticatorManagerEnabled) {
-                $container->setDefinition('security.listener.'.$id.'.user_provider', new ChildDefinition('security.listener.user_provider.abstract'))
-                    ->addTag('kernel.event_listener', ['event' => CheckPassportEvent::class, 'priority' => 2048, 'method' => 'checkPassport'])
-                    ->replaceArgument(0, new Reference($defaultProvider));
-            }
         } elseif (1 === \count($providerIds)) {
             $defaultProvider = reset($providerIds);
         }
@@ -448,11 +445,11 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         }
 
         // Determine default entry point
-        $configuredEntryPoint = $firewall['entry_point'] ?? null;
+        $configuredEntryPoint = isset($firewall['entry_point']) ? $firewall['entry_point'] : null;
 
         // Authentication listeners
         $firewallAuthenticationProviders = [];
-        [$authListeners, $defaultEntryPoint] = $this->createAuthenticationListeners($container, $id, $firewall, $firewallAuthenticationProviders, $defaultProvider, $providerIds, $configuredEntryPoint, $contextListenerId);
+        list($authListeners, $defaultEntryPoint) = $this->createAuthenticationListeners($container, $id, $firewall, $firewallAuthenticationProviders, $defaultProvider, $providerIds, $configuredEntryPoint, $contextListenerId);
 
         if (!$this->authenticatorManagerEnabled) {
             $authenticationProviders = array_merge($authenticationProviders, $firewallAuthenticationProviders);
@@ -506,8 +503,8 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         // Exception listener
         $exceptionListener = new Reference($this->createExceptionListener($container, $firewall, $id, $configuredEntryPoint ?: $defaultEntryPoint, $firewall['stateless']));
 
-        $config->replaceArgument(8, $firewall['access_denied_handler'] ?? null);
-        $config->replaceArgument(9, $firewall['access_denied_url'] ?? null);
+        $config->replaceArgument(8, isset($firewall['access_denied_handler']) ? $firewall['access_denied_handler'] : null);
+        $config->replaceArgument(9, isset($firewall['access_denied_url']) ? $firewall['access_denied_url'] : null);
 
         $container->setAlias('security.user_checker.'.$id, new Alias($firewall['user_checker'], false));
 
@@ -521,7 +518,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         }
 
         $config->replaceArgument(10, $listenerKeys);
-        $config->replaceArgument(11, $firewall['switch_user'] ?? null);
+        $config->replaceArgument(11, isset($firewall['switch_user']) ? $firewall['switch_user'] : null);
 
         return [$matcher, $listeners, $exceptionListener, null !== $logoutListenerId ? new Reference($logoutListenerId) : null];
     }
@@ -559,35 +556,37 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
 
                         $authenticators = $factory->createAuthenticator($container, $id, $firewall[$key], $userProvider);
                         if (\is_array($authenticators)) {
-                            foreach ($authenticators as $authenticator) {
+                            foreach ($authenticators as $i => $authenticator) {
                                 $authenticationProviders[] = $authenticator;
-                                $entryPoints[] = $authenticator;
                             }
                         } else {
                             $authenticationProviders[] = $authenticators;
-                            $entryPoints[$key] = $authenticators;
+                        }
+
+                        if ($factory instanceof EntryPointFactoryInterface && ($entryPoint = $factory->registerEntryPoint($container, $id, $firewall[$key]))) {
+                            $entryPoints[$key] = $entryPoint;
                         }
                     } else {
-                        [$provider, $listenerId, $defaultEntryPoint] = $factory->create($container, $id, $firewall[$key], $userProvider, $defaultEntryPoint);
+                        list($provider, $listenerId, $defaultEntryPoint) = $factory->create($container, $id, $firewall[$key], $userProvider, $defaultEntryPoint);
 
                         $listeners[] = new Reference($listenerId);
                         $authenticationProviders[] = $provider;
                     }
-
-                    if ($factory instanceof FirewallListenerFactoryInterface) {
-                        $firewallListenerIds = $factory->createListeners($container, $id, $firewall[$key]);
-                        foreach ($firewallListenerIds as $firewallListenerId) {
-                            $listeners[] = new Reference($firewallListenerId);
-                        }
-                    }
-
                     $hasListeners = true;
                 }
             }
         }
 
-        // the actual entry point is configured by the RegisterEntryPointPass
-        $container->setParameter('security.'.$id.'._indexed_authenticators', $entryPoints);
+        if ($entryPoints) {
+            // we can be sure the authenticator system is enabled
+            if (null !== $defaultEntryPoint) {
+                $defaultEntryPoint = $entryPoints[$defaultEntryPoint] ?? $defaultEntryPoint;
+            } elseif (1 === \count($entryPoints)) {
+                $defaultEntryPoint = current($entryPoints);
+            } else {
+                throw new InvalidConfigurationException(sprintf('Because you have multiple authenticators in firewall "%s", you need to set the "entry_point" key to one of your authenticators (%s) or a service ID implementing "%s". The "entry_point" determines what should happen (e.g. redirect to "/login") when an anonymous user tries to access a protected page.', $id, implode(', ', $entryPoints), AuthenticationEntryPointInterface::class));
+            }
+        }
 
         if (false === $hasListeners && !$this->authenticatorManagerEnabled) {
             throw new InvalidConfigurationException(sprintf('No authentication listener registered for firewall "%s".', $id));
@@ -624,7 +623,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             return $userProvider;
         }
 
-        if ('remember_me' === $factoryKey || 'anonymous' === $factoryKey || 'custom_authenticators' === $factoryKey) {
+        if ('remember_me' === $factoryKey || 'anonymous' === $factoryKey) {
             return 'security.user_providers';
         }
 
@@ -843,7 +842,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             return $this->expressions[$id];
         }
 
-        if (!class_exists(\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)) {
+        if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
             throw new \RuntimeException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
         }
 

@@ -22,7 +22,6 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
@@ -33,7 +32,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
- * @experimental in 5.2
+ * @experimental in 5.1
  */
 class HttpBasicAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
 {
@@ -67,14 +66,12 @@ class HttpBasicAuthenticator implements AuthenticatorInterface, AuthenticationEn
         $username = $request->headers->get('PHP_AUTH_USER');
         $password = $request->headers->get('PHP_AUTH_PW', '');
 
-        $passport = new Passport(new UserBadge($username, function ($username) {
-            $user = $this->userProvider->loadUserByUsername($username);
-            if (!$user instanceof UserInterface) {
-                throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
-            }
+        $user = $this->userProvider->loadUserByUsername($username);
+        if (!$user instanceof UserInterface) {
+            throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
+        }
 
-            return $user;
-        }), new PasswordCredentials($password));
+        $passport = new Passport($user, new PasswordCredentials($password));
         if ($this->userProvider instanceof PasswordUpgraderInterface) {
             $passport->addBadge(new PasswordUpgradeBadge($password, $this->userProvider));
         }

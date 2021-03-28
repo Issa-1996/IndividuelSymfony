@@ -41,7 +41,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
         $calls[] = ['__construct', $value->getArguments()];
 
         foreach ($calls as $i => $call) {
-            [$method, $arguments] = $call;
+            list($method, $arguments) = $call;
             $parameters = null;
             $resolvedArguments = [];
 
@@ -107,7 +107,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
             }
         }
 
-        [, $arguments] = array_pop($calls);
+        list(, $arguments) = array_pop($calls);
 
         if ($arguments !== $value->getArguments()) {
             $value->setArguments($arguments);

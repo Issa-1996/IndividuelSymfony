@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,6 +22,9 @@ namespace Doctrine\ORM\Mapping;
 /**
  * This annotation is used to override the mapping of a entity property.
  *
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since   2.3
+ *
  * @Annotation
  * @Target("ANNOTATION")
  */
@@ -30,8 +32,8 @@ final class AttributeOverride implements Annotation
 {
     /**
      * The name of the property whose mapping is being overridden.
-     *
-     * @var string
+     * 
+     * @var string 
      */
     public $name;
 

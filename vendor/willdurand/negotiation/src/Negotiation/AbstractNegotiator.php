@@ -13,7 +13,7 @@ abstract class AbstractNegotiator
      *
      * @return AcceptHeader|null best matching type
      */
-    public function getBest($header, array $priorities, $strict = false)
+    public function getBest($header, array $priorities)
     {
         if (empty($priorities)) {
             throw new InvalidArgument('A set of server priorities should be given.');
@@ -33,9 +33,7 @@ abstract class AbstractNegotiator
             try {
                 $acceptedHeaders[] = $this->acceptFactory($h);
             } catch (Exception\Exception $e) {
-                if ($strict) {
-                    throw $e;
-                }
+                // silently skip in case of invalid headers coming in from a client
             }
         }
         $acceptedPriorities = array();
@@ -43,58 +41,13 @@ abstract class AbstractNegotiator
             $acceptedPriorities[] = $this->acceptFactory($p);
         }
         $matches         = $this->findMatches($acceptedHeaders, $acceptedPriorities);
-        $specificMatches = array_reduce($matches, 'Negotiation\AcceptMatch::reduce', []);
+        $specificMatches = array_reduce($matches, 'Negotiation\Match::reduce', []);
 
-        usort($specificMatches, 'Negotiation\AcceptMatch::compare');
+        usort($specificMatches, 'Negotiation\Match::compare');
 
         $match = array_shift($specificMatches);
 
         return null === $match ? null : $acceptedPriorities[$match->index];
-    }
-
-    /**
-     * @param string $header A string containing an `Accept|Accept-*` header.
-     *
-     * @return [AcceptHeader] An ordered list of accept header elements
-     */
-    public function getOrderedElements($header)
-    {
-        if (!$header) {
-            throw new InvalidArgument('The header string should not be empty.');
-        }
-
-        $elements = array();
-        $orderKeys = array();
-        foreach ($this->parseHeader($header) as $key => $h) {
-            try {
-                $element = $this->acceptFactory($h);
-                $elements[] = $element;
-                $orderKeys[] = [$element->getQuality(), $key, $element->getValue()];
-            } catch (Exception\Exception $e) {
-                // silently skip in case of invalid headers coming in from a client
-            }
-        }
-
-        // sort based on quality and then original order. This is necessary as
-        // to ensure that the first in the list for two items with the same
-        // quality stays in that order in both PHP5 and PHP7.
-        uasort($orderKeys, function ($a, $b) {
-            $qA = $a[0];
-            $qB = $b[0];
-
-            if ($qA == $qB) {
-                return $a[1] <=> $b[1];
-            }
-
-            return ($qA > $qB) ? -1 : 1;
-        });
-
-        $orderedElements = [];
-        foreach ($orderKeys as $key) {
-            $orderedElements[] = $elements[$key[1]];
-        }
-
-        return $orderedElements;
     }
 
     /**
@@ -109,7 +62,7 @@ abstract class AbstractNegotiator
      * @param AcceptHeader $priority
      * @param integer      $index
      *
-     * @return AcceptMatch|null Headers matched
+     * @return Match|null Headers matched
      */
     protected function match(AcceptHeader $header, AcceptHeader $priority, $index)
     {
@@ -121,7 +74,7 @@ abstract class AbstractNegotiator
         if ($equal || $ac === '*') {
             $score = 1 * $equal;
 
-            return new AcceptMatch($header->getQuality() * $priority->getQuality(), $score, $index);
+            return new Match($header->getQuality() * $priority->getQuality(), $score, $index);
         }
 
         return null;
@@ -147,7 +100,7 @@ abstract class AbstractNegotiator
      * @param AcceptHeader[] $headerParts
      * @param Priority[]     $priorities  Configured priorities
      *
-     * @return AcceptMatch[] Headers matched
+     * @return Match[] Headers matched
      */
     private function findMatches(array $headerParts, array $priorities)
     {

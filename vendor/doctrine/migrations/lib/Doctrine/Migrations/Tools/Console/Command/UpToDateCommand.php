@@ -12,7 +12,6 @@ use Doctrine\Migrations\Version\Version;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -29,7 +28,7 @@ final class UpToDateCommand extends DoctrineCommand
     /** @var string */
     protected static $defaultName = 'migrations:up-to-date';
 
-    protected function configure(): void
+    protected function configure() : void
     {
         $this
             ->setAliases(['up-to-date'])
@@ -46,7 +45,7 @@ EOT
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $statusCalculator = $this->getDependencyFactory()->getMigrationStatusCalculator();
 
@@ -96,20 +95,20 @@ EOT
     /**
      * @return Version[]
      */
-    private function getSortedVersions(AvailableMigrationsList $newMigrations, ExecutedMigrationsList $executedUnavailableMigrations): array
+    private function getSortedVersions(AvailableMigrationsList $newMigrations, ExecutedMigrationsList $executedUnavailableMigrations) : array
     {
-        $executedUnavailableVersion = array_map(static function (ExecutedMigration $executedMigration): Version {
+        $executedUnavailableVersion = array_map(static function (ExecutedMigration $executedMigration) : Version {
             return $executedMigration->getVersion();
         }, $executedUnavailableMigrations->getItems());
 
-        $newVersions = array_map(static function (AvailableMigration $availableMigration): Version {
+        $newVersions = array_map(static function (AvailableMigration $availableMigration) : Version {
             return $availableMigration->getVersion();
         }, $newMigrations->getItems());
 
         $versions = array_unique(array_merge($executedUnavailableVersion, $newVersions));
 
         $comparator = $this->getDependencyFactory()->getVersionComparator();
-        uasort($versions, static function (Version $a, Version $b) use ($comparator): int {
+        uasort($versions, static function (Version $a, Version $b) use ($comparator) : int {
             return $comparator->compare($a, $b);
         });
 

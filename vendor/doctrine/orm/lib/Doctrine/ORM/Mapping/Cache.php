@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,6 +22,9 @@ namespace Doctrine\ORM\Mapping;
 /**
  * Caching to an entity or a collection.
  *
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since   2.5
+ *
  * @Annotation
  * @Target({"CLASS","PROPERTY"})
  */
@@ -30,10 +32,13 @@ final class Cache implements Annotation
 {
     /**
      * @Enum({"READ_ONLY", "NONSTRICT_READ_WRITE", "READ_WRITE"})
+     * 
      * @var string The concurrency strategy.
      */
     public $usage = 'READ_ONLY';
 
-    /** @var string Cache region name. */
+    /**
+     * @var string Cache region name.
+     */
     public $region;
 }

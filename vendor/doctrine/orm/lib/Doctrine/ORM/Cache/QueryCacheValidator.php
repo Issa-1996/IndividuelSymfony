@@ -22,13 +22,19 @@ namespace Doctrine\ORM\Cache;
 
 /**
  * Cache query validator interface.
+ *
+ * @since   2.5
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 interface QueryCacheValidator
 {
     /**
      * Checks if the query entry is valid
      *
-     * @return bool
+     * @param \Doctrine\ORM\Cache\QueryCacheKey   $key
+     * @param \Doctrine\ORM\Cache\QueryCacheEntry $entry
+     *
+     * @return boolean
      */
     public function isValid(QueryCacheKey $key, QueryCacheEntry $entry);
 }

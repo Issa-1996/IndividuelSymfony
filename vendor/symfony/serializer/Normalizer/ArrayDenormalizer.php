@@ -35,8 +35,6 @@ class ArrayDenormalizer implements ContextAwareDenormalizerInterface, Serializer
      * {@inheritdoc}
      *
      * @throws NotNormalizableValueException
-     *
-     * @return array
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {

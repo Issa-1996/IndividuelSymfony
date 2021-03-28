@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -33,16 +32,14 @@ class LoginFailureEvent extends Event
     private $request;
     private $response;
     private $firewallName;
-    private $passport;
 
-    public function __construct(AuthenticationException $exception, AuthenticatorInterface $authenticator, Request $request, ?Response $response, string $firewallName, ?PassportInterface $passport = null)
+    public function __construct(AuthenticationException $exception, AuthenticatorInterface $authenticator, Request $request, ?Response $response, string $firewallName)
     {
         $this->exception = $exception;
         $this->authenticator = $authenticator;
         $this->request = $request;
         $this->response = $response;
         $this->firewallName = $firewallName;
-        $this->passport = $passport;
     }
 
     public function getException(): AuthenticationException
@@ -73,10 +70,5 @@ class LoginFailureEvent extends Event
     public function getResponse(): ?Response
     {
         return $this->response;
-    }
-
-    public function getPassport(): ?PassportInterface
-    {
-        return $this->passport;
     }
 }

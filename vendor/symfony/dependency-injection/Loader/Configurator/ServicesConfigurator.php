@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
  */
 class ServicesConfigurator extends AbstractConfigurator
 {
-    public const FACTORY = 'services';
+    const FACTORY = 'services';
 
     private $defaults;
     private $container;
@@ -81,6 +81,7 @@ class ServicesConfigurator extends AbstractConfigurator
             }
 
             $id = sprintf('.%d_%s', ++$this->anonymousCount, preg_replace('/^.*\\\\/', '', $class).'~'.$this->anonymousHash);
+            $definition->setPublic(false);
         } elseif (!$defaults->isPublic() || !$defaults->isPrivate()) {
             $definition->setPublic($defaults->isPublic() && !$defaults->isPrivate());
         }

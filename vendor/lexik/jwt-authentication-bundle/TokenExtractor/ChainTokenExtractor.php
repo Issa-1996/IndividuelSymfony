@@ -20,6 +20,9 @@ class ChainTokenExtractor implements \IteratorAggregate, TokenExtractorInterface
      */
     private $map;
 
+    /**
+     * @param array $map
+     */
     public function __construct(array $map)
     {
         $this->map = $map;
@@ -27,6 +30,8 @@ class ChainTokenExtractor implements \IteratorAggregate, TokenExtractorInterface
 
     /**
      * Adds a new token extractor to the map.
+     *
+     * @param TokenExtractorInterface $extractor
      */
     public function addExtractor(TokenExtractorInterface $extractor)
     {
@@ -36,7 +41,7 @@ class ChainTokenExtractor implements \IteratorAggregate, TokenExtractorInterface
     /**
      * Removes a token extractor from the map.
      *
-     * @param \Closure $filter A function taking an extractor as argument,
+     * @param Closure $filter A function taking an extractor as argument,
      *                        used to find the extractor to remove,
      *
      * @return bool True in case of success, false otherwise

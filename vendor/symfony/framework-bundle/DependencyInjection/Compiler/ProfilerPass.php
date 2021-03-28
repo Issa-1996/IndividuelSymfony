@@ -11,7 +11,6 @@
 
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler;
 
-use Symfony\Bundle\FrameworkBundle\DataCollector\TemplateAwareDataCollectorInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -35,17 +34,14 @@ class ProfilerPass implements CompilerPassInterface
         $collectors = new \SplPriorityQueue();
         $order = \PHP_INT_MAX;
         foreach ($container->findTaggedServiceIds('data_collector', true) as $id => $attributes) {
-            $priority = $attributes[0]['priority'] ?? 0;
+            $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
             $template = null;
 
-            $collectorClass = $container->findDefinition($id)->getClass();
-            $isTemplateAware = is_subclass_of($collectorClass, TemplateAwareDataCollectorInterface::class);
-            if (isset($attributes[0]['template']) || $isTemplateAware) {
-                $idForTemplate = $attributes[0]['id'] ?? $collectorClass;
-                if (!$idForTemplate) {
+            if (isset($attributes[0]['template'])) {
+                if (!isset($attributes[0]['id'])) {
                     throw new InvalidArgumentException(sprintf('Data collector service "%s" must have an id attribute in order to specify a template.', $id));
                 }
-                $template = [$idForTemplate, $attributes[0]['template'] ?? $collectorClass::getTemplate()];
+                $template = [$attributes[0]['id'], $attributes[0]['template']];
             }
 
             $collectors->insert([$id, $template], [$priority, --$order]);

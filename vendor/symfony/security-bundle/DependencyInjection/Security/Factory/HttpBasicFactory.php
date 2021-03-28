@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @internal
  */
-class HttpBasicFactory implements SecurityFactoryInterface, AuthenticatorFactoryInterface
+class HttpBasicFactory implements SecurityFactoryInterface, AuthenticatorFactoryInterface, EntryPointFactoryInterface
 {
     public function create(ContainerBuilder $container, string $id, array $config, string $userProvider, ?string $defaultEntryPoint)
     {
@@ -38,11 +38,7 @@ class HttpBasicFactory implements SecurityFactoryInterface, AuthenticatorFactory
         // entry point
         $entryPointId = $defaultEntryPoint;
         if (null === $entryPointId) {
-            $entryPointId = 'security.authentication.basic_entry_point.'.$id;
-            $container
-                ->setDefinition($entryPointId, new ChildDefinition('security.authentication.basic_entry_point'))
-                ->addArgument($config['realm'])
-            ;
+            $entryPointId = $this->registerEntryPoint($container, $id, $config);
         }
 
         // listener
@@ -84,5 +80,16 @@ class HttpBasicFactory implements SecurityFactoryInterface, AuthenticatorFactory
                 ->scalarNode('realm')->defaultValue('Secured Area')->end()
             ->end()
         ;
+    }
+
+    public function registerEntryPoint(ContainerBuilder $container, string $id, array $config): string
+    {
+        $entryPointId = 'security.authentication.basic_entry_point.'.$id;
+        $container
+            ->setDefinition($entryPointId, new ChildDefinition('security.authentication.basic_entry_point'))
+            ->addArgument($config['realm'])
+        ;
+
+        return $entryPointId;
     }
 }

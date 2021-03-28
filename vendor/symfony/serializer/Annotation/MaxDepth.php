@@ -21,7 +21,6 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 class MaxDepth
 {
     /**
@@ -29,23 +28,17 @@ class MaxDepth
      */
     private $maxDepth;
 
-    /**
-     * @param int|array $maxDepth
-     */
-    public function __construct($maxDepth)
+    public function __construct(array $data)
     {
-        if (\is_array($maxDepth)) {
-            if (!isset($maxDepth['value'])) {
-                throw new InvalidArgumentException(sprintf('Parameter of annotation "%s" should be set.', static::class));
-            }
-            $maxDepth = $maxDepth['value'];
+        if (!isset($data['value'])) {
+            throw new InvalidArgumentException(sprintf('Parameter of annotation "%s" should be set.', static::class));
         }
 
-        if (!\is_int($maxDepth) || $maxDepth <= 0) {
+        if (!\is_int($data['value']) || $data['value'] <= 0) {
             throw new InvalidArgumentException(sprintf('Parameter of annotation "%s" must be a positive integer.', static::class));
         }
 
-        $this->maxDepth = $maxDepth;
+        $this->maxDepth = $data['value'];
     }
 
     public function getMaxDepth()

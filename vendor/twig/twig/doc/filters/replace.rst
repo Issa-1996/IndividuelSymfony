@@ -22,6 +22,4 @@ Arguments
 
 * ``from``: The placeholder values
 
-.. seealso::
-
-    :doc:`format<format>`
+.. seealso:: :doc:`format<format>`

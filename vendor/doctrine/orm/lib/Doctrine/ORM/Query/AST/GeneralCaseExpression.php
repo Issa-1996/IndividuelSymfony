@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,23 +22,33 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * GeneralCaseExpression ::= "CASE" WhenClause {WhenClause}* "ELSE" ScalarExpression "END"
  *
+ * @since   2.2
+ *
  * @link    www.doctrine-project.org
+ * @author  Benjamin Eberlei <kontakt@beberlei.de>
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class GeneralCaseExpression extends Node
 {
-    /** @var mixed[] */
+    /**
+     * @var array
+     */
     public $whenClauses = [];
 
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $elseScalarExpression = null;
 
     /**
-     * @param mixed[] $whenClauses
-     * @param mixed   $elseScalarExpression
+     * @param array $whenClauses
+     * @param mixed $elseScalarExpression
      */
     public function __construct(array $whenClauses, $elseScalarExpression)
     {
-        $this->whenClauses          = $whenClauses;
+        $this->whenClauses = $whenClauses;
         $this->elseScalarExpression = $elseScalarExpression;
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,18 +23,24 @@ namespace Doctrine\ORM\Query\AST;
  * NewObjectExpression ::= "NEW" IdentificationVariable "(" NewObjectArg {"," NewObjectArg}* ")"
  *
  * @link    www.doctrine-project.org
+ * @since   2.4
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class NewObjectExpression extends Node
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $className;
 
-    /** @var mixed[] */
+    /**
+     * @var array
+     */
     public $args;
 
     /**
-     * @param string  $className
-     * @param mixed[] $args
+     * @param string $className
+     * @param array  $args
      */
     public function __construct($className, array $args)
     {

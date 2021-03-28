@@ -25,7 +25,7 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
  */
 class TagAwareAdapter implements TagAwareAdapterInterface, TagAwareCacheInterface, PruneableInterface, ResettableInterface
 {
-    public const TAGS_PREFIX = "\0tags\0";
+    const TAGS_PREFIX = "\0tags\0";
 
     use ContractsTrait;
     use ProxyTrait;

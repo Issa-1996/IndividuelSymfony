@@ -1,9 +1,6 @@
 TwigBundle
 ==========
 
-TwigBundle provides a tight integration of Twig into the Symfony full-stack
-framework.
-
 Resources
 ---------
 

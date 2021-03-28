@@ -100,20 +100,11 @@ final class Schema extends \ArrayObject
             return null;
         }
 
-        return $this->removeDefinitionKeyPrefix($this['$ref']);
-    }
+        // strlen('#/definitions/') = 14
+        // strlen('#/components/schemas/') = 21
+        $prefix = self::VERSION_OPENAPI === $this->version ? 21 : 14;
 
-    /**
-     * Returns the name of the items definition, if defined.
-     */
-    public function getItemsDefinitionKey(): ?string
-    {
-        $ref = $this['items']['$ref'] ?? null;
-        if (null === $ref) {
-            return null;
-        }
-
-        return $this->removeDefinitionKeyPrefix($ref);
+        return substr($this['$ref'], $prefix);
     }
 
     /**
@@ -122,14 +113,5 @@ final class Schema extends \ArrayObject
     public function isDefined(): bool
     {
         return isset($this['$ref']) || isset($this['type']);
-    }
-
-    private function removeDefinitionKeyPrefix(string $definitionKey): string
-    {
-        // strlen('#/definitions/') = 14
-        // strlen('#/components/schemas/') = 21
-        $prefix = self::VERSION_OPENAPI === $this->version ? 21 : 14;
-
-        return substr($definitionKey, $prefix);
     }
 }

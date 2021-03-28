@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 interface TokenExtractorInterface
 {
     /**
+     * @param Request $request
+     *
      * @return string|false
      */
     public function extract(Request $request);

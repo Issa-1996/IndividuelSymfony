@@ -39,12 +39,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class SwitchUserListener extends AbstractListener
 {
-    public const EXIT_VALUE = '_exit';
+    const EXIT_VALUE = '_exit';
 
     private $tokenStorage;
     private $provider;
     private $userChecker;
-    private $firewallName;
+    private $providerKey;
     private $accessDecisionManager;
     private $usernameParameter;
     private $role;
@@ -52,16 +52,16 @@ class SwitchUserListener extends AbstractListener
     private $dispatcher;
     private $stateless;
 
-    public function __construct(TokenStorageInterface $tokenStorage, UserProviderInterface $provider, UserCheckerInterface $userChecker, string $firewallName, AccessDecisionManagerInterface $accessDecisionManager, LoggerInterface $logger = null, string $usernameParameter = '_switch_user', string $role = 'ROLE_ALLOWED_TO_SWITCH', EventDispatcherInterface $dispatcher = null, bool $stateless = false)
+    public function __construct(TokenStorageInterface $tokenStorage, UserProviderInterface $provider, UserCheckerInterface $userChecker, string $providerKey, AccessDecisionManagerInterface $accessDecisionManager, LoggerInterface $logger = null, string $usernameParameter = '_switch_user', string $role = 'ROLE_ALLOWED_TO_SWITCH', EventDispatcherInterface $dispatcher = null, bool $stateless = false)
     {
-        if ('' === $firewallName) {
-            throw new \InvalidArgumentException('$firewallName must not be empty.');
+        if (empty($providerKey)) {
+            throw new \InvalidArgumentException('$providerKey must not be empty.');
         }
 
         $this->tokenStorage = $tokenStorage;
         $this->provider = $provider;
         $this->userChecker = $userChecker;
-        $this->firewallName = $firewallName;
+        $this->providerKey = $providerKey;
         $this->accessDecisionManager = $accessDecisionManager;
         $this->usernameParameter = $usernameParameter;
         $this->role = $role;
@@ -181,8 +181,7 @@ class SwitchUserListener extends AbstractListener
 
         $roles = $user->getRoles();
         $roles[] = 'ROLE_PREVIOUS_ADMIN';
-        $originatedFromUri = str_replace('/&', '/?', preg_replace('#[&?]'.$this->usernameParameter.'=[^&]*#', '', $request->getRequestUri()));
-        $token = new SwitchUserToken($user, $user->getPassword(), $this->firewallName, $roles, $token, $originatedFromUri);
+        $token = new SwitchUserToken($user, $user->getPassword(), $this->providerKey, $roles, $token);
 
         if (null !== $this->dispatcher) {
             $switchEvent = new SwitchUserEvent($request, $token->getUser(), $token);

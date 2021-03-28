@@ -10,6 +10,8 @@ use Doctrine\Migrations\Configuration\Connection\Exception\ConnectionNotSpecifie
 /**
  * The ConnectionLoader defines the interface used to load the Doctrine\DBAL\Connection instance to use
  * for migrations.
+ *
+ * @internal
  */
 interface ConnectionLoader
 {
@@ -19,5 +21,5 @@ interface ConnectionLoader
      *
      * @throws ConnectionNotSpecified
      */
-    public function getConnection(?string $name = null): Connection;
+    public function getConnection() : Connection;
 }

@@ -30,7 +30,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -111,9 +110,9 @@ abstract class ConstraintValidatorTestCase extends TestCase
 
     protected function createContext()
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
         $translator->expects($this->any())->method('trans')->willReturnArgument(0);
-        $validator = $this->createMock(ValidatorInterface::class);
+        $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')->getMock();
         $validator->expects($this->any())
             ->method('validate')
             ->willReturnCallback(function () {
@@ -474,7 +473,7 @@ class AssertingContextualValidator implements ContextualValidatorInterface
             return $this;
         }
 
-        [$expectedValue, $expectedGroup, $expectedConstraints, $violation] = $this->expectedValidate[$this->validateCalls];
+        list($expectedValue, $expectedGroup, $expectedConstraints, $violation) = $this->expectedValidate[$this->validateCalls];
 
         Assert::assertSame($expectedValue, $value);
         $expectedConstraints($constraints);

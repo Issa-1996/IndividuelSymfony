@@ -7,7 +7,6 @@ namespace Doctrine\Migrations\Tools\Console\Command;
 use Doctrine\Migrations\Exception\NoMigrationsToExecute;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function sprintf;
 
 /**
@@ -18,7 +17,7 @@ final class LatestCommand extends DoctrineCommand
     /** @var string */
     protected static $defaultName = 'migrations:latest';
 
-    protected function configure(): void
+    protected function configure() : void
     {
         $this
             ->setAliases(['latest'])
@@ -27,7 +26,7 @@ final class LatestCommand extends DoctrineCommand
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $aliasResolver = $this->getDependencyFactory()->getVersionAliasResolver();
 

@@ -28,14 +28,12 @@ interface IdentifierConverterInterface
     public const HAS_IDENTIFIER_CONVERTER = 'has_identifier_converter';
 
     /**
-     * Takes an array of strings representing identifiers and transform their values to the expected type.
-     *
-     * @param mixed  $data  Identifier to convert to php values
+     * @param string $data  Identifier to convert to php values
      * @param string $class The class to which the identifiers belong
      *
      * @throws InvalidIdentifierException
      *
      * @return array Indexed by identifiers properties with their values denormalized
      */
-    public function convert($data, string $class): array;
+    public function convert(string $data, string $class): array;
 }

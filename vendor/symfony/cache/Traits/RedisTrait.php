@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Cache\Traits;
 
-use Predis\Command\Redis\UNLINK;
 use Predis\Connection\Aggregate\ClusterInterface;
 use Predis\Connection\Aggregate\RedisCluster;
 use Predis\Response\Status;
@@ -159,11 +158,11 @@ trait RedisTrait
             throw new InvalidArgumentException(sprintf('Invalid Redis DSN: "%s".', $dsn));
         }
 
-        $params += $query + $options + self::$defaultConnectionOptions;
-
         if (isset($params['redis_sentinel']) && !class_exists(\Predis\Client::class)) {
             throw new CacheException(sprintf('Redis Sentinel support requires the "predis/predis" package: "%s".', $dsn));
         }
+
+        $params += $query + $options + self::$defaultConnectionOptions;
 
         if (null === $params['class'] && !isset($params['redis_sentinel']) && \extension_loaded('redis')) {
             $class = $params['redis_cluster'] ? \RedisCluster::class : (1 < \count($hosts) ? \RedisArray::class : \Redis::class);
@@ -177,7 +176,7 @@ trait RedisTrait
 
             $initializer = static function ($redis) use ($connect, $params, $dsn, $auth, $hosts) {
                 try {
-                    @$redis->{$connect}($hosts[0]['host'] ?? $hosts[0]['path'], $hosts[0]['port'] ?? null, $params['timeout'], (string) $params['persistent_id'], $params['retry_interval'], $params['read_timeout']);
+                    @$redis->{$connect}($hosts[0]['host'] ?? $hosts[0]['path'], $hosts[0]['port'] ?? null, $params['timeout'], (string) $params['persistent_id'], $params['retry_interval']);
 
                     set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
                     $isConnected = $redis->isConnected();
@@ -189,6 +188,7 @@ trait RedisTrait
 
                     if ((null !== $auth && !$redis->auth($auth))
                         || ($params['dbindex'] && !$redis->select($params['dbindex']))
+                        || ($params['read_timeout'] && !$redis->setOption(\Redis::OPT_READ_TIMEOUT, $params['read_timeout']))
                     ) {
                         $e = preg_replace('/^ERR /', '', $redis->getLastError());
                         throw new InvalidArgumentException(sprintf('Redis connection "%s" failed: ', $dsn).$e.'.');
@@ -357,14 +357,13 @@ trait RedisTrait
             }
 
             $info = $host->info('Server');
-            $info = $info['Server'] ?? $info;
+            $info = isset($info['Server']) ? $info['Server'] : $info;
 
             if (!version_compare($info['redis_version'], '2.8', '>=')) {
                 // As documented in Redis documentation (http://redis.io/commands/keys) using KEYS
                 // can hang your server when it is executed against large databases (millions of items).
                 // Whenever you hit this scale, you should really consider upgrading to Redis 2.8 or above.
-                $unlink = version_compare($info['redis_version'], '4.0', '>=') ? 'UNLINK' : 'DEL';
-                $cleared = $host->eval("local keys=redis.call('KEYS',ARGV[1]..'*') for i=1,#keys,5000 do redis.call('$unlink',unpack(keys,i,math.min(i+4999,#keys))) end return 1", $evalArgs[0], $evalArgs[1]) && $cleared;
+                $cleared = $host->eval("local keys=redis.call('KEYS',ARGV[1]..'*') for i=1,#keys,5000 do redis.call('DEL',unpack(keys,i,math.min(i+4999,#keys))) end return 1", $evalArgs[0], $evalArgs[1]) && $cleared;
                 continue;
             }
 
@@ -394,28 +393,13 @@ trait RedisTrait
         }
 
         if ($this->redis instanceof \Predis\ClientInterface && $this->redis->getConnection() instanceof ClusterInterface) {
-            static $del;
-            $del = $del ?? (class_exists(UNLINK::class) ? 'unlink' : 'del');
-
-            $this->pipeline(function () use ($ids, $del) {
+            $this->pipeline(function () use ($ids) {
                 foreach ($ids as $id) {
-                    yield $del => [$id];
+                    yield 'del' => [$id];
                 }
             })->rewind();
         } else {
-            static $unlink = true;
-
-            if ($unlink) {
-                try {
-                    $unlink = false !== $this->redis->unlink($ids);
-                } catch (\Throwable $e) {
-                    $unlink = false;
-                }
-            }
-
-            if (!$unlink) {
-                $this->redis->del($ids);
-            }
+            $this->redis->del($ids);
         }
 
         return true;
@@ -485,7 +469,7 @@ trait RedisTrait
             foreach ($connections as $h => $c) {
                 $connections[$h] = $c[0]->exec();
             }
-            foreach ($results as $k => [$h, $c]) {
+            foreach ($results as $k => list($h, $c)) {
                 $results[$k] = $connections[$h][$c];
             }
         } else {

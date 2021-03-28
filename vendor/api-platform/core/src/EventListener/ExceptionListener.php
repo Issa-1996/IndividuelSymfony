@@ -27,14 +27,11 @@ use Symfony\Component\HttpKernel\EventListener\ExceptionListener as LegacyExcept
  */
 final class ExceptionListener
 {
-    /**
-     * @var ErrorListener
-     */
     private $exceptionListener;
 
     public function __construct($controller, LoggerInterface $logger = null, $debug = false, ErrorListener $errorListener = null)
     {
-        $this->exceptionListener = $errorListener ? new ErrorListener($controller, $logger, $debug) : new LegacyExceptionListener($controller, $logger, $debug); // @phpstan-ignore-line
+        $this->exceptionListener = $errorListener ? new ErrorListener($controller, $logger, $debug) : new LegacyExceptionListener($controller, $logger, $debug);
     }
 
     public function onKernelException(ExceptionEvent $event): void

@@ -10,6 +10,7 @@ interface JWTUserInterface extends UserInterface
      * Creates a new instance from a given JWT payload.
      *
      * @param string $username
+     * @param array  $payload
      *
      * @return JWTUserInterface
      */

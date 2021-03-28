@@ -30,10 +30,10 @@ of that file:
           {# vs #}
           {% set content = include('template.html') %}
 
-          {# Apply filter on a rendered template #}
-          {% apply upper %}
+          {# Filter a rendered template #}
+          {% filter upper %}
               {% include 'template.html' %}
-          {% endapply %}
+          {% endfilter %}
           {# vs #}
           {{ include('template.html')|upper }}
 

@@ -33,16 +33,14 @@ final class Paginator implements \IteratorAggregate, PaginatorInterface
     private $limit;
     private $offset;
     private $cachedDenormalizedDocuments = [];
-    private $denormalizationContext = [];
 
-    public function __construct(DenormalizerInterface $denormalizer, array $documents, string $resourceClass, int $limit, int $offset, array $denormalizationContext = [])
+    public function __construct(DenormalizerInterface $denormalizer, array $documents, string $resourceClass, int $limit, int $offset)
     {
         $this->denormalizer = $denormalizer;
         $this->documents = $documents;
         $this->resourceClass = $resourceClass;
         $this->limit = $limit;
         $this->offset = $offset;
-        $this->denormalizationContext = $denormalizationContext;
     }
 
     /**
@@ -104,8 +102,6 @@ final class Paginator implements \IteratorAggregate, PaginatorInterface
      */
     public function getIterator(): \Traversable
     {
-        $denormalizationContext = array_merge([AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true], $this->denormalizationContext);
-
         foreach ($this->documents['hits']['hits'] ?? [] as $document) {
             $cacheKey = isset($document['_index'], $document['_type'], $document['_id']) ? md5("${document['_index']}_${document['_type']}_${document['_id']}") : null;
 
@@ -116,7 +112,7 @@ final class Paginator implements \IteratorAggregate, PaginatorInterface
                     $document,
                     $this->resourceClass,
                     ItemNormalizer::FORMAT,
-                    $denormalizationContext
+                    [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true]
                 );
 
                 if ($cacheKey) {

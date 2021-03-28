@@ -15,7 +15,8 @@ namespace ApiPlatform\Core\GraphQl\Resolver\Stage;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Security\ResourceAccessCheckerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use GraphQL\Error\Error;
+use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Security stage of GraphQL resolvers.
@@ -52,6 +53,8 @@ final class SecurityStage implements SecurityStageInterface
             return;
         }
 
-        throw new AccessDeniedHttpException($resourceMetadata->getGraphqlAttribute($operationName, 'security_message', 'Access Denied.'));
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
+        throw Error::createLocatedError($resourceMetadata->getGraphqlAttribute($operationName, 'security_message', 'Access Denied.'), $info->fieldNodes, $info->path);
     }
 }

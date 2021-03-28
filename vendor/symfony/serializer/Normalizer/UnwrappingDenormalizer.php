@@ -23,7 +23,7 @@ final class UnwrappingDenormalizer implements DenormalizerInterface, SerializerA
 {
     use SerializerAwareTrait;
 
-    public const UNWRAP_PATH = 'unwrap_path';
+    const UNWRAP_PATH = 'unwrap_path';
 
     private $propertyAccessor;
 

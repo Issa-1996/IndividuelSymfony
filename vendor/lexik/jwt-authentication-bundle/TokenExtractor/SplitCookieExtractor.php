@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SplitCookieExtractor implements TokenExtractorInterface
 {
+
     /**
      * @var array
      */
@@ -25,7 +26,7 @@ class SplitCookieExtractor implements TokenExtractorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function extract(Request $request)
     {

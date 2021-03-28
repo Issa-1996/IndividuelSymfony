@@ -16,7 +16,6 @@ namespace ApiPlatform\Core\GraphQl\Serializer;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
 use GraphQL\Type\Definition\ResolveInfo;
-use Symfony\Component\Serializer\NameConverter\AdvancedNameConverterInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 /**
@@ -46,8 +45,8 @@ final class SerializerContextBuilder implements SerializerContextBuilderInterfac
             'graphql_operation_name' => $operationName,
         ];
 
-        if (isset($resolverContext['fields'])) {
-            $context['no_resolver_data'] = true;
+        if ($normalization) {
+            $context['attributes'] = $this->fieldsToAttributes($resourceMetadata, $resolverContext);
         }
 
         if ($resourceMetadata) {
@@ -58,31 +57,23 @@ final class SerializerContextBuilder implements SerializerContextBuilderInterfac
             $context = array_merge($resourceMetadata->getGraphqlAttribute($operationName, $key, [], true), $context);
         }
 
-        if ($normalization) {
-            $context['attributes'] = $this->fieldsToAttributes($resourceClass, $resourceMetadata, $resolverContext, $context);
-        }
-
         return $context;
     }
 
     /**
      * Retrieves fields, recursively replaces the "_id" key (the raw id) by "id" (the name of the property expected by the Serializer) and flattens edge and node structures (pagination).
      */
-    private function fieldsToAttributes(?string $resourceClass, ?ResourceMetadata $resourceMetadata, array $resolverContext, array $context): array
+    private function fieldsToAttributes(?ResourceMetadata $resourceMetadata, array $context): array
     {
-        if (isset($resolverContext['fields'])) {
-            $fields = $resolverContext['fields'];
-        } else {
-            /** @var ResolveInfo $info */
-            $info = $resolverContext['info'];
-            $fields = $info->getFieldSelection(\PHP_INT_MAX);
-        }
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
+        $fields = $info->getFieldSelection(PHP_INT_MAX);
 
-        $attributes = $this->replaceIdKeys($fields['edges']['node'] ?? $fields['collection'] ?? $fields, $resourceClass, $context);
+        $attributes = $this->replaceIdKeys($fields['edges']['node'] ?? $fields);
 
-        if ($resolverContext['is_mutation'] || $resolverContext['is_subscription']) {
+        if ($context['is_mutation']) {
             if (!$resourceMetadata) {
-                throw new \LogicException('ResourceMetadata should always exist for a mutation or a subscription.');
+                throw new \LogicException('ResourceMetadata should always exist for a mutation.');
             }
 
             $wrapFieldName = lcfirst($resourceMetadata->getShortName());
@@ -93,7 +84,7 @@ final class SerializerContextBuilder implements SerializerContextBuilderInterfac
         return $attributes;
     }
 
-    private function replaceIdKeys(array $fields, ?string $resourceClass, array $context): array
+    private function replaceIdKeys(array $fields): array
     {
         $denormalizedFields = [];
 
@@ -104,21 +95,14 @@ final class SerializerContextBuilder implements SerializerContextBuilderInterfac
                 continue;
             }
 
-            $denormalizedFields[$this->denormalizePropertyName((string) $key, $resourceClass, $context)] = \is_array($fields[$key]) ? $this->replaceIdKeys($fields[$key], $resourceClass, $context) : $value;
+            $denormalizedFields[$this->denormalizePropertyName((string) $key)] = \is_array($fields[$key]) ? $this->replaceIdKeys($fields[$key]) : $value;
         }
 
         return $denormalizedFields;
     }
 
-    private function denormalizePropertyName(string $property, ?string $resourceClass, array $context): string
+    private function denormalizePropertyName(string $property): string
     {
-        if (null === $this->nameConverter) {
-            return $property;
-        }
-        if ($this->nameConverter instanceof AdvancedNameConverterInterface) {
-            return $this->nameConverter->denormalize($property, $resourceClass, null, $context);
-        }
-
-        return $this->nameConverter->denormalize($property);
+        return null !== $this->nameConverter ? $this->nameConverter->denormalize($property) : $property;
     }
 }

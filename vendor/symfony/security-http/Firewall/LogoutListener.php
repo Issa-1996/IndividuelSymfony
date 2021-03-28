@@ -142,9 +142,4 @@ class LogoutListener extends AbstractListener
     {
         return isset($this->options['logout_path']) && $this->httpUtils->checkRequestPath($request, $this->options['logout_path']);
     }
-
-    public static function getPriority(): int
-    {
-        return -127;
-    }
 }

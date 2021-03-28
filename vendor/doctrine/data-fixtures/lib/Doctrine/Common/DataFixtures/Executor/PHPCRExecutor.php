@@ -6,7 +6,6 @@ namespace Doctrine\Common\DataFixtures\Executor;
 
 use Doctrine\Common\DataFixtures\Purger\PHPCRPurger;
 use Doctrine\ODM\PHPCR\DocumentManagerInterface;
-
 use function method_exists;
 
 /**
@@ -34,9 +33,6 @@ class PHPCRExecutor extends AbstractExecutor
         $this->setPurger($purger);
     }
 
-    /**
-     * @return DocumentManagerInterface
-     */
     public function getObjectManager()
     {
         return $this->dm;

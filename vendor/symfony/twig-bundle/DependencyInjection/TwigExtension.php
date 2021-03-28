@@ -15,7 +15,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Mailer\Mailer;
@@ -34,19 +34,19 @@ class TwigExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('twig.php');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('twig.xml');
 
-        if (class_exists(\Symfony\Component\Form\Form::class)) {
-            $loader->load('form.php');
+        if (class_exists('Symfony\Component\Form\Form')) {
+            $loader->load('form.xml');
         }
 
         if (class_exists(Application::class)) {
-            $loader->load('console.php');
+            $loader->load('console.xml');
         }
 
         if (class_exists(Mailer::class)) {
-            $loader->load('mailer.php');
+            $loader->load('mailer.xml');
         }
 
         if (!class_exists(Translator::class)) {

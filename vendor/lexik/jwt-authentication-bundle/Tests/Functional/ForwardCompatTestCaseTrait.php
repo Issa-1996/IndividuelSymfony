@@ -18,11 +18,6 @@ if (70000 <= \PHP_VERSION_ID && (new \ReflectionMethod(WebTestCase::class, 'tear
                 static::ensureKernelShutdown();
                 static::$kernel = null;
             }
-            
-            protected function setUp(): void
-            {
-                $this->doSetUp();
-            }
         }
     ');
 } else {
@@ -35,11 +30,6 @@ if (70000 <= \PHP_VERSION_ID && (new \ReflectionMethod(WebTestCase::class, 'tear
         {
             static::ensureKernelShutdown();
             static::$kernel = null;
-        }
-
-        protected function setUp()
-        {
-            $this->doSetUp();
         }
     }
 }

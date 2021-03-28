@@ -1,12 +1,6 @@
 CHANGELOG
 =========
 
-5.2.0
------
-
- * added support for symfony/uid as `UlidType` and `UuidType` as Doctrine types
- * added `UlidGenerator`, `UuidV1Generator`, `UuidV4Generator` and `UuidV6Generator`
-
 5.0.0
 -----
 

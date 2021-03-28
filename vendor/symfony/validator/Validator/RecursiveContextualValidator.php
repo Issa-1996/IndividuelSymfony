@@ -108,7 +108,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
             $this->validateGenericNode(
                 $value,
                 $previousObject,
-                \is_object($value) ? $this->generateCacheKey($value) : null,
+                \is_object($value) ? spl_object_hash($value) : null,
                 $metadata,
                 $this->defaultPropertyPath,
                 $groups,
@@ -176,7 +176,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
 
         $propertyMetadatas = $classMetadata->getPropertyMetadata($propertyName);
         $groups = $groups ? $this->normalizeGroups($groups) : $this->defaultGroups;
-        $cacheKey = $this->generateCacheKey($object);
+        $cacheKey = spl_object_hash($object);
         $propertyPath = PropertyPath::append($this->defaultPropertyPath, $propertyName);
 
         $previousValue = $this->context->getValue();
@@ -224,7 +224,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
         if (\is_object($objectOrClass)) {
             $object = $objectOrClass;
             $class = \get_class($object);
-            $cacheKey = $this->generateCacheKey($objectOrClass);
+            $cacheKey = spl_object_hash($objectOrClass);
             $propertyPath = PropertyPath::append($this->defaultPropertyPath, $propertyName);
         } else {
             // $objectOrClass contains a class name
@@ -311,7 +311,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
 
             $this->validateClassNode(
                 $object,
-                $this->generateCacheKey($object),
+                spl_object_hash($object),
                 $classMetadata,
                 $propertyPath,
                 $groups,
@@ -425,7 +425,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
             $defaultOverridden = false;
 
             // Use the object hash for group sequences
-            $groupHash = \is_object($group) ? $this->generateCacheKey($group, true) : $group;
+            $groupHash = \is_object($group) ? spl_object_hash($group) : $group;
 
             if ($context->isGroupValidated($cacheKey, $groupHash)) {
                 // Skip this group when validating the properties and when
@@ -730,7 +730,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
             // Prevent duplicate validation of constraints, in the case
             // that constraints belong to multiple validated groups
             if (null !== $cacheKey) {
-                $constraintHash = $this->generateCacheKey($constraint, true);
+                $constraintHash = spl_object_hash($constraint);
                 // instanceof Valid: In case of using a Valid constraint with many groups
                 // it makes a reference object get validated by each group
                 if ($constraint instanceof Composite || $constraint instanceof Valid) {
@@ -761,23 +761,5 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
                     ->addViolation();
             }
         }
-    }
-
-    /**
-     * @param object $object
-     */
-    private function generateCacheKey($object, bool $dependsOnPropertyPath = false): string
-    {
-        if ($this->context instanceof ExecutionContext) {
-            $cacheKey = $this->context->generateCacheKey($object);
-        } else {
-            $cacheKey = spl_object_hash($object);
-        }
-
-        if ($dependsOnPropertyPath) {
-            $cacheKey .= $this->context->getPropertyPath();
-        }
-
-        return $cacheKey;
     }
 }

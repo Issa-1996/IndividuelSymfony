@@ -7,7 +7,6 @@ namespace Doctrine\Migrations\Metadata;
 use Countable;
 use Doctrine\Migrations\Exception\MigrationNotAvailable;
 use Doctrine\Migrations\Version\Version;
-
 use function array_values;
 use function count;
 
@@ -30,17 +29,17 @@ final class AvailableMigrationsSet implements Countable
     /**
      * @return AvailableMigration[]
      */
-    public function getItems(): array
+    public function getItems() : array
     {
         return $this->items;
     }
 
-    public function count(): int
+    public function count() : int
     {
         return count($this->items);
     }
 
-    public function hasMigration(Version $version): bool
+    public function hasMigration(Version $version) : bool
     {
         foreach ($this->items as $migration) {
             if ($migration->getVersion()->equals($version)) {
@@ -51,7 +50,7 @@ final class AvailableMigrationsSet implements Countable
         return false;
     }
 
-    public function getMigration(Version $version): AvailableMigration
+    public function getMigration(Version $version) : AvailableMigration
     {
         foreach ($this->items as $migration) {
             if ($migration->getVersion()->equals($version)) {

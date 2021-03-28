@@ -30,12 +30,10 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provides a stateless implementation of an authentication via
@@ -45,7 +43,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @author Wouter de Jong <wouter@wouterj.nl>
  *
  * @final
- * @experimental in 5.2
+ * @experimental in 5.1
  */
 class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
 {
@@ -55,11 +53,6 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
     private $propertyAccessor;
     private $successHandler;
     private $failureHandler;
-
-    /**
-     * @var TranslatorInterface|null
-     */
-    private $translator;
 
     public function __construct(HttpUtils $httpUtils, UserProviderInterface $userProvider, ?AuthenticationSuccessHandlerInterface $successHandler = null, ?AuthenticationFailureHandlerInterface $failureHandler = null, array $options = [], ?PropertyAccessorInterface $propertyAccessor = null)
     {
@@ -94,14 +87,12 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
             throw $e;
         }
 
-        $passport = new Passport(new UserBadge($credentials['username'], function ($username) {
-            $user = $this->userProvider->loadUserByUsername($username);
-            if (!$user instanceof UserInterface) {
-                throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
-            }
+        $user = $this->userProvider->loadUserByUsername($credentials['username']);
+        if (!$user instanceof UserInterface) {
+            throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
+        }
 
-            return $user;
-        }), new PasswordCredentials($credentials['password']));
+        $passport = new Passport($user, new PasswordCredentials($credentials['password']));
         if ($this->userProvider instanceof PasswordUpgraderInterface) {
             $passport->addBadge(new PasswordUpgradeBadge($credentials['password'], $this->userProvider));
         }
@@ -126,13 +117,7 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         if (null === $this->failureHandler) {
-            if (null !== $this->translator) {
-                $errorMessage = $this->translator->trans($exception->getMessageKey(), $exception->getMessageData(), 'security');
-            } else {
-                $errorMessage = strtr($exception->getMessageKey(), $exception->getMessageData());
-            }
-
-            return new JsonResponse(['error' => $errorMessage], JsonResponse::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => $exception->getMessageKey()], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         return $this->failureHandler->onAuthenticationFailure($request, $exception);
@@ -141,11 +126,6 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
     public function isInteractive(): bool
     {
         return true;
-    }
-
-    public function setTranslator(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
     }
 
     private function getCredentials(Request $request)

@@ -19,7 +19,6 @@ namespace Symfony\Component\Serializer\Annotation;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 final class Ignore
 {
 }

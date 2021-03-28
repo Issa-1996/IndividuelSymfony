@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,20 +19,22 @@
 
 namespace Doctrine\ORM\Mapping\Builder;
 
-use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
-
-use function class_exists;
-use function get_class_methods;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Events;
 
 /**
  * Builder for entity listeners.
+ *
+ * @since       2.4
+ * @author      Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class EntityListenerBuilder
 {
-    /** @var array<string,bool> Hash-map to handle event names. */
-    private static $events = [
+    /**
+     * @var array Hash-map to handle event names.
+     */
+    static private $events = [
         Events::preRemove   => true,
         Events::postRemove  => true,
         Events::prePersist  => true,
@@ -41,27 +42,27 @@ class EntityListenerBuilder
         Events::preUpdate   => true,
         Events::postUpdate  => true,
         Events::postLoad    => true,
-        Events::preFlush    => true,
+        Events::preFlush    => true
     ];
 
     /**
      * Lookup the entity class to find methods that match to event lifecycle names
      *
-     * @param ClassMetadata $metadata  The entity metadata.
-     * @param string        $className The listener class name.
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $metadata     The entity metadata.
+     * @param string $className                                 The listener class name.
      *
-     * @throws MappingException When the listener class not found.
+     * @throws \Doctrine\ORM\Mapping\MappingException           When the listener class not found.
      */
-    public static function bindEntityListener(ClassMetadata $metadata, $className)
+    static public function bindEntityListener(ClassMetadata $metadata, $className)
     {
         $class = $metadata->fullyQualifiedClassName($className);
 
-        if (! class_exists($class)) {
+        if ( ! class_exists($class)) {
             throw MappingException::entityListenerClassNotFound($class, $className);
         }
 
         foreach (get_class_methods($class) as $method) {
-            if (! isset(self::$events[$method])) {
+            if ( ! isset(self::$events[$method])) {
                 continue;
             }
 

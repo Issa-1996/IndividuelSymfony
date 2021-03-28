@@ -41,9 +41,9 @@ class TaggedIteratorArgument extends IteratorArgument
 
         $this->tag = $tag;
         $this->indexAttribute = $indexAttribute;
-        $this->defaultIndexMethod = $defaultIndexMethod ?: ($indexAttribute ? 'getDefault'.str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $indexAttribute))).'Name' : null);
+        $this->defaultIndexMethod = $defaultIndexMethod ?: ('getDefault'.str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $indexAttribute ?? ''))).'Name');
         $this->needsIndexes = $needsIndexes;
-        $this->defaultPriorityMethod = $defaultPriorityMethod ?: ($indexAttribute ? 'getDefault'.str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $indexAttribute))).'Priority' : null);
+        $this->defaultPriorityMethod = $defaultPriorityMethod ?: ('getDefault'.str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $indexAttribute ?? ''))).'Priority');
     }
 
     public function getTag()

@@ -89,19 +89,7 @@ class RedisSessionHandler extends AbstractSessionHandler
      */
     protected function doDestroy(string $sessionId): bool
     {
-        static $unlink = true;
-
-        if ($unlink) {
-            try {
-                $unlink = false !== $this->redis->unlink($this->prefix.$sessionId);
-            } catch (\Throwable $e) {
-                $unlink = false;
-            }
-        }
-
-        if (!$unlink) {
-            $this->redis->del($this->prefix.$sessionId);
-        }
+        $this->redis->del($this->prefix.$sessionId);
 
         return true;
     }

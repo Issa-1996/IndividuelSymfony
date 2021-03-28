@@ -16,7 +16,7 @@
         <row>
             <columns large="12" small="12">
                 {% block lead %}
-                    {% if importance is not null %}<small><strong>{{ importance|upper }}</strong></small>{% endif %}
+                    <small><strong>{{ importance|upper }}</strong></small>
                     <p class="lead">
                         {{ email.subject }}
                     </p>
@@ -49,15 +49,13 @@
         <wrapper class="secondary">
             <spacer size="16"></spacer>
             {% block footer %}
-                {% if footer_text is defined and footer_text is not null %}
                 <row>
                     <columns small="12" large="6">
                         {% block footer_content %}
-                            <p><small>{{ footer_text }}</small></p>
+                            <p><small>Notification e-mail sent by Symfony</small></p>
                         {% endblock %}
                     </columns>
                 </row>
-                {% endif %}
             {% endblock %}
         </wrapper>
     </container>

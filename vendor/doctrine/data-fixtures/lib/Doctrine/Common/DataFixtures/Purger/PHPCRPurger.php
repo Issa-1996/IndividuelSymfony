@@ -13,7 +13,7 @@ use PHPCR\Util\NodeHelper;
  */
 class PHPCRPurger implements PurgerInterface
 {
-    /** @var DocumentManagerInterface|null */
+    /** @var DocumentManagerInterface */
     private $dm;
 
     public function __construct(?DocumentManagerInterface $dm = null)
@@ -26,9 +26,6 @@ class PHPCRPurger implements PurgerInterface
         $this->dm = $dm;
     }
 
-    /**
-     * @return DocumentManagerInterface|null
-     */
     public function getObjectManager()
     {
         return $this->dm;

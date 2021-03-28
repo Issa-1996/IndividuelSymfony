@@ -7,7 +7,6 @@ namespace Doctrine\Bundle\MigrationsBundle\DependencyInjection;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
 use function array_filter;
 use function array_keys;
 use function constant;
@@ -30,7 +29,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return TreeBuilder The config tree builder
      */
-    public function getConfigTreeBuilder(): TreeBuilder
+    public function getConfigTreeBuilder() : TreeBuilder
     {
         $treeBuilder = new TreeBuilder('doctrine_migrations');
 
@@ -60,8 +59,8 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->validate()
                         ->ifTrue(static function ($v) {
-                            return count(array_filter(array_keys($v), static function (string $doctrineService): bool {
-                                return strpos($doctrineService, 'Doctrine\Migrations\\') !== 0;
+                            return count(array_filter(array_keys($v), static function (string $doctrineService) : bool {
+                                return strpos($doctrineService, 'Doctrine\Migrations\\') !==0;
                             }));
                         })
                         ->thenInvalid('Valid services for the DoctrineMigrationsBundle must be in the "Doctrine\Migrations" namespace.')
@@ -75,8 +74,8 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->validate()
                         ->ifTrue(static function ($v) {
-                            return count(array_filter(array_keys($v), static function (string $doctrineService): bool {
-                                return strpos($doctrineService, 'Doctrine\Migrations\\') !== 0;
+                            return count(array_filter(array_keys($v), static function (string $doctrineService) : bool {
+                                return strpos($doctrineService, 'Doctrine\Migrations\\') !==0;
                             }));
                         })
                         ->thenInvalid('Valid callables for the DoctrineMigrationsBundle must be in the "Doctrine\Migrations" namespace.')
@@ -131,12 +130,16 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(false)
                     ->info('Organize migrations mode. Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false')
                     ->validate()
-                        ->ifTrue(static function ($v) use ($organizeMigrationModes): bool {
+                        ->ifTrue(static function ($v) use ($organizeMigrationModes) {
                             if ($v === false) {
                                 return false;
                             }
 
-                            return ! is_string($v) || ! in_array(strtoupper($v), $organizeMigrationModes, true);
+                            if (is_string($v) && in_array(strtoupper($v), $organizeMigrationModes, true)) {
+                                return false;
+                            }
+
+                            return true;
                         })
                         ->thenInvalid('Invalid organize migrations mode value %s')
                     ->end()
@@ -152,12 +155,13 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+
     /**
      * Find organize migrations modes for their names
      *
      * @return string[]
      */
-    private function getOrganizeMigrationsModes(): array
+    private function getOrganizeMigrationsModes() : array
     {
         $constPrefix = 'VERSIONS_ORGANIZATION_';
         $prefixLen   = strlen($constPrefix);

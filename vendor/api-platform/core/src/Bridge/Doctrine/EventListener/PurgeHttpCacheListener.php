@@ -103,7 +103,7 @@ final class PurgeHttpCacheListener
             return;
         }
 
-        $this->purger->purge(array_values($this->tags));
+        $this->purger->purge($this->tags);
         $this->tags = [];
     }
 
@@ -113,11 +113,12 @@ final class PurgeHttpCacheListener
             $resourceClass = $this->resourceClassResolver->getResourceClass($entity);
             $iri = $this->iriConverter->getIriFromResourceClass($resourceClass);
             $this->tags[$iri] = $iri;
-
             if ($purgeItem) {
-                $this->addTagForItem($entity);
+                $iri = $this->iriConverter->getIriFromItem($entity);
+                $this->tags[$iri] = $iri;
             }
         } catch (InvalidArgumentException $e) {
+            return;
         }
     }
 

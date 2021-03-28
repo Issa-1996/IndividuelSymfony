@@ -69,14 +69,14 @@ EOT
             $driverOptions = $params['driverOptions'];
         }
 
-        // Since doctrine/dbal 2.11 master has been replaced by primary
-        if (isset($params['primary'])) {
-            $params                  = $params['primary'];
+        if (isset($params['master'])) {
+            $params                  = $params['master'];
             $params['driverOptions'] = $driverOptions;
         }
 
-        if (isset($params['master'])) {
-            $params                  = $params['master'];
+        // Since doctrine/dbal 2.11 master has been replaced by primary
+        if (isset($params['primary'])) {
+            $params                  = $params['primary'];
             $params['driverOptions'] = $driverOptions;
         }
 

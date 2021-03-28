@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Security\Http\Firewall;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
@@ -18,7 +19,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-abstract class AbstractListener implements FirewallListenerInterface
+abstract class AbstractListener
 {
     final public function __invoke(RequestEvent $event)
     {
@@ -27,8 +28,15 @@ abstract class AbstractListener implements FirewallListenerInterface
         }
     }
 
-    public static function getPriority(): int
-    {
-        return 0; // Default
-    }
+    /**
+     * Tells whether the authenticate() method should be called or not depending on the incoming request.
+     *
+     * Returning null means authenticate() can be called lazily when accessing the token storage.
+     */
+    abstract public function supports(Request $request): ?bool;
+
+    /**
+     * Does whatever is required to authenticate the request, typically calling $event->setResponse() internally.
+     */
+    abstract public function authenticate(RequestEvent $event);
 }

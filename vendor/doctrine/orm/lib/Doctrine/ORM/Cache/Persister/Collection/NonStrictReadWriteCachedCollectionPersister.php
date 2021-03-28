@@ -23,8 +23,10 @@ namespace Doctrine\ORM\Cache\Persister\Collection;
 use Doctrine\ORM\Cache\CollectionCacheKey;
 use Doctrine\ORM\PersistentCollection;
 
-use function spl_object_hash;
-
+/**
+ * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since 2.5
+ */
 class NonStrictReadWriteCachedCollectionPersister extends AbstractCollectionPersister
 {
     /**
@@ -76,7 +78,7 @@ class NonStrictReadWriteCachedCollectionPersister extends AbstractCollectionPers
         $isInitialized = $collection->isInitialized();
         $isDirty       = $collection->isDirty();
 
-        if (! $isInitialized && ! $isDirty) {
+        if ( ! $isInitialized && ! $isDirty) {
             return;
         }
 
@@ -96,7 +98,7 @@ class NonStrictReadWriteCachedCollectionPersister extends AbstractCollectionPers
 
         $this->queuedCache['update'][spl_object_hash($collection)] = [
             'key'   => $key,
-            'list'  => $collection,
+            'list'  => $collection
         ];
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,6 +25,8 @@ namespace Doctrine\ORM\Mapping;
  */
 final class NamedQueries implements Annotation
 {
-    /** @var array<\Doctrine\ORM\Mapping\NamedQuery> */
+    /**
+     * @var array<\Doctrine\ORM\Mapping\NamedQuery>
+     */
     public $value;
 }

@@ -1,13 +1,6 @@
 CHANGELOG
 =========
 
-5.2.0
------
-
- * added `param()` and `abstract_arg()` in the PHP-DSL
- * deprecated `Definition::setPrivate()` and `Alias::setPrivate()`, use `setPublic()` instead
- * added support for the `#[Required]` attribute
-
 5.1.0
 -----
 
@@ -177,6 +170,7 @@ CHANGELOG
  * added `TaggedIteratorArgument` with YAML (`!tagged foo`) and XML (`<service type="tagged"/>`) support
  * deprecated `AutowireExceptionPass` and `AutowirePass::getAutowiringExceptions()`, use `Definition::addError()` and the `DefinitionErrorExceptionPass` instead
 
+
 3.3.0
 -----
 
@@ -245,8 +239,8 @@ CHANGELOG
 2.5.0
 -----
 
- * added DecoratorServicePass and a way to override a service definition (Definition::setDecoratedService())
- * deprecated SimpleXMLElement class.
+* added DecoratorServicePass and a way to override a service definition (Definition::setDecoratedService())
+* deprecated SimpleXMLElement class.
 
 2.4.0
 -----

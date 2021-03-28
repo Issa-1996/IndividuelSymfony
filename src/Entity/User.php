@@ -4,24 +4,52 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"user" = "User", "apprenant" = "Apprenant", "cm" = "CM", "formateur" = "Formateur"})
  * @ApiResource(
- *      routePrefix="/admin",
- *      collectionOperations={"POST","GET"},
- *      itemOperations={
- *           "get_user_trans"={
- *                "method"="GET",
- *                "path"="/users/{id}/transaction"
- *           },"GET","PUT"},
- *      normalizationContext={"groups"={"User:read"}},
- *      denormalizationContext={"groups"={"User:write"}}
+ *     routePrefix="/admin",
+ *     attributes={
+ *         "security"="is_granted('ROLE_ADMIN')", 
+ *         "security_message"="Vous n'avez pas access à cette Ressource",
+ *     },
+ *     collectionOperations={
+ *          "post"={
+ *              "method"="POST",
+ *              "security"="is_granted('ROLE_ADMIN')"
+ *          },
+ *          "GET"={
+ *              "method"="GET",
+ *              "path"="/users"
+ *           }
+ *     },
+ *     itemOperations={"POST"={
+ *          "deserialize"=false,
+ *             "validation_groups"={"Default", "media_object_create"},
+ *             "swagger_context"={
+ *                 "consumes"={
+ *                     "multipart/form-data",
+ *                 },
+ *                 "parameters"={
+ *                     {
+ *                         "in"="formData",
+ *                         "name"="file",
+ *                         "type"="file",
+ *                         "description"="The file to upload",
+ *                     },
+ *                 },
+ *             },
+ * }, "GET"},
+ *     normalizationContext={"groups"={"User:read"}},
+ *     denormalizationContext={"groups"={"User:write"}}
  * )
  */
 class User implements UserInterface
@@ -32,32 +60,27 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      * @Groups({"User:read"})
      * @Groups({"User:write"})
-     * @Groups({"Profil:read"})
-     * @Groups({"Profil:write"})
-     * @Groups({"Transaction:read"})
-     * @Groups({"Transaction:write"})
-     * @Groups({"Agence:read"})
-     * @Groups({"Agence:write"})
-     * @Groups({"Compte:read"})
-     * @Groups({"Compte:write"})
+     * @Groups({"readGroupe", "writeGroupe"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="L'email est obligatoire")
+     * @Assert\Email()
      * @Groups({"User:read"})
      * @Groups({"User:write"})
      */
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+  
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le password est obligatoire")
+     * @Groups({"User:write"})
      */
     private $password;
 
@@ -80,66 +103,48 @@ class User implements UserInterface
      * @Groups({"User:read"})
      * @Groups({"User:write"})
      */
-    private $telephone;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $status;
+    private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"User:read"})
      * @Groups({"User:write"})
      */
-    private $cni;
+    private $telephone;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="user")
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"User:read"})
+     * @Groups({"User:write"})
+     */
+    private $genre;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"User:read"})
+     * @Groups({"User:write"})
+     */
+    private $status="actif";
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @Groups({"User:read"})
      * @Groups({"User:write"})
      */
     private $profil;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Agence::class, inversedBy="user")
-     * @Groups({"User:write"})
-      * @Groups({"User:read"})
-     */
-    private $agence;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Compte::class, mappedBy="user")
-     * @Groups({"User:write"})
-     * @Groups({"User:read"})
-     */
-    private $comptes;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userRetrait")
+     * @ORM\Column(type="blob")
      * @Groups({"User:read"})
      * @Groups({"User:write"})
-     */
-    private $retraitTransaction;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="userDepot")
-     * @Groups({"User:read"})
-     * @Groups({"User:write"})
-     */
-    private $depotTransaction;
-
-    /**
-     * @ORM\Column(type="blob", nullable=true)
      */
     private $avatar;
 
-    public function __construct()
-    {
-        $this->comptes = new ArrayCollection();
-        $this->retraitTransaction = new ArrayCollection();
-        $this->depotTransaction = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"User:read"})
+     */
+    private $archivage=false;
 
     public function getId(): ?int
     {
@@ -175,7 +180,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = "ROLE_".strtoupper($this->profil->getLibelle());
 
         return array_unique($roles);
     }
@@ -203,14 +208,11 @@ class User implements UserInterface
     }
 
     /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
      * @see UserInterface
      */
-    public function getSalt(): ?string
+    public function getSalt()
     {
-        return null;
+        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
     /**
@@ -246,6 +248,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
     public function getTelephone(): ?string
     {
         return $this->telephone;
@@ -258,26 +272,26 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getStatus(): ?bool
+    public function getGenre(): ?string
     {
-        return $this->status;
+        return $this->genre;
     }
 
-    public function setStatus(bool $status): self
+    public function setGenre(string $genre): self
     {
-        $this->status = $status;
+        $this->genre = $genre;
 
         return $this;
     }
 
-    public function getCni(): ?string
+    public function getStatus(): ?string
     {
-        return $this->cni;
+        return $this->status;
     }
 
-    public function setCni(string $cni): self
+    public function setStatus(string $status): self
     {
-        $this->cni = $cni;
+        $this->status = $status;
 
         return $this;
     }
@@ -294,108 +308,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getAgence(): ?Agence
-    {
-        return $this->agence;
-    }
-
-    public function setAgence(?Agence $agence): self
-    {
-        $this->agence = $agence;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Compte[]
-     */
-    public function getComptes(): Collection
-    {
-        return $this->comptes;
-    }
-
-    public function addCompte(Compte $compte): self
-    {
-        if (!$this->comptes->contains($compte)) {
-            $this->comptes[] = $compte;
-            $compte->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompte(Compte $compte): self
-    {
-        if ($this->comptes->removeElement($compte)) {
-            // set the owning side to null (unless already changed)
-            if ($compte->getUser() === $this) {
-                $compte->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Transaction[]
-     */
-    public function getRetraitTransaction(): Collection
-    {
-        return $this->retraitTransaction;
-    }
-
-    public function addRetraitTransaction(Transaction $retraitTransaction): self
-    {
-        if (!$this->retraitTransaction->contains($retraitTransaction)) {
-            $this->retraitTransaction[] = $retraitTransaction;
-            $retraitTransaction->setUserRetrait($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRetraitTransaction(Transaction $retraitTransaction): self
-    {
-        if ($this->retraitTransaction->removeElement($retraitTransaction)) {
-            // set the owning side to null (unless already changed)
-            if ($retraitTransaction->getUserRetrait() === $this) {
-                $retraitTransaction->setUserRetrait(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Transaction[]
-     */
-    public function getDepotTransaction(): Collection
-    {
-        return $this->depotTransaction;
-    }
-
-    public function addDepotTransaction(Transaction $depotTransaction): self
-    {
-        if (!$this->depotTransaction->contains($depotTransaction)) {
-            $this->depotTransaction[] = $depotTransaction;
-            $depotTransaction->setUserDepot($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDepotTransaction(Transaction $depotTransaction): self
-    {
-        if ($this->depotTransaction->removeElement($depotTransaction)) {
-            // set the owning side to null (unless already changed)
-            if ($depotTransaction->getUserDepot() === $this) {
-                $depotTransaction->setUserDepot(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAvatar()
     {
         return base64_encode(stream_get_contents($this->avatar));
@@ -404,6 +316,18 @@ class User implements UserInterface
     public function setAvatar($avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getArchivage(): ?string
+    {
+        return $this->archivage;
+    }
+
+    public function setArchivage(string $archivage): self
+    {
+        $this->archivage = $archivage;
 
         return $this;
     }

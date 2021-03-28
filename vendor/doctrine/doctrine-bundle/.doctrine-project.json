@@ -5,7 +5,7 @@
   "versions": [
     {
       "name": "2.3",
-      "branchName": "2.3.x",
+      "branchName": "master",
       "slug": "latest",
       "upcoming": true
     },
@@ -36,7 +36,7 @@
       "name": "1.12",
       "branchName": "1.12.x",
       "slug": "1.12",
-      "maintained": false
+      "maintained": true
     },
     {
       "name": "1.11",

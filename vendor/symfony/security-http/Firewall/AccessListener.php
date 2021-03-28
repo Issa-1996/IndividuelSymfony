@@ -14,7 +14,6 @@ namespace Symfony\Component\Security\Http\Firewall;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -32,6 +31,8 @@ use Symfony\Component\Security\Http\Event\LazyResponseEvent;
  */
 class AccessListener extends AbstractListener
 {
+    const PUBLIC_ACCESS = 'PUBLIC_ACCESS';
+
     private $tokenStorage;
     private $accessDecisionManager;
     private $map;
@@ -55,7 +56,7 @@ class AccessListener extends AbstractListener
         [$attributes] = $this->map->getPatterns($request);
         $request->attributes->set('_access_control_attributes', $attributes);
 
-        return $attributes && ([AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] !== $attributes && [AuthenticatedVoter::PUBLIC_ACCESS] !== $attributes) ? true : null;
+        return $attributes && ([AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] !== $attributes && [self::PUBLIC_ACCESS] !== $attributes) ? true : null;
     }
 
     /**
@@ -88,7 +89,19 @@ class AccessListener extends AbstractListener
                 throw new AuthenticationCredentialsNotFoundException('A Token was not found in the TokenStorage.');
             }
 
-            $token = new NullToken();
+            if ([AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] === $attributes) {
+                trigger_deprecation('symfony/security-http', '5.1', 'Using "IS_AUTHENTICATED_ANONYMOUSLY" in your access_control rules when using the authenticator Security system is deprecated, use "PUBLIC_ACCESS" instead.');
+
+                return;
+            }
+
+            if ([self::PUBLIC_ACCESS] !== $attributes) {
+                throw $this->createAccessDeniedException($request, $attributes);
+            }
+        }
+
+        if ([self::PUBLIC_ACCESS] === $attributes) {
+            return;
         }
 
         if (!$token->isAuthenticated()) {
@@ -108,10 +121,5 @@ class AccessListener extends AbstractListener
         $exception->setSubject($request);
 
         return $exception;
-    }
-
-    public static function getPriority(): int
-    {
-        return -255;
     }
 }

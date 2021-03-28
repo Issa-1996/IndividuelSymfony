@@ -38,11 +38,11 @@ use Twig\TokenParser\TokenParserInterface;
  */
 class Environment
 {
-    const VERSION = '3.3.0';
-    const VERSION_ID = 30300;
+    const VERSION = '3.1.1';
+    const VERSION_ID = 30101;
     const MAJOR_VERSION = 3;
-    const MINOR_VERSION = 3;
-    const RELEASE_VERSION = 0;
+    const MINOR_VERSION = 1;
+    const RELEASE_VERSION = 1;
     const EXTRA_VERSION = '';
 
     private $charset;
@@ -554,7 +554,7 @@ class Environment
     }
 
     /**
-     * Returns the runtime implementation of a Twig element (filter/function/tag/test).
+     * Returns the runtime implementation of a Twig element (filter/function/test).
      *
      * @param string $class A runtime class name
      *
@@ -616,16 +616,18 @@ class Environment
     }
 
     /**
+     * @return TokenParserInterface[]
+     *
      * @internal
      */
-    public function getTokenParser(string $name): ?TokenParserInterface
+    public function getTags(): array
     {
-        return $this->extensionSet->getTokenParser($name);
-    }
+        $tags = [];
+        foreach ($this->getTokenParsers() as $parser) {
+            $tags[$parser->getTag()] = $parser;
+        }
 
-    public function registerUndefinedTokenParserCallback(callable $callable): void
-    {
-        $this->extensionSet->registerUndefinedTokenParserCallback($callable);
+        return $tags;
     }
 
     public function addNodeVisitor(NodeVisitorInterface $visitor)
@@ -656,7 +658,7 @@ class Environment
         return $this->extensionSet->getFilter($name);
     }
 
-    public function registerUndefinedFilterCallback(callable $callable): void
+    public function registerUndefinedFilterCallback(callable $callable)
     {
         $this->extensionSet->registerUndefinedFilterCallback($callable);
     }
@@ -713,7 +715,7 @@ class Environment
         return $this->extensionSet->getFunction($name);
     }
 
-    public function registerUndefinedFunctionCallback(callable $callable): void
+    public function registerUndefinedFunctionCallback(callable $callable)
     {
         $this->extensionSet->registerUndefinedFunctionCallback($callable);
     }

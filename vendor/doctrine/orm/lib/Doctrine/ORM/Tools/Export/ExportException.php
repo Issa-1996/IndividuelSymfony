@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -54,6 +53,6 @@ class ExportException extends ORMException
      */
     public static function attemptOverwriteExistingFile($file)
     {
-        return new self("Attempting to overwrite an existing file '" . $file . "'.");
+        return new self("Attempting to overwrite an existing file '".$file."'.");
     }
 }

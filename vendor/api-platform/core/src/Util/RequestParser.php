@@ -55,7 +55,7 @@ final class RequestParser
 
         $source = preg_replace_callback(
             '/(^|(?<=&))[^=[&]+/',
-            static function ($key) {
+            function ($key) {
                 return bin2hex(urldecode($key[0]));
             },
             $source

@@ -5,10 +5,11 @@ namespace Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * AuthenticationFailureHandler.
@@ -22,6 +23,9 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
      */
     protected $dispatcher;
 
+    /**
+     * @param EventDispatcherInterface $dispatcher
+     */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
@@ -32,13 +36,16 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $errorMessage = strtr($exception->getMessageKey(), $exception->getMessageData());
         $event = new AuthenticationFailureEvent(
             $exception,
-            new JWTAuthenticationFailureResponse($errorMessage)
+            new JWTAuthenticationFailureResponse($exception->getMessageKey())
         );
 
-        $this->dispatcher->dispatch($event, Events::AUTHENTICATION_FAILURE);
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, Events::AUTHENTICATION_FAILURE);
+        } else {
+            $this->dispatcher->dispatch(Events::AUTHENTICATION_FAILURE, $event);
+        }
 
         return $event->getResponse();
     }

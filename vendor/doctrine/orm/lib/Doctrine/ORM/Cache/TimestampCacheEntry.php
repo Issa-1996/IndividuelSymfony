@@ -20,10 +20,11 @@
 
 namespace Doctrine\ORM\Cache;
 
-use function microtime;
-
 /**
  * Timestamp cache entry
+ *
+ * @since   2.5
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class TimestampCacheEntry implements CacheEntry
 {
@@ -47,7 +48,7 @@ class TimestampCacheEntry implements CacheEntry
      *
      * This method allow Doctrine\Common\Cache\PhpFileCache compatibility
      *
-     * @param array<string,float> $values array containing property values
+     * @param array $values array containing property values
      *
      * @return TimestampCacheEntry
      */

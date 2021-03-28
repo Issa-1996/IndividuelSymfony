@@ -69,11 +69,6 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
         return $this->providerKey;
     }
 
-    public function getFirewallName(): string
-    {
-        return $this->getProviderKey();
-    }
-
     /**
      * {@inheritdoc}
      */

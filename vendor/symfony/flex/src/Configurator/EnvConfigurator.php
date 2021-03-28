@@ -51,11 +51,7 @@ class EnvConfigurator extends AbstractConfigurator
             foreach ($vars as $key => $value) {
                 $value = $this->evaluateValue($value);
                 if ('#' === $key[0] && is_numeric(substr($key, 1))) {
-                    if ('' === $value) {
-                        $data .= "#\n";
-                    } else {
-                        $data .= '# '.$value."\n";
-                    }
+                    $data .= '# '.$value."\n";
 
                     continue;
                 }

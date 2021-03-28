@@ -36,7 +36,7 @@ interface Relations
     /**
      * Refers to a substitute for this context
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-alternate
+     * @see http://www.w3.org/TR/html5/links.html#link-type-alternate
      */
     const REL_ALTERNATE = 'alternate';
 
@@ -78,7 +78,7 @@ interface Relations
     /**
      * Refers to the context's author.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-author
+     * @see http://www.w3.org/TR/html5/links.html#link-type-author
      */
     const REL_AUTHOR = 'author';
 
@@ -92,7 +92,7 @@ interface Relations
     /**
      * Gives a permanent link to use for bookmarking purposes.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-bookmark
+     * @see http://www.w3.org/TR/html5/links.html#link-type-bookmark
      */
     const REL_BOOKMARK = 'bookmark';
 
@@ -263,7 +263,7 @@ interface Relations
     /**
      * Refers to context-sensitive help.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-help
+     * @see http://www.w3.org/TR/html5/links.html#link-type-help
      */
     const REL_HELP = 'help';
 
@@ -289,7 +289,7 @@ interface Relations
     /**
      * Refers to an icon representing the link's context.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#rel-icon
+     * @see http://www.w3.org/TR/html5/links.html#link-type-icon
      */
     const REL_ICON = 'icon';
 
@@ -469,7 +469,7 @@ interface Relations
     /**
      * Links to a manifest file for the context.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-manifest
+     * @see https://www.w3.org/TR/appmanifest/#using-a-link-element-to-link-to-a-manifest
      */
     const REL_MANIFEST = 'manifest';
 
@@ -479,13 +479,6 @@ interface Relations
      * @see https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/pinnedTabs/pinnedTabs.html#//apple_ref/doc/uid/TP40002051-CH18-SW1
      */
     const REL_MASK_ICON = 'mask-icon';
-
-    /**
-     * Refers to a feed of personalised media recommendations relevant to the link context.
-     *
-     * @see https://wicg.github.io/media-feeds/#discovery-of-media-feeds
-     */
-    const REL_MEDIA_FEED = 'media-feed';
 
     /**
      * The Target IRI points to a Memento, a fixed resource that will not change state anymore.
@@ -527,7 +520,7 @@ interface Relations
     /**
      * Indicates that the link's context is a part of a series, and that the next in the series is the link target. 
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-next
+     * @see http://www.w3.org/TR/html5/links.html#link-type-next
      */
     const REL_NEXT = 'next';
 
@@ -541,7 +534,7 @@ interface Relations
     /**
      * Indicates that the context’s original author or publisher does not endorse the link target.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-nofollow
+     * @see http://www.w3.org/TR/html5/links.html#link-type-nofollow
      */
     const REL_NOFOLLOW = 'nofollow';
 
@@ -556,7 +549,7 @@ interface Relations
     /**
      * Indicates that no referrer information is to be leaked when following the link.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
+     * @see http://www.w3.org/TR/html5/links.html#link-type-noreferrer
      */
     const REL_NOREFERRER = 'noreferrer';
 
@@ -669,7 +662,7 @@ interface Relations
     /**
      * Indicates that the link's context is a part of a series, and that the previous in the series is the link target. 
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-prev
+     * @see http://www.w3.org/TR/html5/links.html#link-type-prev
      */
     const REL_PREV = 'prev';
 
@@ -744,14 +737,6 @@ interface Relations
      * @see https://tools.ietf.org/html/rfc4685
      */
     const REL_REPLIES = 'replies';
-
-    /**
-     * The resource identified by the link target provides an input value to an instance of a rule, where the resource which
-     * represents the rule instance is identified by the link context. 
-     *
-     * @see https://openconnectivity.org/specs/OCF_Core_Optional_Specification_v2.2.0.pdf
-     */
-    const REL_RULEINPUT = 'ruleinput';
 
     /**
      * Refers to a resource that can be used to search through the link's context and related resources.
@@ -829,7 +814,7 @@ interface Relations
     /**
      * Refers to a stylesheet.
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-stylesheet
+     * @see http://www.w3.org/TR/html5/links.html#link-type-stylesheet
      */
     const REL_STYLESHEET = 'stylesheet';
 
@@ -857,7 +842,7 @@ interface Relations
     /**
      * Gives a tag (identified by the given address) that applies to the current document. 
      *
-     * @see https://html.spec.whatwg.org/multipage/links.html#link-type-tag
+     * @see http://www.w3.org/TR/html5/links.html#link-type-tag
      */
     const REL_TAG = 'tag';
 

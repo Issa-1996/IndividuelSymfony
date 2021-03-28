@@ -8,10 +8,11 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides convenient methods to manage JWT creation/verification.
@@ -42,17 +43,22 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     protected $userIdClaim;
 
     /**
-     * @param string|null $userIdClaim
+     * @param JWTEncoderInterface      $encoder
+     * @param EventDispatcherInterface $dispatcher
+     * @param string|null              $userIdClaim
      */
     public function __construct(JWTEncoderInterface $encoder, EventDispatcherInterface $dispatcher, $userIdClaim = null)
     {
-        $this->jwtEncoder = $encoder;
-        $this->dispatcher = $dispatcher;
+        $this->jwtEncoder        = $encoder;
+        $this->dispatcher        = $dispatcher;
         $this->userIdentityField = 'username';
-        $this->userIdClaim = $userIdClaim;
+        $this->userIdClaim       = $userIdClaim;
     }
 
     /**
+     * @param UserInterface $user
+     * @param array $payload
+     *
      * @return string The JWT token
      */
     public function create(UserInterface $user)
@@ -64,6 +70,9 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     }
 
     /**
+     * @param UserInterface $user
+     * @param array $payload
+     *
      * @return string The JWT token
      */
     public function createFromPayload(UserInterface $user, array $payload)
@@ -75,12 +84,19 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     }
 
     /**
+     * @param UserInterface $user
+     * @param array $payload
+     *
      * @return string The JWT token
      */
     private function generateJwtStringAndDispatchEvents(UserInterface $user, array $payload)
     {
         $jwtCreatedEvent = new JWTCreatedEvent($payload, $user);
-        $this->dispatcher->dispatch($jwtCreatedEvent, Events::JWT_CREATED);
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($jwtCreatedEvent, Events::JWT_CREATED);
+        } else {
+            $this->dispatcher->dispatch(Events::JWT_CREATED, $jwtCreatedEvent);
+        }
 
         if ($this->jwtEncoder instanceof HeaderAwareJWTEncoderInterface) {
             $jwtString = $this->jwtEncoder->encode($jwtCreatedEvent->getData(), $jwtCreatedEvent->getHeader());
@@ -90,7 +106,11 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
 
         $jwtEncodedEvent = new JWTEncodedEvent($jwtString);
 
-        $this->dispatcher->dispatch($jwtEncodedEvent, Events::JWT_ENCODED);
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($jwtEncodedEvent, Events::JWT_ENCODED);
+        } else {
+            $this->dispatcher->dispatch(Events::JWT_ENCODED, $jwtEncodedEvent);
+        }
 
         return $jwtString;
     }
@@ -105,7 +125,11 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
         }
 
         $event = new JWTDecodedEvent($payload);
-        $this->dispatcher->dispatch($event, Events::JWT_DECODED);
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, Events::JWT_DECODED);
+        } else {
+            $this->dispatcher->dispatch(Events::JWT_DECODED, $event);
+        }
 
         if (!$event->isValid()) {
             return false;
@@ -118,11 +142,12 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
      * Add user identity to payload, username by default.
      * Override this if you need to identify it by another property.
      *
-     * @param array &$payload
+     * @param UserInterface $user
+     * @param array         &$payload
      */
     protected function addUserIdentityToPayload(UserInterface $user, array &$payload)
     {
-        $accessor = PropertyAccess::createPropertyAccessor();
+        $accessor                    = PropertyAccess::createPropertyAccessor();
         $payload[$this->userIdClaim ?: $this->userIdentityField] = $accessor->getValue($user, $this->userIdentityField);
     }
 

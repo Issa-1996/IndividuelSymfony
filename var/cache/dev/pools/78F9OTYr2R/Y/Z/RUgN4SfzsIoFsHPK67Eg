@@ -1,3 +1,0 @@
-<?php //route_name_cb2340a4f3241e237924a4d4863b9170
-
-return [PHP_INT_MAX, 'api_profil_de_sorties_GET_item'];

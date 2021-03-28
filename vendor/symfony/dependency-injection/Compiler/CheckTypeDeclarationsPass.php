@@ -84,7 +84,7 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
             return $value;
         }
 
-        if (!$value instanceof Definition || $value->hasErrors() || $value->isDeprecated()) {
+        if (!$value instanceof Definition || $value->hasErrors()) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -153,27 +153,26 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
     /**
      * @throws InvalidParameterTypeException When a parameter is not compatible with the declared type
      */
-    private function checkType(Definition $checkedDefinition, $value, \ReflectionParameter $parameter, ?string $envPlaceholderUniquePrefix, \ReflectionType $reflectionType = null): void
+    private function checkType(Definition $checkedDefinition, $value, \ReflectionParameter $parameter, ?string $envPlaceholderUniquePrefix, string $type = null): void
     {
-        $reflectionType = $reflectionType ?? $parameter->getType();
+        if (null === $type) {
+            $type = $parameter->getType();
 
-        if ($reflectionType instanceof \ReflectionUnionType) {
-            foreach ($reflectionType->getTypes() as $t) {
-                try {
-                    $this->checkType($checkedDefinition, $value, $parameter, $envPlaceholderUniquePrefix, $t);
+            if ($type instanceof \ReflectionUnionType) {
+                foreach ($type->getTypes() as $type) {
+                    try {
+                        $this->checkType($checkedDefinition, $value, $parameter, $envPlaceholderUniquePrefix, $type);
 
-                    return;
-                } catch (InvalidParameterTypeException $e) {
+                        return;
+                    } catch (InvalidParameterTypeException $e) {
+                    }
                 }
+
+                throw new InvalidParameterTypeException($this->currentId, $e->getCode(), $parameter);
             }
 
-            throw new InvalidParameterTypeException($this->currentId, $e->getCode(), $parameter);
+            $type = $type->getName();
         }
-        if (!$reflectionType instanceof \ReflectionNamedType) {
-            return;
-        }
-
-        $type = $reflectionType->getName();
 
         if ($value instanceof Reference) {
             if (!$this->container->has($value = (string) $value)) {
@@ -280,26 +279,15 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
             return;
         }
 
-        if ('mixed' === $type) {
-            return;
-        }
-
         if (is_a($class, $type, true)) {
             return;
         }
 
-        if ('false' === $type) {
-            if (false === $value) {
-                return;
-            }
-        } elseif ($reflectionType->isBuiltin()) {
-            $checkFunction = sprintf('is_%s', $type);
-            if ($checkFunction($value)) {
-                return;
-            }
-        }
+        $checkFunction = sprintf('is_%s', $type);
 
-        throw new InvalidParameterTypeException($this->currentId, \is_object($value) ? $class : get_debug_type($value), $parameter);
+        if (!$parameter->getType()->isBuiltin() || !$checkFunction($value)) {
+            throw new InvalidParameterTypeException($this->currentId, \is_object($value) ? $class : get_debug_type($value), $parameter);
+        }
     }
 
     private function getExpressionLanguage(): ExpressionLanguage

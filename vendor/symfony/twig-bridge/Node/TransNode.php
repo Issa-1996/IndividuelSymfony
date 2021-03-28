@@ -52,7 +52,7 @@ final class TransNode extends Node
             $defaults = $this->getNode('vars');
             $vars = null;
         }
-        [$msg, $defaults] = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
+        list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
         $compiler
             ->write('echo $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->trans(')

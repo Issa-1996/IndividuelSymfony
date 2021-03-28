@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraint;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Callback extends Constraint
 {
     /**
@@ -29,23 +28,19 @@ class Callback extends Constraint
 
     /**
      * {@inheritdoc}
-     *
-     * @param array|string|callable $callback The callback or a set of options
      */
-    public function __construct($callback = null, array $groups = null, $payload = null, array $options = [])
+    public function __construct($options = null)
     {
         // Invocation through annotations with an array parameter only
-        if (\is_array($callback) && 1 === \count($callback) && isset($callback['value'])) {
-            $callback = $callback['value'];
+        if (\is_array($options) && 1 === \count($options) && isset($options['value'])) {
+            $options = $options['value'];
         }
 
-        if (!\is_array($callback) || (!isset($callback['callback']) && !isset($callback['groups']) && !isset($callback['payload']))) {
-            $options['callback'] = $callback;
-        } else {
-            $options = array_merge($callback, $options);
+        if (\is_array($options) && !isset($options['callback']) && !isset($options['groups']) && !isset($options['payload'])) {
+            $options = ['callback' => $options];
         }
 
-        parent::__construct($options, $groups, $payload);
+        parent::__construct($options);
     }
 
     /**

@@ -170,7 +170,7 @@ abstract class AbstractFactory implements SecurityFactoryInterface
         } else {
             $successHandler = $container->setDefinition($successHandlerId, new ChildDefinition('security.authentication.success_handler'));
             $successHandler->addMethodCall('setOptions', [$options]);
-            $successHandler->addMethodCall('setFirewallName', [$id]);
+            $successHandler->addMethodCall('setProviderKey', [$id]);
         }
 
         return $successHandlerId;

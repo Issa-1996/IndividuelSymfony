@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -22,7 +21,6 @@ namespace Doctrine\ORM\Tools\Console\Command;
 
 use Doctrine\ORM\Tools\Console\MetadataFilter;
 use Doctrine\ORM\Tools\EntityRepositoryGenerator;
-use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,17 +28,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-use function file_exists;
-use function is_writable;
-use function realpath;
-use function sprintf;
-
 /**
  * Command to generate repository classes for mapping information.
  *
- * @deprecated 2.7 This class is being removed from the ORM and won't have any replacement
- *
  * @link    www.doctrine-project.org
+ * @since   2.0
+ * @author  Benjamin Eberlei <kontakt@beberlei.de>
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
+ *
+ * @deprecated 2.7 This class is being removed from the ORM and won't have any replacement
  */
 class GenerateRepositoriesCommand extends Command
 {
@@ -75,21 +73,20 @@ class GenerateRepositoriesCommand extends Command
         // Process destination directory
         $destPath = realpath($input->getArgument('dest-path'));
 
-        if (! file_exists($destPath)) {
-            throw new InvalidArgumentException(
+        if ( ! file_exists($destPath)) {
+            throw new \InvalidArgumentException(
                 sprintf("Entities destination directory '<info>%s</info>' does not exist.", $input->getArgument('dest-path'))
             );
         }
 
-        if (! is_writable($destPath)) {
-            throw new InvalidArgumentException(
+        if ( ! is_writable($destPath)) {
+            throw new \InvalidArgumentException(
                 sprintf("Entities destination directory '<info>%s</info>' does not have write permissions.", $destPath)
             );
         }
 
         if (empty($metadatas)) {
             $ui->success('No Metadata Classes to process.');
-
             return 0;
         }
 
@@ -110,7 +107,6 @@ class GenerateRepositoriesCommand extends Command
 
         if ($numRepositories === 0) {
             $ui->text('No Repository classes were found to be processed.');
-
             return 0;
         }
 

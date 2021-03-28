@@ -21,6 +21,7 @@ use ApiPlatform\Core\GraphQl\Resolver\Stage\SerializeStageInterface;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Util\ClassInfoTrait;
 use ApiPlatform\Core\Util\CloneTrait;
+use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
 use Psr\Container\ContainerInterface;
 
@@ -35,8 +36,8 @@ use Psr\Container\ContainerInterface;
  */
 final class ItemResolverFactory implements ResolverFactoryInterface
 {
-    use ClassInfoTrait;
     use CloneTrait;
+    use ClassInfoTrait;
 
     private $readStage;
     private $securityStage;
@@ -64,14 +65,14 @@ final class ItemResolverFactory implements ResolverFactoryInterface
             }
 
             $operationName = $operationName ?? 'item_query';
-            $resolverContext = ['source' => $source, 'args' => $args, 'info' => $info, 'is_collection' => false, 'is_mutation' => false, 'is_subscription' => false];
+            $resolverContext = ['source' => $source, 'args' => $args, 'info' => $info, 'is_collection' => false, 'is_mutation' => false];
 
             $item = ($this->readStage)($resourceClass, $rootClass, $operationName, $resolverContext);
             if (null !== $item && !\is_object($item)) {
                 throw new \LogicException('Item from read stage should be a nullable object.');
             }
 
-            $resourceClass = $this->getResourceClass($item, $resourceClass);
+            $resourceClass = $this->getResourceClass($item, $resourceClass, $info);
             $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
 
             $queryResolverId = $resourceMetadata->getGraphqlAttribute($operationName, 'item_query');
@@ -79,7 +80,7 @@ final class ItemResolverFactory implements ResolverFactoryInterface
                 /** @var QueryItemResolverInterface $queryResolver */
                 $queryResolver = $this->queryResolverLocator->get($queryResolverId);
                 $item = $queryResolver($item, $resolverContext);
-                $resourceClass = $this->getResourceClass($item, $resourceClass, sprintf('Custom query resolver "%s"', $queryResolverId).' has to return an item of class %s but returned an item of class %s.');
+                $resourceClass = $this->getResourceClass($item, $resourceClass, $info, sprintf('Custom query resolver "%s"', $queryResolverId).' has to return an item of class %s but returned an item of class %s.');
             }
 
             ($this->securityStage)($resourceClass, $operationName, $resolverContext + [
@@ -101,13 +102,13 @@ final class ItemResolverFactory implements ResolverFactoryInterface
     /**
      * @param object|null $item
      *
-     * @throws \UnexpectedValueException
+     * @throws Error
      */
-    private function getResourceClass($item, ?string $resourceClass, string $errorMessage = 'Resolver only handles items of class %s but retrieved item is of class %s.'): string
+    private function getResourceClass($item, ?string $resourceClass, ResolveInfo $info, string $errorMessage = 'Resolver only handles items of class %s but retrieved item is of class %s.'): string
     {
         if (null === $item) {
             if (null === $resourceClass) {
-                throw new \UnexpectedValueException('Resource class cannot be determined.');
+                throw Error::createLocatedError('Resource class cannot be determined.', $info->fieldNodes, $info->path);
             }
 
             return $resourceClass;
@@ -120,7 +121,7 @@ final class ItemResolverFactory implements ResolverFactoryInterface
         }
 
         if ($resourceClass !== $itemClass) {
-            throw new \UnexpectedValueException(sprintf($errorMessage, (new \ReflectionClass($resourceClass))->getShortName(), (new \ReflectionClass($itemClass))->getShortName()));
+            throw Error::createLocatedError(sprintf($errorMessage, (new \ReflectionClass($resourceClass))->getShortName(), (new \ReflectionClass($itemClass))->getShortName()), $info->fieldNodes, $info->path);
         }
 
         return $resourceClass;

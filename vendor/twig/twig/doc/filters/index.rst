@@ -47,7 +47,6 @@ Filters
     reverse
     round
     slice
-    slug
     sort
     spaceless
     split

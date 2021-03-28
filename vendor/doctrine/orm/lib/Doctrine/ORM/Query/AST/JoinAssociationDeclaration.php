@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,16 +23,24 @@ namespace Doctrine\ORM\Query\AST;
  * JoinAssociationDeclaration ::= JoinAssociationPathExpression ["AS"] AliasIdentificationVariable
  *
  * @link    www.doctrine-project.org
+ * @since   2.3
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class JoinAssociationDeclaration extends Node
 {
-    /** @var JoinAssociationPathExpression */
+    /**
+     * @var JoinAssociationPathExpression
+     */
     public $joinAssociationPathExpression;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $aliasIdentificationVariable;
 
-    /** @var IndexBy|null */
+    /**
+     * @var IndexBy|null
+     */
     public $indexBy;
 
     /**

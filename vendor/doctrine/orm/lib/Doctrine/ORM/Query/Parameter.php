@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,6 +25,8 @@ use function trim;
  * Defines a Query Parameter.
  *
  * @link    www.doctrine-project.org
+ * @since   2.3
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  */
 class Parameter
 {
@@ -70,6 +71,8 @@ class Parameter
     private $typeSpecified;
 
     /**
+     * Constructor.
+     *
      * @param string $name  Parameter name
      * @param mixed  $value Parameter value
      * @param mixed  $type  Parameter type
@@ -124,7 +127,7 @@ class Parameter
         $this->type  = $type ?: ParameterTypeInferer::inferType($value);
     }
 
-    public function typeWasSpecified(): bool
+    public function typeWasSpecified() : bool
     {
         return $this->typeSpecified;
     }

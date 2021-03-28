@@ -2,9 +2,7 @@
 
 namespace Negotiation\Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-
-abstract class TestCase extends PHPUnitTestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected function call_private_method($class, $method, $object, $params)
     {

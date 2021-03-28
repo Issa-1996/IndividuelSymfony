@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,14 +22,24 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * WhenClause ::= "WHEN" ConditionalExpression "THEN" ScalarExpression
  *
+ * @since   2.2
+ * 
  * @link    www.doctrine-project.org
+ * @author  Benjamin Eberlei <kontakt@beberlei.de>
+ * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author  Jonathan Wage <jonwage@gmail.com>
+ * @author  Roman Borschel <roman@code-factory.org>
  */
 class WhenClause extends Node
 {
-    /** @var ConditionalExpression */
+    /**
+     * @var ConditionalExpression
+     */
     public $caseConditionExpression = null;
 
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     public $thenScalarExpression = null;
 
     /**
@@ -40,7 +49,7 @@ class WhenClause extends Node
     public function __construct($caseConditionExpression, $thenScalarExpression)
     {
         $this->caseConditionExpression = $caseConditionExpression;
-        $this->thenScalarExpression    = $thenScalarExpression;
+        $this->thenScalarExpression = $thenScalarExpression;
     }
 
     /**

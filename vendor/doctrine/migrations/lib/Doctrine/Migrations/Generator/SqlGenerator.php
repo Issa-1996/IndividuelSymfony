@@ -9,7 +9,6 @@ use Doctrine\Migrations\Configuration\Configuration;
 use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
-
 use function array_unshift;
 use function count;
 use function implode;
@@ -44,15 +43,13 @@ class SqlGenerator
         bool $formatted = false,
         int $lineLength = 120,
         bool $checkDbPlatform = true
-    ): string {
+    ) : string {
         $code = [];
 
         $storageConfiguration = $this->configuration->getMetadataStorageConfiguration();
         foreach ($sql as $query) {
-            if (
-                $storageConfiguration instanceof TableMetadataStorageConfiguration
-                && stripos($query, $storageConfiguration->getTableName()) !== false
-            ) {
+            if ($storageConfiguration instanceof TableMetadataStorageConfiguration
+                && stripos($query, $storageConfiguration->getTableName()) !== false) {
                 continue;
             }
 

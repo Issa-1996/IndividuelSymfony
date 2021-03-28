@@ -19,21 +19,20 @@ namespace Symfony\Component\Security\Core\Authentication\Token;
 class SwitchUserToken extends UsernamePasswordToken
 {
     private $originalToken;
-    private $originatedFromUri;
 
     /**
-     * @param string|object $user              The username (like a nickname, email address, etc.), or a UserInterface instance or an object implementing a __toString method
-     * @param mixed         $credentials       This usually is the password of the user
-     * @param string|null   $originatedFromUri The URI where was the user at the switch
+     * @param string|object $user        The username (like a nickname, email address, etc.), or a UserInterface instance or an object implementing a __toString method
+     * @param mixed         $credentials This usually is the password of the user
+     * @param string        $providerKey The provider key
+     * @param string[]      $roles       An array of roles
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($user, $credentials, string $firewallName, array $roles, TokenInterface $originalToken, string $originatedFromUri = null)
+    public function __construct($user, $credentials, string $providerKey, array $roles, TokenInterface $originalToken)
     {
-        parent::__construct($user, $credentials, $firewallName, $roles);
+        parent::__construct($user, $credentials, $providerKey, $roles);
 
         $this->originalToken = $originalToken;
-        $this->originatedFromUri = $originatedFromUri;
     }
 
     public function getOriginalToken(): TokenInterface
@@ -41,17 +40,12 @@ class SwitchUserToken extends UsernamePasswordToken
         return $this->originalToken;
     }
 
-    public function getOriginatedFromUri(): ?string
-    {
-        return $this->originatedFromUri;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function __serialize(): array
     {
-        return [$this->originalToken, $this->originatedFromUri, parent::__serialize()];
+        return [$this->originalToken, parent::__serialize()];
     }
 
     /**
@@ -59,12 +53,7 @@ class SwitchUserToken extends UsernamePasswordToken
      */
     public function __unserialize(array $data): void
     {
-        if (3 > \count($data)) {
-            // Support for tokens serialized with version 5.1 or lower of symfony/security-core.
-            [$this->originalToken, $parentData] = $data;
-        } else {
-            [$this->originalToken, $this->originatedFromUri, $parentData] = $data;
-        }
+        [$this->originalToken, $parentData] = $data;
         $parentData = \is_array($parentData) ? $parentData : unserialize($parentData);
         parent::__unserialize($parentData);
     }

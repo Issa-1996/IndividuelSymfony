@@ -1,55 +1,285 @@
 <?php
-declare(strict_types=1);
+/**
+ * This file is part of Lcobucci\JWT, a simple library to handle JWT and JWS
+ *
+ * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ */
 
 namespace Lcobucci\JWT;
 
+use BadMethodCallException;
+use DateTime;
 use DateTimeInterface;
-use Lcobucci\JWT\Token\DataSet;
+use Generator;
+use Lcobucci\JWT\Claim\Validatable;
+use Lcobucci\JWT\Signer\Key;
+use OutOfBoundsException;
 
-interface Token
+/**
+ * Basic structure of the JWT
+ *
+ * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
+ * @since 0.1.0
+ */
+class Token
 {
     /**
+     * The token headers
+     *
+     * @var array
+     */
+    private $headers;
+
+    /**
+     * The token claim set
+     *
+     * @var array
+     */
+    private $claims;
+
+    /**
+     * The token signature
+     *
+     * @var Signature
+     */
+    private $signature;
+
+    /**
+     * The encoded data
+     *
+     * @var array
+     */
+    private $payload;
+
+    /**
+     * Initializes the object
+     *
+     * @param array $headers
+     * @param array $claims
+     * @param array $payload
+     * @param Signature $signature
+     */
+    public function __construct(
+        array $headers = ['alg' => 'none'],
+        array $claims = [],
+        Signature $signature = null,
+        array $payload = ['', '']
+    ) {
+        $this->headers = $headers;
+        $this->claims = $claims;
+        $this->signature = $signature;
+        $this->payload = $payload;
+    }
+
+    /**
      * Returns the token headers
+     *
+     * @return array
      */
-    public function headers(): DataSet;
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
 
     /**
-     * Returns if the token is allowed to be used by the audience
+     * Returns if the header is configured
+     *
+     * @param string $name
+     *
+     * @return boolean
      */
-    public function isPermittedFor(string $audience): bool;
+    public function hasHeader($name)
+    {
+        return array_key_exists($name, $this->headers);
+    }
 
     /**
-     * Returns if the token has the given id
+     * Returns the value of a token header
+     *
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
+     *
+     * @throws OutOfBoundsException
      */
-    public function isIdentifiedBy(string $id): bool;
+    public function getHeader($name, $default = null)
+    {
+        if ($this->hasHeader($name)) {
+            return $this->getHeaderValue($name);
+        }
+
+        if ($default === null) {
+            throw new OutOfBoundsException('Requested header is not configured');
+        }
+
+        return $default;
+    }
 
     /**
-     * Returns if the token has the given subject
+     * Returns the value stored in header
+     *
+     * @param string $name
+     *
+     * @return mixed
      */
-    public function isRelatedTo(string $subject): bool;
+    private function getHeaderValue($name)
+    {
+        $header = $this->headers[$name];
+
+        if ($header instanceof Claim) {
+            return $header->getValue();
+        }
+
+        return $header;
+    }
 
     /**
-     * Returns if the token was issued by any of given issuers
+     * Returns the token claim set
+     *
+     * @return array
      */
-    public function hasBeenIssuedBy(string ...$issuers): bool;
+    public function getClaims()
+    {
+        return $this->claims;
+    }
 
     /**
-     * Returns if the token was issued before of given time
+     * Returns if the claim is configured
+     *
+     * @param string $name
+     *
+     * @return boolean
      */
-    public function hasBeenIssuedBefore(DateTimeInterface $now): bool;
+    public function hasClaim($name)
+    {
+        return array_key_exists($name, $this->claims);
+    }
 
     /**
-     * Returns if the token minimum time is before than given time
+     * Returns the value of a token claim
+     *
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
+     *
+     * @throws OutOfBoundsException
      */
-    public function isMinimumTimeBefore(DateTimeInterface $now): bool;
+    public function getClaim($name, $default = null)
+    {
+        if ($this->hasClaim($name)) {
+            return $this->claims[$name]->getValue();
+        }
+
+        if ($default === null) {
+            throw new OutOfBoundsException('Requested claim is not configured');
+        }
+
+        return $default;
+    }
 
     /**
-     * Returns if the token is expired
+     * Verify if the key matches with the one that created the signature
+     *
+     * @param Signer $signer
+     * @param Key|string $key
+     *
+     * @return boolean
+     *
+     * @throws BadMethodCallException When token is not signed
      */
-    public function isExpired(DateTimeInterface $now): bool;
+    public function verify(Signer $signer, $key)
+    {
+        if ($this->signature === null) {
+            throw new BadMethodCallException('This token is not signed');
+        }
+
+        if ($this->headers['alg'] !== $signer->getAlgorithmId()) {
+            return false;
+        }
+
+        return $this->signature->verify($signer, $this->getPayload(), $key);
+    }
+
+    /**
+     * Validates if the token is valid
+     *
+     * @param ValidationData $data
+     *
+     * @return boolean
+     */
+    public function validate(ValidationData $data)
+    {
+        foreach ($this->getValidatableClaims() as $claim) {
+            if (!$claim->validate($data)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the token is expired.
+     *
+     * @param DateTimeInterface $now Defaults to the current time.
+     *
+     * @return bool
+     */
+    public function isExpired(DateTimeInterface $now = null)
+    {
+        $exp = $this->getClaim('exp', false);
+
+        if ($exp === false) {
+            return false;
+        }
+
+        $now = $now ?: new DateTime();
+
+        $expiresAt = new DateTime();
+        $expiresAt->setTimestamp($exp);
+
+        return $now > $expiresAt;
+    }
+
+    /**
+     * Yields the validatable claims
+     *
+     * @return Generator
+     */
+    private function getValidatableClaims()
+    {
+        foreach ($this->claims as $claim) {
+            if ($claim instanceof Validatable) {
+                yield $claim;
+            }
+        }
+    }
+
+    /**
+     * Returns the token payload
+     *
+     * @return string
+     */
+    public function getPayload()
+    {
+        return $this->payload[0] . '.' . $this->payload[1];
+    }
 
     /**
      * Returns an encoded representation of the token
+     *
+     * @return string
      */
-    public function toString(): string;
+    public function __toString()
+    {
+        $data = implode('.', $this->payload);
+
+        if ($this->signature === null) {
+            $data .= '.';
+        }
+
+        return $data;
+    }
 }

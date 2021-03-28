@@ -149,11 +149,7 @@ class RedisTagAwareAdapter extends AbstractTagAwareAdapter
     {
         $lua = <<<'EOLUA'
             local v = redis.call('GET', KEYS[1])
-            local e = redis.pcall('UNLINK', KEYS[1])
-
-            if type(e) ~= 'number' then
-                redis.call('DEL', KEYS[1])
-            end
+            redis.call('DEL', KEYS[1])
 
             if not v or v:len() <= 13 or v:byte(1) ~= 0x9D or v:byte(6) ~= 0 or v:byte(10) ~= 0x5F then
                 return ''
@@ -284,7 +280,7 @@ EOLUA;
 
         foreach ($this->getHosts() as $host) {
             $info = $host->info('Memory');
-            $info = $info['Memory'] ?? $info;
+            $info = isset($info['Memory']) ? $info['Memory'] : $info;
 
             return $this->redisEvictionPolicy = $info['maxmemory_policy'];
         }

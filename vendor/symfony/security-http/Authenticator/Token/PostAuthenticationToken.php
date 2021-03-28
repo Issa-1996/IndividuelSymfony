@@ -27,7 +27,7 @@ class PostAuthenticationToken extends AbstractToken
     {
         parent::__construct($roles);
 
-        if ('' === $firewallName) {
+        if (empty($firewallName)) {
             throw new \InvalidArgumentException('$firewallName must not be empty.');
         }
 

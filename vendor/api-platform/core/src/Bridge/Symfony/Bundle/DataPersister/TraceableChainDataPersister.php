@@ -16,7 +16,6 @@ namespace ApiPlatform\Core\Bridge\Symfony\Bundle\DataPersister;
 use ApiPlatform\Core\DataPersister\ChainDataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use ApiPlatform\Core\DataPersister\ResumableDataPersisterInterface;
 
 /**
  * @author Anthony GRASSIOT <antograssiot@free.fr>
@@ -53,9 +52,9 @@ final class TraceableChainDataPersister implements ContextAwareDataPersisterInte
      */
     public function persist($data, array $context = [])
     {
-        $this->tracePersisters($data, $context);
-
-        return $this->decorated->persist($data, $context);
+        if ($match = $this->tracePersisters($data, $context)) {
+            return $match->persist($data, $context) ?? $data;
+        }
     }
 
     /**
@@ -63,22 +62,22 @@ final class TraceableChainDataPersister implements ContextAwareDataPersisterInte
      */
     public function remove($data, array $context = [])
     {
-        $this->tracePersisters($data, $context);
-
-        return $this->decorated->remove($data, $context);
+        if ($match = $this->tracePersisters($data, $context)) {
+            return $match->remove($data, $context);
+        }
     }
 
     private function tracePersisters($data, array $context = [])
     {
-        $found = false;
+        $match = null;
         foreach ($this->persisters as $persister) {
-            if (
-                ($this->persistersResponse[\get_class($persister)] = $found ? false : $persister->supports($data, $context))
-                &&
-                !($persister instanceof ResumableDataPersisterInterface && $persister->resumable()) && !$found
-            ) {
-                $found = true;
+            $this->persistersResponse[\get_class($persister)] = $match ? null : false;
+            if (!$match && $persister->supports($data, $context)) {
+                $match = $persister;
+                $this->persistersResponse[\get_class($persister)] = true;
             }
         }
+
+        return $match;
     }
 }

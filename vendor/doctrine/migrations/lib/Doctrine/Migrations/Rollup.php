@@ -8,7 +8,6 @@ use Doctrine\Migrations\Exception\RollupFailed;
 use Doctrine\Migrations\Metadata\Storage\MetadataStorage;
 use Doctrine\Migrations\Version\ExecutionResult;
 use Doctrine\Migrations\Version\Version;
-
 use function count;
 
 /**
@@ -36,7 +35,7 @@ class Rollup
     /**
      * @throws RollupFailed
      */
-    public function rollup(): Version
+    public function rollup() : Version
     {
         $versions = $this->migrationRepository->getMigrations();
 

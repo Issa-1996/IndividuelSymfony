@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,6 +24,9 @@ namespace Doctrine\ORM\Mapping;
  * If this annotation is used, the SQL statement should select all of the columns that are mapped to the entity object.
  * This should include foreign key columns to related entities.
  * The results obtained when insufficient data is available are undefined.
+ *
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @since   2.3
  *
  * @Annotation
  * @Target("ANNOTATION")

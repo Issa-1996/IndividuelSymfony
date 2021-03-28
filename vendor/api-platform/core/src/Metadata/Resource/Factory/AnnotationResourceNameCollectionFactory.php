@@ -32,7 +32,7 @@ final class AnnotationResourceNameCollectionFactory implements ResourceNameColle
     /**
      * @param string[] $paths
      */
-    public function __construct(Reader $reader = null, array $paths, ResourceNameCollectionFactoryInterface $decorated = null)
+    public function __construct(Reader $reader, array $paths, ResourceNameCollectionFactoryInterface $decorated = null)
     {
         $this->reader = $reader;
         $this->paths = $paths;
@@ -53,10 +53,7 @@ final class AnnotationResourceNameCollectionFactory implements ResourceNameColle
         }
 
         foreach (ReflectionClassRecursiveIterator::getReflectionClassesFromDirectories($this->paths) as $className => $reflectionClass) {
-            if (
-                (\PHP_VERSION_ID >= 80000 && $reflectionClass->getAttributes(ApiResource::class)) ||
-                (null !== $this->reader && $this->reader->getClassAnnotation($reflectionClass, ApiResource::class))
-            ) {
+            if ($this->reader->getClassAnnotation($reflectionClass, ApiResource::class)) {
                 $classes[$className] = true;
             }
         }

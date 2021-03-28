@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,6 +23,9 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Represents an ID generator that uses the database UUID expression
+ *
+ * @since 2.3
+ * @author Maarten de Keizer <m.de.keizer@markei.nl>
  */
 class UuidGenerator extends AbstractIdGenerator
 {
@@ -33,7 +35,7 @@ class UuidGenerator extends AbstractIdGenerator
     public function generate(EntityManager $em, $entity)
     {
         $conn = $em->getConnection();
-        $sql  = 'SELECT ' . $conn->getDatabasePlatform()->getGuidExpression();
+        $sql = 'SELECT ' . $conn->getDatabasePlatform()->getGuidExpression();
 
         return $conn->query($sql)->fetchColumn(0);
     }

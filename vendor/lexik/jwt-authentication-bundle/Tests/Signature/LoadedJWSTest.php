@@ -3,30 +3,26 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle\Tests\Signature;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Signature\LoadedJWS;
-use Lexik\Bundle\JWTAuthenticationBundle\Tests\ForwardCompatTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 
 /**
  * Tests the CreatedJWS model class.
- *
  * @group time-sensitive
  */
 final class LoadedJWSTest extends TestCase
 {
-    use ForwardCompatTestCaseTrait;
-
     private $goodPayload;
 
     /**
      * {@inheritdoc}
      */
-    protected function doSetUp()
+    protected function setUp()
     {
         $this->goodPayload = [
             'username' => 'chalasr',
-            'exp' => time() + 3600,
-            'iat' => time(),
+            'exp'      => time() + 3600,
+            'iat'      => time(),
         ];
     }
 
@@ -111,8 +107,8 @@ final class LoadedJWSTest extends TestCase
 
         $dstPayload = [
             'username' => 'test',
-            'exp' => $timestamp + 3600,
-            'iat' => $timestamp,
+            'exp'      => $timestamp + 3600,
+            'iat'      => $timestamp,
         ];
 
         $jws = new LoadedJWS($dstPayload, true);

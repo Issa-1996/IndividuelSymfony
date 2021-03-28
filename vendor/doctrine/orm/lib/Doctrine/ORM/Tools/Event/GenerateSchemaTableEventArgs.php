@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,35 +16,48 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-
 namespace Doctrine\ORM\Tools\Event;
 
 use Doctrine\Common\EventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * Event Args used for the Events::postGenerateSchemaTable event.
  *
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        www.doctrine-project.com
+ * @since       1.0
+ * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
 class GenerateSchemaTableEventArgs extends EventArgs
 {
-    /** @var ClassMetadata */
+    /**
+     * @var \Doctrine\ORM\Mapping\ClassMetadata
+     */
     private $classMetadata;
 
-    /** @var Schema */
+    /**
+     * @var \Doctrine\DBAL\Schema\Schema
+     */
     private $schema;
 
-    /** @var Table */
+    /**
+     * @var \Doctrine\DBAL\Schema\Table
+     */
     private $classTable;
 
+    /**
+     * @param ClassMetadata $classMetadata
+     * @param Schema        $schema
+     * @param Table         $classTable
+     */
     public function __construct(ClassMetadata $classMetadata, Schema $schema, Table $classTable)
     {
         $this->classMetadata = $classMetadata;
-        $this->schema        = $schema;
-        $this->classTable    = $classTable;
+        $this->schema = $schema;
+        $this->classTable = $classTable;
     }
 
     /**

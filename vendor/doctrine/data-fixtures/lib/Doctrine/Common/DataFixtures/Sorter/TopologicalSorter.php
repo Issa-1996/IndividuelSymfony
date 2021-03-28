@@ -7,7 +7,6 @@ namespace Doctrine\Common\DataFixtures\Sorter;
 use Doctrine\Common\DataFixtures\Exception\CircularReferenceException;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use RuntimeException;
-
 use function get_class;
 use function sprintf;
 
@@ -167,7 +166,6 @@ class TopologicalSorter
                             )
                         );
                     }
-
                     break;
                 case Vertex::NOT_VISITED:
                     $this->visit($childDefinition);

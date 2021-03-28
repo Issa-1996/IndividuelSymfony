@@ -29,19 +29,12 @@ use ApiPlatform\Core\Exception\InvalidArgumentException;
  *     @Attribute("openapiContext", type="array"),
  *     @Attribute("jsonldContext", type="array"),
  *     @Attribute("push", type="bool"),
- *     @Attribute("security", type="string"),
  *     @Attribute("swaggerContext", type="array")
  * )
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::TARGET_PARAMETER)]
 final class ApiProperty
 {
     use AttributesHydratorTrait;
-
-    /**
-     * @var array<string, array>
-     */
-    private static $deprecatedAttributes = [];
 
     /**
      * @var string
@@ -84,73 +77,59 @@ final class ApiProperty
     public $identifier;
 
     /**
-     * @var string|int|float|bool|array|null
-     */
-    public $default;
-
-    /**
-     * @var string|int|float|bool|array|null
-     */
-    public $example;
-
-    /**
-     * @param string                           $description
-     * @param bool                             $readable
-     * @param bool                             $writable
-     * @param bool                             $readableLink
-     * @param bool                             $writableLink
-     * @param bool                             $required
-     * @param string                           $iri
-     * @param bool                             $identifier
-     * @param string|int|float|bool|array      $default
-     * @param string|int|float|bool|array|null $example
-     * @param string                           $deprecationReason
-     * @param bool                             $fetchable
-     * @param bool                             $fetchEager
-     * @param array                            $jsonldContext
-     * @param array                            $openapiContext
-     * @param bool                             $push
-     * @param string                           $security
-     * @param array                            $swaggerContext
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
      *
+     * @var string
+     */
+    private $deprecationReason;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var bool
+     */
+    private $fetchable;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var bool
+     */
+    private $fetchEager;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var array
+     */
+    private $jsonldContext;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var array
+     */
+    private $openapiContext;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var bool
+     */
+    private $push;
+
+    /**
+     * @see https://github.com/Haehnchen/idea-php-annotation-plugin/issues/112
+     *
+     * @var array
+     */
+    private $swaggerContext;
+
+    /**
      * @throws InvalidArgumentException
      */
-    public function __construct(
-        $description = null,
-        ?bool $readable = null,
-        ?bool $writable = null,
-        ?bool $readableLink = null,
-        ?bool $writableLink = null,
-        ?bool $required = null,
-        ?string $iri = null,
-        ?bool $identifier = null,
-        $default = null,
-        $example = null,
-
-        // attributes
-        ?array $attributes = null,
-        ?string $deprecationReason = null,
-        ?bool $fetchable = null,
-        ?bool $fetchEager = null,
-        ?array $jsonldContext = null,
-        ?array $openapiContext = null,
-        ?bool $push = null,
-        ?string $security = null,
-        ?array $swaggerContext = null
-    ) {
-        if (!\is_array($description)) { // @phpstan-ignore-line Doctrine annotations support
-            [$publicProperties, $configurableAttributes] = self::getConfigMetadata();
-
-            foreach ($publicProperties as $prop => $_) {
-                $this->{$prop} = ${$prop};
-            }
-
-            $description = [];
-            foreach ($configurableAttributes as $attribute => $_) {
-                $description[$attribute] = ${$attribute};
-            }
-        }
-
-        $this->hydrateAttributes($description);
+    public function __construct(array $values = [])
+    {
+        $this->hydrateAttributes($values);
     }
 }

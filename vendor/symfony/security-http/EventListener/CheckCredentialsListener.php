@@ -14,7 +14,6 @@ namespace Symfony\Component\Security\Http\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
@@ -27,7 +26,7 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
  * @author Wouter de Jong <wouter@driveamber.com>
  *
  * @final
- * @experimental in 5.2
+ * @experimental in 5.1
  */
 class CheckCredentialsListener implements EventSubscriberInterface
 {
@@ -65,10 +64,6 @@ class CheckCredentialsListener implements EventSubscriberInterface
             }
 
             $badge->markResolved();
-
-            if (!$passport->hasBadge(PasswordUpgradeBadge::class)) {
-                $passport->addBadge(new PasswordUpgradeBadge($presentedPassword));
-            }
 
             return;
         }

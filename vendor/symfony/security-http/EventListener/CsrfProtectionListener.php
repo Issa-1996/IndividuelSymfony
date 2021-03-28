@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
  * @author Wouter de Jong <wouter@wouterj.nl>
  *
  * @final
- * @experimental in 5.2
+ * @experimental in 5.1
  */
 class CsrfProtectionListener implements EventSubscriberInterface
 {
@@ -57,6 +57,6 @@ class CsrfProtectionListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [CheckPassportEvent::class => ['checkPassport', 512]];
+        return [CheckPassportEvent::class => ['checkPassport', 128]];
     }
 }

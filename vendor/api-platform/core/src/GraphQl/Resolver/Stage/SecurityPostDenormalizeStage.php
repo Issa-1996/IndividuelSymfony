@@ -15,7 +15,8 @@ namespace ApiPlatform\Core\GraphQl\Resolver\Stage;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Security\ResourceAccessCheckerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use GraphQL\Error\Error;
+use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Security post denormalize stage of GraphQL resolvers.
@@ -48,7 +49,7 @@ final class SecurityPostDenormalizeStage implements SecurityPostDenormalizeStage
             // Backward compatibility
             $isGranted = $resourceMetadata->getGraphqlAttribute($operationName, 'access_control', null, true);
             if (null !== $isGranted) {
-                @trigger_error('Attribute "access_control" is deprecated since API Platform 2.5, prefer using "security" attribute instead', \E_USER_DEPRECATED);
+                @trigger_error('Attribute "access_control" is deprecated since API Platform 2.5, prefer using "security" attribute instead', E_USER_DEPRECATED);
             }
         }
 
@@ -60,6 +61,8 @@ final class SecurityPostDenormalizeStage implements SecurityPostDenormalizeStage
             return;
         }
 
-        throw new AccessDeniedHttpException($resourceMetadata->getGraphqlAttribute($operationName, 'security_post_denormalize_message', 'Access Denied.'));
+        /** @var ResolveInfo $info */
+        $info = $context['info'];
+        throw Error::createLocatedError($resourceMetadata->getGraphqlAttribute($operationName, 'security_post_denormalize_message', 'Access Denied.'), $info->fieldNodes, $info->path);
     }
 }

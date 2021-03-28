@@ -7,7 +7,6 @@ namespace Doctrine\Migrations\Configuration\Migration;
 use Doctrine\Migrations\Configuration\Configuration;
 use Doctrine\Migrations\Configuration\Migration\Exception\MissingConfigurationFile;
 use Doctrine\Migrations\Tools\Console\Exception\FileTypeNotSupported;
-
 use function file_exists;
 
 /**
@@ -26,7 +25,7 @@ final class ConfigurationFileWithFallback implements ConfigurationLoader
         $this->file = $file;
     }
 
-    public function getConfiguration(): Configuration
+    public function getConfiguration() : Configuration
     {
         if ($this->file !== null) {
             return $this->loadConfiguration($this->file);
@@ -52,7 +51,7 @@ final class ConfigurationFileWithFallback implements ConfigurationLoader
         throw MissingConfigurationFile::new();
     }
 
-    private function configurationFileExists(string $config): bool
+    private function configurationFileExists(string $config) : bool
     {
         return file_exists($config);
     }
@@ -60,7 +59,7 @@ final class ConfigurationFileWithFallback implements ConfigurationLoader
     /**
      * @throws FileTypeNotSupported
      */
-    private function loadConfiguration(string $file): Configuration
+    private function loadConfiguration(string $file) : Configuration
     {
         return (new FormattedFile($file))->getConfiguration();
     }

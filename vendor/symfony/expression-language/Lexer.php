@@ -60,7 +60,7 @@ class Lexer
                     throw new SyntaxError(sprintf('Unexpected "%s".', $expression[$cursor]), $cursor, $expression);
                 }
 
-                [$expect, $cur] = array_pop($brackets);
+                list($expect, $cur) = array_pop($brackets);
                 if ($expression[$cursor] != strtr($expect, '([{', ')]}')) {
                     throw new SyntaxError(sprintf('Unclosed "%s".', $expect), $cur, $expression);
                 }
@@ -92,7 +92,7 @@ class Lexer
         $tokens[] = new Token(Token::EOF_TYPE, null, $cursor + 1);
 
         if (!empty($brackets)) {
-            [$expect, $cur] = array_pop($brackets);
+            list($expect, $cur) = array_pop($brackets);
             throw new SyntaxError(sprintf('Unclosed "%s".', $expect), $cur, $expression);
         }
 

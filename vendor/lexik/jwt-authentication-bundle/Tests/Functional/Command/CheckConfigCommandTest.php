@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle\Tests\Functional\Command;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Tests\Functional\TestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -19,10 +18,9 @@ class CheckConfigCommandTest extends TestCase
     public function testCheckOpenSSLCommand()
     {
         $kernel = $this->bootKernel();
-        $app = new Application($kernel);
-        $tester = new CommandTester($app->find('lexik:jwt:check-config'));
+        $tester = new CommandTester($kernel->getContainer()->get('lexik_jwt_authentication.check_config_command'));
 
         $this->assertSame(0, $tester->execute([]));
-        $this->{method_exists($this, 'assertStringContainsString') ? 'assertStringContainsString' : 'assertContains'}('The configuration seems correct.', $tester->getDisplay());
+        $this->assertStringContainsString('The configuration seems correct.', $tester->getDisplay());
     }
 }

@@ -467,7 +467,6 @@ class Flex implements PluginInterface, EventSubscriberInterface
             copy($rootDir.'/.env.dist', $rootDir.'/.env');
         }
 
-        // Execute missing recipes
         $recipes = $this->fetchRecipes($this->operations);
         $this->operations = [];     // Reset the operation after getting recipes
 
@@ -483,7 +482,6 @@ class Flex implements PluginInterface, EventSubscriberInterface
         $this->io->writeError('');
 
         if (!$recipes) {
-            $this->synchronizePackageJson($rootDir);
             $this->lock->write();
 
             if ($this->downloader->isEnabled()) {
@@ -574,24 +572,10 @@ class Flex implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $this->synchronizePackageJson($rootDir);
         $this->lock->write();
 
         if ($this->shouldUpdateComposerLock) {
             $this->updateComposerLock();
-        }
-    }
-
-    private function synchronizePackageJson(?string $rootDir)
-    {
-        $synchronizer = new PackageJsonSynchronizer($rootDir);
-
-        if ($synchronizer->shouldSynchronize()) {
-            $packagesNames = array_column($this->composer->getLocker()->getLockData()['packages'] ?? [], 'name');
-
-            $this->io->writeError('<info>Synchronizing package.json with PHP packages</>');
-            $synchronizer->synchronize($packagesNames);
-            $this->io->writeError('Don\'t forget to run <comment>npm install --force</> or <comment>yarn install --force</> to refresh your JavaScript dependencies!');
         }
     }
 

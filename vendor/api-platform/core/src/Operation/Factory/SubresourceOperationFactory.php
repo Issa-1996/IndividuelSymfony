@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ApiPlatform\Core\Operation\Factory;
 
-use ApiPlatform\Core\Api\IdentifiersExtractorInterface;
 use ApiPlatform\Core\Bridge\Symfony\Routing\RouteNameGenerator;
 use ApiPlatform\Core\Metadata\Property\Factory\PropertyMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface;
@@ -27,21 +26,19 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
 {
     public const SUBRESOURCE_SUFFIX = '_subresource';
     public const FORMAT_SUFFIX = '.{_format}';
-    public const ROUTE_OPTIONS = ['defaults' => [], 'requirements' => [], 'options' => [], 'host' => '', 'schemes' => [], 'condition' => '', 'controller' => null, 'stateless' => null];
+    public const ROUTE_OPTIONS = ['defaults' => [], 'requirements' => [], 'options' => [], 'host' => '', 'schemes' => [], 'condition' => '', 'controller' => null];
 
     private $resourceMetadataFactory;
     private $propertyNameCollectionFactory;
     private $propertyMetadataFactory;
     private $pathSegmentNameGenerator;
-    private $identifiersExtractor;
 
-    public function __construct(ResourceMetadataFactoryInterface $resourceMetadataFactory, PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory, PropertyMetadataFactoryInterface $propertyMetadataFactory, PathSegmentNameGeneratorInterface $pathSegmentNameGenerator, IdentifiersExtractorInterface $identifiersExtractor = null)
+    public function __construct(ResourceMetadataFactoryInterface $resourceMetadataFactory, PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory, PropertyMetadataFactoryInterface $propertyMetadataFactory, PathSegmentNameGeneratorInterface $pathSegmentNameGenerator)
     {
         $this->resourceMetadataFactory = $resourceMetadataFactory;
         $this->propertyNameCollectionFactory = $propertyNameCollectionFactory;
         $this->propertyMetadataFactory = $propertyMetadataFactory;
         $this->pathSegmentNameGenerator = $pathSegmentNameGenerator;
-        $this->identifiersExtractor = $identifiersExtractor;
     }
 
     /**
@@ -78,7 +75,6 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
 
             $subresourceClass = $subresource->getResourceClass();
             $subresourceMetadata = $this->resourceMetadataFactory->create($subresourceClass);
-            $subresourceMetadata = $subresourceMetadata->withAttributes(($subresourceMetadata->getAttributes() ?: []) + ['identifiers' => !$this->identifiersExtractor ? [$property] : $this->identifiersExtractor->getIdentifiersFromResourceClass($subresourceClass)]);
             $isLastItem = ($parentOperation['resource_class'] ?? null) === $resourceClass && $propertyMetadata->isIdentifier();
 
             // A subresource that is also an identifier can't be a start point
@@ -97,7 +93,6 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
             }
 
             $rootResourceMetadata = $this->resourceMetadataFactory->create($rootResourceClass);
-            $rootResourceMetadata = $rootResourceMetadata->withAttributes(($rootResourceMetadata->getAttributes() ?: []) + ['identifiers' => !$this->identifiersExtractor ? ['id'] : $this->identifiersExtractor->getIdentifiersFromResourceClass($rootResourceClass)]);
             $operationName = 'get';
             $operation = [
                 'property' => $property,
@@ -107,10 +102,8 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
             ];
 
             if (null === $parentOperation) {
-                $identifiers = (array) $rootResourceMetadata->getAttribute('identifiers');
                 $rootShortname = $rootResourceMetadata->getShortName();
-                $identifier = \is_string($key = array_key_first($identifiers)) ? $key : $identifiers[0];
-                $operation['identifiers'][$identifier] = [$rootResourceClass, $identifiers[$identifier][1] ?? $identifier, true];
+                $operation['identifiers'] = [['id', $rootResourceClass, true]];
                 $operation['operation_name'] = sprintf(
                     '%s_%s%s',
                     RouteNameGenerator::inflector($operation['property'], $operation['collection'] ?? false),
@@ -133,10 +126,9 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
                 }
 
                 $operation['path'] = $subresourceOperation['path'] ?? sprintf(
-                    '/%s%s/{%s}/%s%s',
+                    '/%s%s/{id}/%s%s',
                     $prefix,
                     $this->pathSegmentNameGenerator->getSegmentName($rootShortname),
-                    $identifier,
                     $this->pathSegmentNameGenerator->getSegmentName($operation['property'], $operation['collection']),
                     self::FORMAT_SUFFIX
                 );
@@ -146,14 +138,8 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
                 }
             } else {
                 $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
-                $identifiers = (array) $resourceMetadata->getAttribute('identifiers', null === $this->identifiersExtractor ? ['id'] : $this->identifiersExtractor->getIdentifiersFromResourceClass($resourceClass));
-                $identifier = \is_string($key = array_key_first($identifiers)) ? $key : $identifiers[0];
                 $operation['identifiers'] = $parentOperation['identifiers'];
-
-                if (!isset($operation['identifiers'][$parentOperation['property']])) {
-                    $operation['identifiers'][$parentOperation['property']] = [$resourceClass, $identifiers[$identifier][1] ?? $identifier, $isLastItem ? true : $parentOperation['collection']];
-                }
-
+                $operation['identifiers'][] = [$parentOperation['property'], $resourceClass, $isLastItem ? true : $parentOperation['collection']];
                 $operation['operation_name'] = str_replace(
                     'get'.self::SUBRESOURCE_SUFFIX,
                     RouteNameGenerator::inflector($isLastItem ? 'item' : $property, $operation['collection']).'_get'.self::SUBRESOURCE_SUFFIX,
@@ -173,7 +159,8 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
                     $operation['path'] = str_replace(self::FORMAT_SUFFIX, '', (string) $parentOperation['path']);
 
                     if ($parentOperation['collection']) {
-                        $operation['path'] .= sprintf('/{%s}', array_key_last($operation['identifiers']));
+                        [$key] = end($operation['identifiers']);
+                        $operation['path'] .= sprintf('/{%s}', $key);
                     }
 
                     if ($isLastItem) {
@@ -182,10 +169,6 @@ final class SubresourceOperationFactory implements SubresourceOperationFactoryIn
                         $operation['path'] .= sprintf('/%s%s', $this->pathSegmentNameGenerator->getSegmentName($property, $operation['collection']), self::FORMAT_SUFFIX);
                     }
                 }
-            }
-
-            if (isset($subresourceOperation['openapi_context'])) {
-                $operation['openapi_context'] = $subresourceOperation['openapi_context'];
             }
 
             foreach (self::ROUTE_OPTIONS as $routeOption => $defaultValue) {

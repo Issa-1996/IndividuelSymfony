@@ -14,7 +14,6 @@ namespace Symfony\Bundle\MakerBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
-use Symfony\Bundle\MakerBundle\Util\PhpCompatUtil;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -26,21 +25,12 @@ class Generator
     private $twigHelper;
     private $pendingOperations = [];
     private $namespacePrefix;
-    private $phpCompatUtil;
 
-    public function __construct(FileManager $fileManager, string $namespacePrefix, PhpCompatUtil $phpCompatUtil = null)
+    public function __construct(FileManager $fileManager, string $namespacePrefix)
     {
         $this->fileManager = $fileManager;
         $this->twigHelper = new GeneratorTwigHelper($fileManager);
         $this->namespacePrefix = trim($namespacePrefix, '\\');
-
-        if (null === $phpCompatUtil) {
-            $phpCompatUtil = new PhpCompatUtil($fileManager);
-
-            trigger_deprecation('symfony/maker-bundle', '1.25', 'Initializing Generator without providing an instance of PhpCompatUtil is deprecated.');
-        }
-
-        $this->phpCompatUtil = $phpCompatUtil;
     }
 
     /**
@@ -167,8 +157,6 @@ class Generator
         }
 
         $variables['relative_path'] = $this->fileManager->relativizePath($targetPath);
-        $variables['use_attributes'] = $this->phpCompatUtil->canUseAttributes();
-        $variables['use_typed_properties'] = $this->phpCompatUtil->canUseTypedProperties();
 
         $templatePath = $templateName;
         if (!file_exists($templatePath)) {

@@ -118,6 +118,7 @@ class MarkdownDescriptor extends Descriptor
      */
     protected function describeCommand(Command $command, array $options = [])
     {
+        $command->getSynopsis();
         $command->mergeApplicationDefinition(false);
 
         $this->write(
@@ -135,10 +136,9 @@ class MarkdownDescriptor extends Descriptor
             $this->write($help);
         }
 
-        $definition = $command->getDefinition();
-        if ($definition->getOptions() || $definition->getArguments()) {
+        if ($command->getNativeDefinition()) {
             $this->write("\n\n");
-            $this->describeInputDefinition($definition);
+            $this->describeInputDefinition($command->getNativeDefinition());
         }
     }
 
@@ -147,7 +147,7 @@ class MarkdownDescriptor extends Descriptor
      */
     protected function describeApplication(Application $application, array $options = [])
     {
-        $describedNamespace = $options['namespace'] ?? null;
+        $describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
         $description = new ApplicationDescription($application, $describedNamespace);
         $title = $this->getApplicationTitle($application);
 

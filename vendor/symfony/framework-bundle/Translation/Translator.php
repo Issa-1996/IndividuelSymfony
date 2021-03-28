@@ -155,7 +155,7 @@ class Translator extends BaseTranslator implements WarmableInterface
             $this->addResourceFiles();
         }
         foreach ($this->resources as $key => $params) {
-            [$format, $resource, $locale, $domain] = $params;
+            list($format, $resource, $locale, $domain) = $params;
             parent::addResource($format, $resource, $locale, $domain);
         }
         $this->resources = [];

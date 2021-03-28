@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,13 +20,14 @@
 namespace Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
 
 /**
  * "BIT_AND" "(" ArithmeticPrimary "," ArithmeticPrimary ")"
  *
+ *
  * @link    www.doctrine-project.org
+ * @since   2.2
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 class BitAndFunction extends FunctionNode
 {
@@ -38,7 +38,7 @@ class BitAndFunction extends FunctionNode
      * @override
      * @inheritdoc
      */
-    public function getSql(SqlWalker $sqlWalker)
+    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
         $platform = $sqlWalker->getConnection()->getDatabasePlatform();
 
@@ -52,7 +52,7 @@ class BitAndFunction extends FunctionNode
      * @override
      * @inheritdoc
      */
-    public function parse(Parser $parser)
+    public function parse(\Doctrine\ORM\Query\Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);

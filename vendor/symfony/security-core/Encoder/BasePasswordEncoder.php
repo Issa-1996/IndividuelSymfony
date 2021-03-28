@@ -18,7 +18,7 @@ namespace Symfony\Component\Security\Core\Encoder;
  */
 abstract class BasePasswordEncoder implements PasswordEncoderInterface
 {
-    public const MAX_PASSWORD_LENGTH = 4096;
+    const MAX_PASSWORD_LENGTH = 4096;
 
     /**
      * {@inheritdoc}

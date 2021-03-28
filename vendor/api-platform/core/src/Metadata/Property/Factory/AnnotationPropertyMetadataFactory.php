@@ -29,7 +29,7 @@ final class AnnotationPropertyMetadataFactory implements PropertyMetadataFactory
     private $reader;
     private $decorated;
 
-    public function __construct(Reader $reader = null, PropertyMetadataFactoryInterface $decorated = null)
+    public function __construct(Reader $reader, PropertyMetadataFactoryInterface $decorated = null)
     {
         $this->reader = $reader;
         $this->decorated = $decorated;
@@ -56,13 +56,7 @@ final class AnnotationPropertyMetadataFactory implements PropertyMetadataFactory
         }
 
         if ($reflectionClass->hasProperty($property)) {
-            $annotation = null;
-            $reflectionProperty = $reflectionClass->getProperty($property);
-            if (\PHP_VERSION_ID >= 80000 && $attributes = $reflectionProperty->getAttributes(ApiProperty::class)) {
-                $annotation = $attributes[0]->newInstance();
-            } elseif (null !== $this->reader) {
-                $annotation = $this->reader->getPropertyAnnotation($reflectionProperty, ApiProperty::class);
-            }
+            $annotation = $this->reader->getPropertyAnnotation($reflectionClass->getProperty($property), ApiProperty::class);
 
             if ($annotation instanceof ApiProperty) {
                 return $this->createMetadata($annotation, $parentPropertyMetadata);
@@ -80,12 +74,7 @@ final class AnnotationPropertyMetadataFactory implements PropertyMetadataFactory
                 continue;
             }
 
-            $annotation = null;
-            if (\PHP_VERSION_ID >= 80000 && $attributes = $reflectionMethod->getAttributes(ApiProperty::class)) {
-                $annotation = $attributes[0]->newInstance();
-            } elseif (null !== $this->reader) {
-                $annotation = $this->reader->getMethodAnnotation($reflectionMethod, ApiProperty::class);
-            }
+            $annotation = $this->reader->getMethodAnnotation($reflectionMethod, ApiProperty::class);
 
             if ($annotation instanceof ApiProperty) {
                 return $this->createMetadata($annotation, $parentPropertyMetadata);
@@ -123,16 +112,12 @@ final class AnnotationPropertyMetadataFactory implements PropertyMetadataFactory
                 $annotation->identifier,
                 $annotation->iri,
                 null,
-                $annotation->attributes,
-                null,
-                null,
-                $annotation->default,
-                $annotation->example
+                $annotation->attributes
             );
         }
 
         $propertyMetadata = $parentPropertyMetadata;
-        foreach ([['get', 'description'], ['is', 'readable'], ['is', 'writable'], ['is', 'readableLink'], ['is', 'writableLink'], ['is', 'required'], ['get', 'iri'], ['is', 'identifier'], ['get', 'attributes'], ['get', 'default'], ['get', 'example']] as $property) {
+        foreach ([['get', 'description'], ['is', 'readable'], ['is', 'writable'], ['is', 'readableLink'], ['is', 'writableLink'], ['is', 'required'], ['get', 'iri'], ['is', 'identifier'], ['get', 'attributes']] as $property) {
             if (null !== $value = $annotation->{$property[1]}) {
                 $propertyMetadata = $this->createWith($propertyMetadata, $property, $value);
             }
